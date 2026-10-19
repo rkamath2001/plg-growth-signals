@@ -102,6 +102,12 @@ def connector_identity() -> str:
     return json.dumps(T.connector_identity(), default=str)
 
 
+@tool
+def viral_loops() -> str:
+    """Viral loop scorecard (shared agents, assets, spaces, embeds, digests, referrals): activated recipients per 100 users, cycle time, retention, companies seeded, prospects pushed over the sales trigger, and a simulation of reward policies including a stage-aware policy."""
+    return json.dumps(T.viral_loops(), default=str)
+
+
 def build_agent() -> Agent:
     model_id = os.environ.get("SANGAM_MODEL_ID")
     region = os.environ.get("AWS_REGION", "us-west-2")
@@ -111,7 +117,7 @@ def build_agent() -> Agent:
                         activation_test, connector_breadth, check_feature_lift,
                         identity_resolution, product_qualified_accounts,
                         sales_trigger_threshold, acquisition_channel_ranking,
-                        signin_provider_ranking, connector_identity])
+                        signin_provider_ranking, connector_identity, viral_loops])
 
 
 def ask(question: str) -> str:

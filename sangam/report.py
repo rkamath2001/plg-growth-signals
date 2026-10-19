@@ -130,8 +130,8 @@ def threshold_chart(res: dict, path: Path):
     ax.text(len(labels) - 0.55, base, f" baseline {base:.0%}", ha="left", va="center", fontsize=8.5, color=INK2)
     cut = next(i for i, v in enumerate(lo) if v >= k)
     ax.axvline(cut - 0.5, color=INK, lw=1.2, ls=":")
-    ax.text(cut - 0.45, 0.97, f"  trigger: {k}+ activated users", fontsize=8.5,
-            color=INK, va="top")
+    ax.text(cut - 0.55, 0.97, f"trigger: {k}+ activated users  ", fontsize=8.5,
+            color=INK, va="top", ha="right")
     ax.set_xticks(range(len(labels)), labels)
     ax.set_xlim(-0.6, len(labels) + 0.4)
     ax.set_ylim(-0.1, 1.05)
@@ -172,7 +172,7 @@ def findings_memo(r: dict, top, path: Path):
 
 ## Summary
 
-Nine findings, each checked against planted ground truth (see `evals/`):
+Ten findings, each checked against planted ground truth (see `evals/`):
 
 1. **Report external users separately.** Customer zero raises week-8 retention from {inf['w8_retention_external_only']:.0%} to {inf['w8_retention_all_users']:.0%}. Internal use is mandated, so it flatters every headline it touches.
 2. **Activation is the first agent action.** External users who complete one in week 0 retain at {act['cohorts']['agent_action']['w8_retention']:.0%} at week 8, versus {act['cohorts']['question_only']['w8_retention']:.0%} for question-only users (95% CI {act['ci95'][0]:+.0%} to {act['ci95'][1]:+.0%}), and the gap holds in every segment. This is observational; the next step is an onboarding experiment that nudges a first agent action.
@@ -183,6 +183,7 @@ Nine findings, each checked against planted ground truth (see `evals/`):
 7. **Rank channels by pipeline, not volume.** The top channel by sign-ups is not the top channel by sales-ready accounts; teammate invites lead on retention and pipeline.
 8. **Sign-in provider decides visibility.** Google and work-email sign-ups reveal the company about half the time; Apple and Amazon almost never. A work-email prompt at the moment of sharing would put more companies over the sales trigger.
 9. **Connected workspaces reveal employers, if guarded.** Matching Slack, Teams and Jira workspaces naively invents adopters from school clubs, side projects and client workspaces; trusting verified domains and requiring corroboration for names recovers real sales-ready accounts with no phantoms.
+10. **Agent shares grow, asset shares land; reward activation, by account stage.** Paying per share sent buys shares, not users; a stage-aware policy paid on the recipient's first agent action keeps the pipeline gains at a fraction of the cost.
 
 ## When to start an enterprise sales motion
 
@@ -226,6 +227,14 @@ Nine findings, each checked against planted ground truth (see `evals/`):
 
 Naive errors by the guard that blocks them: {guards}. {con['caveat']}
 
+## Viral loops and reward policy
+
+{r['viral_loops']['finding']}
+
+![Viral loops](viral_loops.png)
+
+{r['viral_loops']['caveat']}
+
 ## Product-qualified accounts this week
 
 Independent adopters at non-customers, scored with reasons. Signup spikes with low activation are suppressed as noise.
@@ -247,3 +256,31 @@ Independent adopters at non-customers, scored with reasons. Signup spikes with l
 def write_json(results: dict, path: Path):
     slim = {k: {kk: vv for kk, vv in v.items() if kk != "estimates"} for k, v in results.items()}
     path.write_text(json.dumps(slim, indent=2, default=str))
+
+
+def loops_chart(loops: dict, path: Path):
+    """Activated recipients per 100 users vs cycle time, one labeled point per loop."""
+    from .loops import LOOP_LABEL
+    sc = loops["scorecard"]
+    fig, ax = _fig()
+    offsets = {"embed": (-12, 22), "digest": (12, -2)}
+    for r in sc:
+        x, y = r["median_cycle_days"], r["k_activated_per_100"]
+        size = 40 + r["shares"] / 120
+        ax.scatter(x, y, s=size, color=BLUE, alpha=0.85, edgecolor=SURFACE, linewidth=2, zorder=3)
+        dx, dy = offsets.get(r["loop"], (12, 4))
+        ax.annotate(f"{LOOP_LABEL[r['loop']]}\n{r['activation_of_signups']:.0%} of sign-ups activate",
+                    (x, y), xytext=(dx, dy), textcoords="offset points", fontsize=8.5, color=INK,
+                    va="center", ha="right" if dx < 0 else "left")
+    ax.set_xscale("log")
+    ax.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
+    ax.set_xticks([1, 2, 4, 8, 16, 32], ["1", "2", "4", "8", "16", "32"])
+    ax.set_xlim(1.2, 60)
+    ax.set_ylim(0, max(r["k_activated_per_100"] for r in sc) * 1.25)
+    ax.set_xlabel("Median days from share to sign-up (log scale)", color=INK2, fontsize=9)
+    ax.set_ylabel("Activated recipients per 100 users", color=INK2, fontsize=9)
+    _style(ax, "Agent shares grow fastest; embeds and digests barely convert",
+           "Viral coefficient on activated recipients vs cycle time; dot size = shares sent")
+    fig.tight_layout()
+    fig.savefig(path, facecolor=SURFACE)
+    plt.close(fig)

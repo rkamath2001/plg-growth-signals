@@ -10,6 +10,7 @@ from . import cohorts
 from .dhruva import METRIC_DEFINITIONS, MIN_COHORT, Dataset, load, retention_by
 from .connectors import evaluate as _connector_eval
 from .identity import resolution_summary
+from .loops import summarize as _loops_summary
 from .motions import (channel_ranking, conversion_by_activated, find_threshold, prospect_rollup,
                       provider_ranking, work_email_whatif)
 from .pqa import account_rollup, score
@@ -113,7 +114,12 @@ def connector_identity() -> dict:
     return _connector_eval(dataset(), truth, _outcomes(), _ready_accounts()[1])
 
 
+def viral_loops() -> dict:
+    out = _loops_summary(dataset(), _ready_accounts()[1], _outcomes())
+    return out
+
+
 ALL_TOOLS = [metric_definitions, retention_by_dimension, headline_inflation, activation_test,
              connector_breadth, check_feature_lift, identity_resolution, product_qualified_accounts,
              sales_trigger_threshold, acquisition_channel_ranking, signin_provider_ranking,
-             connector_identity]
+             connector_identity, viral_loops]

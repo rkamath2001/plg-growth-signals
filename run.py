@@ -10,12 +10,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from sangam import cohorts, report
+from sangam import cohorts, readme, report
 from sangam.experiment import simulate
 from sangam.generate import generate
 from sangam.pqa import account_rollup, score
 from sangam.tools import (acquisition_channel_ranking, dataset, sales_trigger_threshold,
-                          signin_provider_ranking, work_email_prompt_whatif, connector_identity)
+                          signin_provider_ranking, work_email_prompt_whatif, connector_identity,
+                          viral_loops)
 
 
 def main():
@@ -47,6 +48,7 @@ def main():
     results["provider_ranking"] = signin_provider_ranking()
     results["work_email_whatif"] = work_email_prompt_whatif()
     results["connector_identity"] = connector_identity()
+    results["viral_loops"] = viral_loops()
 
     print("4/4 Writing charts and memo ...")
     report.retention_chart(cohorts.curves(ds), out / "retention_by_activation.png")
@@ -54,11 +56,19 @@ def main():
     report.experiment_chart(results["experiment"], out / "experiment_design.png")
     report.threshold_chart(results["sales_trigger"], out / "sales_trigger_threshold.png")
     report.findings_memo(results, prospects.head(8), out / "findings.md")
+    report.loops_chart(results["viral_loops"], out / "viral_loops.png")
     report.write_json(results, out / "results.json")
+
+    print("Grading against planted ground truth and rendering README ...")
+    from evals.run_evals import collect
+    ev = collect()
+    readme.render(results, ev, Path("README.md"))
     for k, v in results.items():
         if "finding" in v:
             print(f"  - {v['finding']}")
-    print("Done. See reports/ and run `python -m evals.run_evals` to grade.")
+    n = sum(r["passed"] for k in ("analytics", "rubric_self_test") for r in ev[k])
+    t = sum(len(ev[k]) for k in ("analytics", "rubric_self_test"))
+    print(f"Done. {n}/{t} eval checks passed. See reports/ and README.md.")
 
 
 if __name__ == "__main__":

@@ -125,7 +125,7 @@
       }
     ],
     "must_not_claim": [],
-    "reference_good": "Start with Ulnex Holdings and Gargate Group: each has around 20 independent users across 6 functions, about two-thirds completed an agent action in week 0, and several shared agents. Ignore the accounts flagged as noise: their signups came in one week from a webinar spike with low activation. Keep a holdout of qualified accounts so outreach can prove its lift.",
+    "reference_good": "Start with the top-scored accounts: each has a dozen or more independent users across several functions, most completed an agent action in their first week, and several shared agents. Ignore the accounts flagged as noise: their signups came in one week from a webinar spike with low activation. Keep a holdout of qualified accounts so outreach can prove its lift.",
     "reference_bad": "Contact every company with more than 15 signups, starting with the biggest."
   },
   {
@@ -164,7 +164,7 @@
         "pattern": "once (a company|an account) (has|reaches) \\d+ sign-?ups"
       }
     ],
-    "reference_good": "Start the motion once a company has {trigger_k} or more activated independent users; those companies convert at about 63% versus a 6% baseline, and at 4 users run champion enablement instead. Count activated users, not sign-ups, because webinar spikes inflate sign-ups. The rule is learned from 47 contracts, so refit it each quarter.",
+    "reference_good": "Start the motion once a company has {trigger_k} or more activated independent users; those companies convert at several times the baseline rate, and one user short of that, run champion enablement instead. Count activated users, not sign-ups, because webinar spikes inflate sign-ups. Several rules are statistically tied on the contracts we have, so refit the rule each quarter.",
     "reference_bad": "Once a company reaches 10 sign-ups, hand it to sales."
   },
   {
@@ -204,7 +204,49 @@
         "pattern": "(any|every) workspace (whose name|named)"
       }
     ],
-    "reference_good": "Yes, with guards. Trust a workspace's verified domain; treat a matching name as a clue that needs a colleague resolved by work email to corroborate it; drop guest memberships, since contractors sit in client workspaces; and drop community or side-project workspaces, like a school robotics Slack whose members already resolve to several companies. Naive matching was right only about half the time and invented phantom sales-ready accounts.",
+    "reference_good": "Yes, with guards. Trust a workspace's verified domain; treat a matching name as a clue that needs a colleague resolved by work email to corroborate it; drop guest memberships, since contractors sit in client workspaces; and drop community or side-project workspaces, like a school robotics Slack whose members already resolve to several companies. Naive matching made many wrong attributions and invented phantom sales-ready accounts.",
     "reference_bad": "Yes. Map every workspace named after a company to that company and count its members as adopters."
+  },
+  {
+    "id": "reward-policy",
+    "question": "Should we give users credits for sharing to drive viral growth?",
+    "facts": [],
+    "must_mention": [
+      {
+        "why": "pays on the recipient's activation, not the share or sign-up",
+        "any_of": [
+          "first agent action",
+          "recipient activat",
+          "activates",
+          "activation"
+        ]
+      },
+      {
+        "why": "ties rewards to account stage (same company before a contract, external after)",
+        "any_of": [
+          "before a contract",
+          "pre-contract",
+          "after a contract",
+          "post-contract",
+          "stage"
+        ]
+      },
+      {
+        "why": "does not pay for licensed colleagues",
+        "any_of": [
+          "licensed",
+          "already paying",
+          "already a customer"
+        ]
+      }
+    ],
+    "must_not_claim": [
+      {
+        "why": "does not recommend paying per share sent",
+        "pattern": "reward (every|each) share|pay (per|for every) share"
+      }
+    ],
+    "reference_good": "Yes, but pay when the recipient completes their first agent action, not when a share is sent or a sign-up happens. Before a company has a contract, reward shares to colleagues in the same company; after a contract, reward shares to customers and partners outside it, and never pay for colleagues who are already licensed. In simulation this keeps the pipeline gains at about a tenth of the rewards.",
+    "reference_bad": "Yes. Reward every share with credits; more shares means more growth."
   }
 ]

@@ -137,7 +137,17 @@ def channel_ranking(ds: Dataset, ready_accounts: set[str], outcomes: pd.DataFram
 
     Accounts are credited to the channel that brought their *first* sign-up
     (first-touch). That is a choice, stated so it can be challenged."""
-    u = ds.users[ds.users.channel == "self_serve"].copy()
+    all_ss = ds.users[ds.users.channel == "self_serve"].copy()
+    # Loop-sourced users are judged by the loop analysis; first-touch credit would
+    # undervalue them, because loops mostly add users to companies already started.
+    loop_users = all_ss[all_ss.source.str.startswith("shared_")]
+    at_ready = all_ss[all_ss.account_id.isin(ready_accounts) & all_ss.activated_agent]
+    loop_share_of_ready_users = float(at_ready.source.str.startswith("shared_").mean()) if len(at_ready) else 0.0
+    first_all = (all_ss[all_ss.account_id.notna()].sort_values(["signup_week", "user_id"])
+                 .groupby("account_id").source.first())
+    ready_first = first_all[first_all.index.isin(ready_accounts)]
+    loop_share_of_first_touch = float(ready_first.str.startswith("shared_").mean()) if len(ready_first) else 0.0
+    u = all_ss[~all_ss.source.str.startswith("shared_")].copy()
     u["w8"] = ds.activity.loc[u.user_id, W].to_numpy()
     g = u.groupby("source")
     t = pd.DataFrame({
@@ -146,8 +156,7 @@ def channel_ranking(ds: Dataset, ready_accounts: set[str], outcomes: pd.DataFram
         "w8_retention": g.w8.mean(),
         "company_resolved": g.account_id.apply(lambda s: s.notna().mean()),
     })
-    first = (u[u.account_id.notna()].sort_values(["signup_week", "user_id"])
-             .groupby("account_id").source.first())
+    first = first_all[~first_all.str.startswith("shared_")]
     won = set(outcomes.loc[outcomes.converted_to_contract, "account_id"])
     t["sales_ready_accounts"] = first[first.index.isin(ready_accounts)].value_counts().reindex(t.index).fillna(0).astype(int)
     t["contracts_sourced"] = first[first.index.isin(won)].value_counts().reindex(t.index).fillna(0).astype(int)
@@ -170,13 +179,23 @@ def channel_ranking(ds: Dataset, ready_accounts: set[str], outcomes: pd.DataFram
         "question": "Which acquisition channels bring users who matter?",
         "table": t.reset_index().rename(columns={"index": "source"}).to_dict("records"),
         "attribution": "first-touch at the account level; last-touch at the user level",
+        "loop_users": int(len(loop_users)),
+        "loop_share_of_activated_users_at_ready_accounts": round(loop_share_of_ready_users, 3),
+        "loop_share_of_first_touch_credit": round(loop_share_of_first_touch, 3),
+        "attribution_note": (
+            f"Viral-loop recipients are {loop_share_of_ready_users:.0%} of the activated users at sales-ready "
+            f"accounts but get first-touch credit for only {loop_share_of_first_touch:.0%} of those accounts. "
+            "First-touch attribution undervalues expansion loops by design, so loops are measured separately, "
+            "on the prospects they push over the sales trigger."),
         "finding": (
             f"Rankings disagree. '{vol}' brings the most sign-ups, but '{top}' produces the most sales-ready "
             f"accounts per 1,000 sign-ups ({t.loc[top, 'ready_per_1k']}) and retains "
             f"{t.loc[top, 'w8_retention']:.0%} at week 8. '{worst[0]}' and '{worst[1]}' retain worst. "
             "Invest in invite loops and work-identity channels for pipeline; judge broad social channels on "
-            f"retained users, not sign-ups. Pipeline ranks for {', '.join(repr(x) for x in thin)} rest on fewer "
-            "than 5 accounts each; treat their order as noise."),
+            f"retained users, not sign-ups."
+            + (f" Pipeline ranks for {', '.join(repr(x) for x in thin)} rest on fewer than 5 accounts"
+               f"{' each' if len(thin) > 1 else ''}; treat {'their order' if len(thin) > 1 else 'that rank'} as noise."
+               if thin else "")),
         "caveat": "Channels and intent are entangled: invited users arrive with a colleague's context. Test channel spend with geo or time holdouts before reallocating budget.",
     }
 

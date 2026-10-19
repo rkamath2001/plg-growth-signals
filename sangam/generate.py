@@ -32,7 +32,11 @@ agent can be graded against answers we know in advance:
      Jira, but also school and side-project workspaces (a robotics team Slack),
      big open communities, workspaces whose names collide with a company, and
      clients' workspaces as guests. Each is a false-positive trap.
- 10. Sales trigger: a prospect's chance of signing a contract jumps once it
+ 10. Viral loops: users share agents, assets, spaces, embeds, digests and
+     referrals. Agent shares convert and activate best; asset shares reach
+     other companies most; space invites retain best; embeds and digests are
+     high-volume, low-conversion; referral sign-ups rarely activate.
+ 11. Sales trigger: a prospect's chance of signing a contract jumps once it
      has 5+ activated independent users, and again at 3+ functions.
 """
 
@@ -61,6 +65,24 @@ SOURCE_MIX = {  # who arrives through which channel
 }
 SOURCE_INTENT = {"teammate_invite": 0.6, "linkedin": 0.25, "search": 0.15, "direct": 0.05,
                  "youtube": 0.0, "x": -0.25, "reddit": -0.35, "webinar": 0.0}
+
+# Viral loops. Each existing user may share; recipients who sign up become users
+# whose source is the loop. Parameters are the planted ground truth.
+#   rate      shares per sender over the window (scaled by activation and intent)
+#   rel       recipient relation mix: same company / another company / personal
+#   view, signup   per-share probabilities; delay = days from share to sign-up
+#   intent    added to the recipient's intent (drives activation and retention)
+LOOPS = {
+    "agent":    dict(rate=0.25, act_mult=2.5, rel=[.80, .10, .10], view=.80, signup=.45, delay=(1, 4),   intent=0.8),
+    "asset":    dict(rate=0.50, act_mult=1.6, rel=[.35, .55, .10], view=.70, signup=.25, delay=(2, 8),   intent=0.35),
+    "space":    dict(rate=0.18, act_mult=1.8, rel=[.85, .10, .05], view=.85, signup=.50, delay=(3, 11),  intent=1.1),
+    "embed":    dict(rate=1.20, act_mult=1.2, rel=[.80, .15, .05], view=.30, signup=.05, delay=(5, 21),  intent=0.1),
+    "digest":   dict(rate=0.60, act_mult=1.3, rel=[.50, .40, .10], view=.50, signup=.06, delay=(7, 29),  intent=0.0),
+    "referral": dict(rate=0.15, act_mult=1.0, rel=[.20, .20, .60], view=.65, signup=.35, delay=(1, 6),   intent=-0.5),
+}
+# Licensed enterprise users share more externally (clients, partners).
+ENTERPRISE_REL = {"asset": [.25, .65, .10], "digest": [.40, .50, .10]}
+SOURCE_INTENT.update({f"shared_{k}": v["intent"] for k, v in LOOPS.items()})
 # Sign-in provider: work identities arrive mostly via Google Workspace or work
 # email; consumer identities skew to Apple and Amazon.
 PROVIDERS = ["google", "email", "apple", "github", "amazon"]
@@ -320,6 +342,81 @@ THRESHOLD_ACTIVATED = 5
 THRESHOLD_FUNCTIONS = 3
 
 
+def _loops(rng, users, truth, accounts) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Shares by existing users, and the recipients who sign up because of them."""
+    seg = accounts.set_index("account_id").segment
+    dom = accounts.set_index("account_id").domain
+    t = truth.set_index("user_id")
+    snd = users[users.account_id_truth.map(seg).fillna("personal") != "internal"].copy()
+    snd["activated"] = snd.user_id.map(t.agent_action_w0).to_numpy()
+    snd["intent"] = snd.user_id.map(t.intent).to_numpy()
+    snd["licensed"] = snd.account_id_truth.map(seg).eq("contract").to_numpy()
+    others = accounts[accounts.segment.isin(["prospect", "prospect_hot", "contract"])].account_id.to_numpy()
+    rows = []
+    for loop, cfg in LOOPS.items():
+        if loop == "referral":
+            senders = snd[snd.channel == "self_serve"]
+        else:
+            senders = snd
+        lam = (cfg["rate"] * np.where(senders.activated, cfg["act_mult"], 0.5)
+               * np.exp(0.3 * senders.intent.to_numpy()))
+        k = rng.poisson(lam)
+        idx = np.repeat(np.arange(len(senders)), k)
+        if idx.size == 0:
+            continue
+        sd = senders.iloc[idx]
+        n = len(sd)
+        ent = (sd.channel == "enterprise").to_numpy()
+        rel_ss = rng.choice(["same", "other", "personal"], n, p=cfg["rel"])
+        rel_en = rng.choice(["same", "other", "personal"], n, p=ENTERPRISE_REL.get(loop, cfg["rel"]))
+        rel = np.where(ent, rel_en, rel_ss)
+        sender_acct = sd.account_id_truth.to_numpy()
+        rel = np.where((rel == "same") & pd.isna(sender_acct), "personal", rel)
+        acct = np.where(rel == "same", sender_acct, None).astype(object)
+        o = rel == "other"
+        pick = others[rng.integers(0, len(others), o.sum())]
+        acct[o] = np.where(pick == sender_acct[o], others[rng.integers(0, len(others), o.sum())], pick)
+        rdom = np.array([dom.get(a) if isinstance(a, str) else None for a in acct], dtype=object)
+        personal_addr = (rel == "personal") | ((rel == "other") & (rng.random(n) < 0.1))
+        rdom[personal_addr] = rng.choice(PERSONAL_DOMAINS, int(personal_addr.sum()))
+        licensed = np.array([seg.get(a) == "contract" if isinstance(a, str) else False for a in acct])
+        day = sd.signup_week.to_numpy() * 7 + rng.integers(0, 70, n)
+        viewed = rng.random(n) < cfg["view"]
+        signed = viewed & ~licensed & (rng.random(n) < cfg["signup"])
+        sday = day + rng.integers(cfg["delay"][0], cfg["delay"][1], n)
+        signed &= (sday // 7) < OBSERVE_WEEKS - 1
+        rows.append(pd.DataFrame({
+            "sender_id": sd.user_id.to_numpy(), "loop": loop, "share_day": day,
+            "sender_licensed": sd.licensed.to_numpy(), "recipient_email_domain": rdom,
+            "recipient_licensed": licensed, "viewed": viewed, "signed_up": signed,
+            "signup_day": np.where(signed, sday, -1), "recipient_account_truth": acct}))
+    ledger = pd.concat(rows, ignore_index=True)
+    ledger.insert(0, "share_id", [f"SH{i:06d}" for i in range(len(ledger))])
+
+    rec = ledger[ledger.signed_up].reset_index(drop=True)
+    n = len(rec)
+    corporate = ~rec.recipient_email_domain.isin(PERSONAL_DOMAINS).to_numpy()
+    provider = np.where(corporate, rng.choice(PROVIDERS, n, p=PROVIDER_MIX["corporate"]),
+                        rng.choice(PROVIDERS, n, p=PROVIDER_MIX["personal"]))
+    edom = rec.recipient_email_domain.to_numpy().copy()
+    relay = (provider == "apple") & (rng.random(n) < 0.6)
+    edom[relay] = RELAY_DOMAIN
+    hide = corporate & (rng.random(n) < pd.Series(provider).map(PERSONAL_ADDRESS_P).to_numpy())
+    edom[hide] = rng.choice(PERSONAL_DOMAINS, int(hide.sum()))
+    start_id = len(users)
+    new = pd.DataFrame({
+        "user_id": [f"U{start_id + i:06d}" for i in range(n)],
+        "channel": "self_serve", "source": "shared_" + rec.loop, "provider": provider,
+        "account_id_truth": rec.recipient_account_truth.to_numpy(), "email_domain": edom,
+        "function": rng.choice(FUNCTIONS, n), "signup_week": (rec.signup_day // 7).astype(int).to_numpy(),
+        "plan": "free", "rollout_wave": pd.array([pd.NA] * n, dtype="Int64"),
+    })
+    new["signup_date"] = START_DATE + pd.to_timedelta(new.signup_week * 7, unit="D")
+    ledger["recipient_user_id"] = None
+    ledger.loc[ledger.signed_up, "recipient_user_id"] = new.user_id.to_numpy()
+    return ledger, new
+
+
 def _conversions(rng, users, truth, accounts) -> pd.DataFrame:
     """Observed outcome: did each prospect company sign an enterprise contract by
     the end of the window? Driven by activated independent users, not sign-ups."""
@@ -435,6 +532,11 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
     accounts = _accounts(rng, cfg)
     users = _users(rng, cfg, accounts)
     events, truth = _behavior(rng, users, accounts)
+    ledger, loop_users = _loops(rng, users, truth, accounts)
+    ev2, tr2 = _behavior(rng, loop_users, accounts)
+    users = pd.concat([users, loop_users], ignore_index=True)
+    events = pd.concat([events, ev2], ignore_index=True)
+    truth = pd.concat([truth, tr2], ignore_index=True)
 
     outcomes = _conversions(rng, users, truth, accounts)
     workspaces, links = _connections(rng, users, accounts)
@@ -449,6 +551,7 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
         "events": out / "events.csv.gz",
         "account_outcomes": out / "account_outcomes.csv",
         "workspaces": out / "workspaces.csv",
+        "shares": out / "shares.csv.gz",
         "connections": out / "connections.csv",
         "ground_truth_users": out / "ground_truth" / "users_truth.csv",
         "ground_truth_accounts": out / "ground_truth" / "accounts_truth.csv",
@@ -462,6 +565,9 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
     workspaces[["workspace_id", "kind_truth", "owner_account_truth"]].to_csv(
         out / "ground_truth" / "workspaces_truth.csv", index=False)
     links.to_csv(paths["connections"], index=False)
+    ledger.drop(columns=["recipient_account_truth"]).to_csv(paths["shares"], index=False)
+    ledger[["share_id", "recipient_account_truth"]].to_csv(
+        out / "ground_truth" / "shares_truth.csv.gz", index=False)
     truth.to_csv(paths["ground_truth_users"], index=False)
     accounts[["account_id", "segment"]].to_csv(paths["ground_truth_accounts"], index=False)
     (out / "README.md").write_text(

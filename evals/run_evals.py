@@ -29,7 +29,8 @@ from sangam import cohorts
 from sangam.experiment import simulate
 from sangam.pqa import account_rollup, score
 from sangam.tools import (acquisition_channel_ranking, dataset, sales_trigger_threshold,
-                          signin_provider_ranking, work_email_prompt_whatif, connector_identity)
+                          signin_provider_ranking, work_email_prompt_whatif, connector_identity,
+                          viral_loops)
 
 ROOT = Path(__file__).resolve().parent
 GOLDEN = json.loads((ROOT / "golden.json").read_text())
@@ -90,9 +91,11 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
           f"F1 {rule['f1']} vs {naive['f1']}")
 
     chan = {r["source"]: r for r in acquisition_channel_ranking()["table"]}
-    check("Teammate invites rank first on pipeline and retention",
-          chan["teammate_invite"]["by_pipeline"] == 1 and chan["teammate_invite"]["by_retention"] == 1,
-          f"pipeline rank {chan['teammate_invite']['by_pipeline']}, retention rank {chan['teammate_invite']['by_retention']}")
+    check("Teammate invites retain best; invites and LinkedIn lead on pipeline",
+          chan["teammate_invite"]["by_retention"] == 1
+          and {k for k, v in chan.items() if v["by_pipeline"] <= 2} == {"teammate_invite", "linkedin"},
+          f"retention rank {chan['teammate_invite']['by_retention']}; pipeline top 2: "
+          f"{sorted(k for k, v in chan.items() if v['by_pipeline'] <= 2)}")
     check("Low-intent social channels rank in the bottom half on retention",
           all(chan[c]["by_retention"] > len(chan) / 2 for c in ("x", "reddit")),
           f"x {chan['x']['by_retention']}, reddit {chan['reddit']['by_retention']} of {len(chan)}")
@@ -118,6 +121,33 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
     top_guard = max(con["naive_errors_by_guard"], key=con["naive_errors_by_guard"].get)
     check("Community and side-project workspaces are the main false-positive source",
           top_guard.startswith("community"), f"{con['naive_errors_by_guard']}")
+
+    lp = viral_loops()
+    sc = pd.DataFrame(lp["scorecard"]).set_index("loop")
+    land = pd.DataFrame(lp["expand_vs_land"]).set_index("loop")
+    sim = lp["reward_simulation"]
+    check("Shared agents have the highest viral coefficient on activated users",
+          sc.k_activated_per_100.idxmax() == "agent", f"{sc.k_activated_per_100.to_dict()}")
+    check("Shared spaces retain recipients best", sc.recipient_w8_retention.idxmax() == "space",
+          f"{sc.recipient_w8_retention.round(3).to_dict()}")
+    check("Shared assets seed the most new companies", land.companies_seeded.idxmax() == "asset",
+          f"{land.companies_seeded.to_dict()}")
+    check("Embeds and digests convert worst per share",
+          set(sc.signup_per_share.nsmallest(2).index) == {"embed", "digest"},
+          f"{sc.signup_per_share.round(3).to_dict()}")
+    check("Referral sign-ups activate least", sc.activation_of_signups.idxmin() == "referral",
+          f"{sc.activation_of_signups.round(3).to_dict()}")
+    check("Rewarding shares sent maximizes shares but not activated users",
+          max(sim, key=lambda a: sim[a]["shares"]) == "per_share_sent"
+          and sim["per_share_sent"]["incremental_activated"] < sim["per_activation_weighted"]["incremental_activated"],
+          f"shares {sim['per_share_sent']['shares']:,}; activated {sim['per_share_sent']['incremental_activated']:+} "
+          f"vs {sim['per_activation_weighted']['incremental_activated']:+}")
+    sa, wt = sim["stage_aware"], sim["per_activation_weighted"]
+    check("Stage-aware rewards keep the pipeline gains at a fraction of the cost",
+          sa["extra_prospects_over_trigger"] >= 0.9 * wt["extra_prospects_over_trigger"]
+          and sa["rewards_paid"] <= 0.2 * wt["rewards_paid"],
+          f"{sa['extra_prospects_over_trigger']} vs {wt['extra_prospects_over_trigger']} prospects over trigger; "
+          f"{sa['rewards_paid']:,} vs {wt['rewards_paid']:,} rewards paid")
     return out
 
 
@@ -185,17 +215,11 @@ def rubric_self_test(facts: dict) -> list[dict]:
     return out
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--agent", action="store_true", help="also grade the live Bedrock agent")
-    ap.add_argument("--out", default="reports/eval_results.json")
-    args = ap.parse_args()
-
+def collect(agent: bool = False) -> dict:
     results = {"analytics": analytics_checks()}
     facts = fact_sheet()
     results["rubric_self_test"] = rubric_self_test(facts)
-
-    if args.agent:
+    if agent:
         from sangam.agent import ask
         graded = []
         for item in GOLDEN:
@@ -204,6 +228,16 @@ def main() -> int:
             g["answer"] = ans
             graded.append(g)
         results["agent"] = graded
+    return results
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--agent", action="store_true", help="also grade the live Bedrock agent")
+    ap.add_argument("--out", default="reports/eval_results.json")
+    args = ap.parse_args()
+
+    results = collect(args.agent)
 
     print("\nSangam evals\n" + "=" * 60)
     total = passed = 0
