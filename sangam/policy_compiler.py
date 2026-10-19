@@ -75,6 +75,8 @@ def grade_compile(got: Policy, want: Policy) -> list[str]:
     Wording of defaults and questions is not compared; the NUMBER of open questions must match
     within one, and a policy that should have questions must have at least one."""
     diffs = []
+    if got.rewarded != want.rewarded:
+        diffs.append(f"rewards the {got.rewarded}, should reward the {want.rewarded}")
     if got.reward_event != want.reward_event:
         diffs.append(f"pays on {got.reward_event}, should pay on {want.reward_event}")
     for stage in ("pre_contract", "post_contract"):

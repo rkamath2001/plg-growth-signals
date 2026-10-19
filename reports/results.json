@@ -749,9 +749,31 @@
         "assumption": "pre-contract: reward same-company shares; post-contract: reward external shares to non-customers; never pay for licensed colleagues",
         "incremental_activated": 294,
         "rewards_per_incremental_activated": 4.56
+      },
+      "stage_aware_recipient": {
+        "shares": 71074,
+        "signups": 5831,
+        "activated_new_users": 3266,
+        "rewards_paid": 1624,
+        "extra_prospects_over_trigger": 13.1,
+        "extra_companies_seeded_by_customers": 6.7,
+        "assumption": "a welcome credit nudges recipients to sign up and try an agent",
+        "incremental_activated": 578,
+        "rewards_per_incremental_activated": 2.81
+      },
+      "stage_aware_both": {
+        "shares": 73311,
+        "signups": 6183,
+        "activated_new_users": 3491,
+        "rewards_paid": 3698,
+        "extra_prospects_over_trigger": 18.8,
+        "extra_companies_seeded_by_customers": 9.3,
+        "assumption": "sharers pick people who will actually use it",
+        "incremental_activated": 803,
+        "rewards_per_incremental_activated": 4.61
       }
     },
-    "cheapest_arm": "stage_aware",
+    "cheapest_arm": "stage_aware_recipient",
     "finding": "'Shared agent' grows the product most (3.25 activated recipients per 100 users; 56% of its sign-ups activate) and turns fastest. 'Shared asset (URL)' is the landing loop: it seeds the most new companies (49). 'Shared space / knowledge base' recipients retain best. Embeds and digests create many impressions but convert under 3% per share, and referral credits paid on sign-up bring sign-ups of which only 31% activate. In the reward simulation, paying per share sent nearly doubles shares but adds only +269 activated users. The stage-aware policy delivers the same pipeline as uniform weighted rewards (7.3 vs 7.3 extra prospects over the trigger; 3.4 vs 3.4 companies seeded by customers) while paying 1,340 rewards instead of 12,488. Uniform rewards buy more total sign-ups, mostly prosumer activity and colleagues who were already licensed.",
     "caveat": "Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see BEHAVIOR in sangam/policy.py); test the policy with an A/B test, randomized by workspace, before rolling it out."
   },

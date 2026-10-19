@@ -52,6 +52,10 @@ class Policy(BaseModel):
     reward_event: RewardEvent = Field(
         description="What earns the reward: the share being sent, the recipient signing up, or the recipient "
                     "completing their first agent action (activation). 'none' only for a no-reward baseline.")
+    rewarded: Literal["sharer", "recipient", "both"] = Field(
+        default="sharer",
+        description="Who receives the reward: the person who shared (sharer), the person they shared with "
+                    "(recipient, paid on their first agent action), or both.")
     loops: list[Literal["agent", "asset", "space", "embed", "digest", "referral"]] = Field(
         default_factory=lambda: list(LOOPS),
         description="Which kinds of share count: agent (shared agent), asset (shared document, analysis or "
@@ -108,6 +112,12 @@ BUILTIN = {
                                       require_admin_ok_external=False),
     "stage_aware": Policy(name="Stage-aware activation reward", reward_event="recipient_first_agent_action",
                           loop_weights=WEIGHTS, pre_contract=["same_company"], post_contract=["other_company"]),
+    "stage_aware_recipient": Policy(name="Stage-aware, recipient rewarded", rewarded="recipient",
+                                    reward_event="recipient_first_agent_action", loop_weights=WEIGHTS,
+                                    pre_contract=["same_company"], post_contract=["other_company"]),
+    "stage_aware_both": Policy(name="Stage-aware, sharer and recipient rewarded", rewarded="both",
+                               reward_event="recipient_first_agent_action", loop_weights=WEIGHTS,
+                               pre_contract=["same_company"], post_contract=["other_company"]),
 }
 
 # How people respond to each kind of incentive. These are the growth team's stated
@@ -122,6 +132,11 @@ BEHAVIOR = {
     "recipient_first_agent_action": {"uplift": 0.25, "quality": 0.90, "fatigue": 1.00,
                                      "note": "sharers pick people who will actually use it"},
 }
+# A reward for the recipient (a welcome credit on their first agent action) changes the
+# recipient, not the sharer: more of them sign up and more of those activate. Sharers
+# share a little more when they have a gift to offer.
+RECIPIENT_BEHAVIOR = {"signup_lift": 0.15, "activation_lift": 0.20, "sharer_uplift": 0.10,
+                      "note": "a welcome credit nudges recipients to sign up and try an agent"}
 LICENSED_FIRST_ACTION = 0.5     # chance a licensed colleague's first agent action follows a share
 
 
@@ -153,7 +168,14 @@ def render_card(p: Policy) -> str:
     lines = [f"## {p.name}"]
     if p.reward_event == "none":
         return "\n\n".join(lines + ["Nobody earns a reward for sharing."])
-    lines.append(f"**What earns a reward.** A person earns a reward {_EVENT[p.reward_event]}.")
+    if p.rewarded == "recipient":
+        lines.append("**What earns a reward.** The person who receives a share earns a reward when they complete "
+                     "their first agent action. The person who shared earns nothing.")
+    else:
+        lines.append(f"**What earns a reward.** A person earns a reward {_EVENT[p.reward_event]}.")
+        if p.rewarded == "both":
+            lines.append("**The recipient too.** The person they shared with also earns a reward on their first "
+                         "agent action.")
     if p.reward:
         lines.append(f"**The reward.** {p.reward[0].upper() + p.reward[1:]}.")
     stage = []
@@ -273,6 +295,11 @@ def _context(ds: Dataset, ready_rule: dict, outcomes: pd.DataFrame, data_dir="da
 def _simulate_one(ctx: dict, p: Policy) -> dict:
     seg = ctx["seg"].copy()
     b = BEHAVIOR[p.reward_event]
+    rb = RECIPIENT_BEHAVIOR
+    pays_sharer = p.reward_event != "none" and p.rewarded in ("sharer", "both")
+    pays_recipient = p.reward_event != "none" and p.rewarded in ("recipient", "both")
+    if p.reward_event != "none" and p.rewarded == "recipient":
+        b = {"uplift": rb["sharer_uplift"], "quality": 1.0, "fatigue": 1.0, "note": rb["note"]}
     w = p.loop_weights
     if p.reward_event == "none":
         elig = np.zeros(len(seg), bool)
@@ -283,23 +310,31 @@ def _simulate_one(ctx: dict, p: Policy) -> dict:
                 & (p.pay_for_licensed_recipients | ~seg.recipient_licensed)).to_numpy()
     up = np.where(elig, b["uplift"] * seg.loop.map(lambda l: w.get(l, 1.0)), 0.0)
     fat, q = b["fatigue"], b["quality"]
+    sm = 1 + rb["signup_lift"] if pays_recipient else 1.0           # recipient-side lifts, eligible shares only
+    mult = np.where(elig, sm * (1 + rb["activation_lift"]) if pays_recipient else 1.0, 1.0)
+    smult = np.where(elig, sm, 1.0)
     new_users = (~seg.recipient_licensed) * seg.n * (fat + up * q)
     lic_actions = seg.recipient_licensed * seg.n * (1 + up) * seg.view * LICENSED_FIRST_ACTION
-    if p.reward_event == "none":
+    act_new = new_users * seg.act * mult                             # activated new recipients per segment
+    if not pays_sharer:
         paid = 0.0
     elif p.reward_event == "share_sent":
         paid = (seg.n * (1 + up) * elig).sum()
     elif p.reward_event == "recipient_signup":
-        paid = (new_users * seg.signup * elig).sum()
+        paid = (new_users * seg.signup * smult * elig).sum()
     else:
-        paid = ((new_users * seg.act + lic_actions * p.pay_for_licensed_recipients) * elig).sum()
+        paid = ((act_new + lic_actions * p.pay_for_licensed_recipients) * elig).sum()
+    if pays_recipient:
+        paid += (act_new * elig).sum()                               # one welcome credit per activated recipient
     # expansion: extra same-company activated recipients at pre-contract prospects
     rate = seg[(seg.relation == "same_company") & (seg.stage == "pre_contract")].groupby("loop")[
         ["signup", "act"]].mean()
     pre_ok = "same_company" in p.pre_contract and p.reward_event != "none"
     upl = {l: (b["uplift"] * w.get(l, 1.0) if pre_ok and l in p.loops else 0.0) for l in rate.index}
+    rm = {l: (sm * (1 + rb["activation_lift"]) if pre_ok and pays_recipient and l in p.loops else 1.0)
+          for l in rate.index}
     pa = ctx["per_acct"]
-    extra = pa.assign(d=pa.n * pa.loop.map(lambda l: (fat - 1) + upl.get(l, 0) * q)
+    extra = pa.assign(d=pa.n * pa.loop.map(lambda l: (fat + upl.get(l, 0) * q) * rm.get(l, 1.0) - 1)
                       * pa.loop.map(rate.signup) * pa.loop.map(rate.act))
     delta = extra.groupby("sender_account").d.sum().clip(lower=0)
     need = (ctx["k"] - ctx["base_act"].reindex(delta.index).fillna(0)).clip(lower=0)
@@ -307,9 +342,10 @@ def _simulate_one(ctx: dict, p: Policy) -> dict:
     # landing: extra activated external recipients from post-contract senders
     m = ((seg.stage == "post_contract") & (seg.relation == "other_company") & ~seg.recipient_licensed).to_numpy()
     post = seg[m]
-    seeded = float((post.n * (fat - 1 + up[m] * q) * post.signup * post.act).sum() * ctx["seed_rate"])
-    return {"shares": round(float((seg.n * (1 + up)).sum())), "signups": round(float((new_users * seg.signup).sum())),
-            "activated_new_users": round(float((new_users * seg.act).sum())), "rewards_paid": round(float(paid)),
+    seeded = float((post.n * ((fat + up[m] * q) * mult[m] - 1) * post.signup * post.act).sum() * ctx["seed_rate"])
+    return {"shares": round(float((seg.n * (1 + up)).sum())),
+            "signups": round(float((new_users * seg.signup * smult).sum())),
+            "activated_new_users": round(float(act_new.sum())), "rewards_paid": round(float(paid)),
             "extra_prospects_over_trigger": crossed,
             "extra_companies_seeded_by_customers": round(seeded, 1), "assumption": b["note"]}
 

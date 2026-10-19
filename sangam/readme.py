@@ -61,7 +61,9 @@ def _loop_table(lp: dict) -> str:
 ARM_LABEL = {"no_reward": "No reward (status quo)", "per_share_sent": "Per share sent",
              "per_signup": "Per recipient sign-up", "per_activation": "Per recipient first agent action",
              "per_activation_weighted": "Per first agent action, weighted by share type",
-             "stage_aware": "Stage-aware (see below)"}
+             "stage_aware": "Stage-aware, sharer rewarded (see below)",
+             "stage_aware_recipient": "Stage-aware, recipient rewarded",
+             "stage_aware_both": "Stage-aware, sharer and recipient rewarded"}
 
 
 def _reward_table(lp: dict) -> str:
@@ -230,7 +232,7 @@ The guarded matcher trusts verified domains; treats a matching name as a clue th
 
 {_loop_table(lp)}
 
-**Reward policy simulation.** Six ways to reward sharing, on the same population:
+**Reward policy simulation.** Eight ways to reward sharing, on the same population:
 
 {_reward_table(lp)}
 

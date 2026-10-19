@@ -130,7 +130,7 @@ The guarded matcher trusts verified domains; treats a matching name as a clue th
 | Referral credit | 1,218 | 23.9% | 31% | 0.31 | 3 | 12% | 2 | 4 |
 | Slack or email embed | 26,169 | 1.6% | 35% | 0.25 | 12 | 15% | 2 | 3 |
 
-**Reward policy simulation.** Six ways to reward sharing, on the same population:
+**Reward policy simulation.** Eight ways to reward sharing, on the same population:
 
 | Reward fires... | Shares | Extra activated users | Rewards paid | Rewards per extra activated user | Extra prospects over trigger | Extra companies seeded by customers |
 |---|---|---|---|---|---|---|
@@ -139,7 +139,9 @@ The guarded matcher trusts verified domains; treats a matching name as a clue th
 | Per recipient sign-up | 97,416 | +484 | 6,186 | 12.78 | 4.0 | 2.2 |
 | Per recipient first agent action | 86,979 | +605 | 12,198 | 20.16 | 5.0 | 2.7 |
 | Per first agent action, weighted by share type | 84,977 | +773 | 12,488 | 16.16 | 7.3 | 3.4 |
-| Stage-aware (see below) | 73,311 | +294 | 1,340 | 4.56 | 7.3 | 3.4 |
+| Stage-aware, sharer rewarded (see below) | 73,311 | +294 | 1,340 | 4.56 | 7.3 | 3.4 |
+| Stage-aware, recipient rewarded | 71,074 | +578 | 1,624 | 2.81 | 13.1 | 6.7 |
+| Stage-aware, sharer and recipient rewarded | 73,311 | +803 | 3,698 | 4.61 | 18.8 | 9.3 |
 
 The **stage-aware** policy pays on the recipient's first agent action, weights agent and space shares higher, rewards *same-company* shares before a company has a contract (each activated colleague moves it toward the sales trigger), rewards *external* shares to customers and partners after a contract (customers become a distribution channel), and never pays for colleagues who are already licensed. Paying per share sent nearly doubles shares (125,249) for the smallest gain in activated users.
 
