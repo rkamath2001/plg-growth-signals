@@ -1,4 +1,12 @@
 {
+  "north_star": {
+    "definition": "Weekly agent-active users: users completing at least one agent action in the week, external users only.",
+    "peak_weekly_agent_active_users": 7825,
+    "peak_week": 11,
+    "agent_active_rate_activated": 0.5016,
+    "agent_active_rate_question_only": 0.1114,
+    "internal_excluded_users": 3500
+  },
   "headline_inflation": {
     "question": "Does the internal deployment distort headline retention?",
     "w8_retention_all_users": 0.327,
@@ -693,6 +701,7 @@
         "extra_companies_seeded_by_customers": 0.0,
         "assumption": "status quo",
         "incremental_activated": 0,
+        "north_star_lift": 0,
         "rewards_per_incremental_activated": null
       },
       "per_share_sent": {
@@ -704,6 +713,7 @@
         "extra_companies_seeded_by_customers": 1.2,
         "assumption": "people blast links for credit; recipients learn to ignore them",
         "incremental_activated": 269,
+        "north_star_lift": 135,
         "rewards_per_incremental_activated": 465.61
       },
       "per_signup": {
@@ -715,6 +725,7 @@
         "extra_companies_seeded_by_customers": 2.2,
         "assumption": "sharers recruit people who sign up as a favor",
         "incremental_activated": 484,
+        "north_star_lift": 243,
         "rewards_per_incremental_activated": 12.78
       },
       "per_activation": {
@@ -726,6 +737,7 @@
         "extra_companies_seeded_by_customers": 2.7,
         "assumption": "sharers pick people who will actually use it",
         "incremental_activated": 605,
+        "north_star_lift": 303,
         "rewards_per_incremental_activated": 20.16
       },
       "per_activation_weighted": {
@@ -737,6 +749,7 @@
         "extra_companies_seeded_by_customers": 3.4,
         "assumption": "agent and space shares, which show the product working, earn more",
         "incremental_activated": 773,
+        "north_star_lift": 388,
         "rewards_per_incremental_activated": 16.16
       },
       "stage_aware": {
@@ -748,6 +761,7 @@
         "extra_companies_seeded_by_customers": 3.4,
         "assumption": "pre-contract: reward same-company shares; post-contract: reward external shares to non-customers; never pay for licensed colleagues",
         "incremental_activated": 294,
+        "north_star_lift": 147,
         "rewards_per_incremental_activated": 4.56
       },
       "stage_aware_recipient": {
@@ -759,6 +773,7 @@
         "extra_companies_seeded_by_customers": 6.7,
         "assumption": "a welcome credit nudges recipients to sign up and try an agent",
         "incremental_activated": 578,
+        "north_star_lift": 290,
         "rewards_per_incremental_activated": 2.81
       },
       "stage_aware_both": {
@@ -770,6 +785,7 @@
         "extra_companies_seeded_by_customers": 9.3,
         "assumption": "sharers pick people who will actually use it",
         "incremental_activated": 803,
+        "north_star_lift": 403,
         "rewards_per_incremental_activated": 4.61
       }
     },
@@ -794,6 +810,7 @@
           "extra_companies_seeded_by_customers": 3.4,
           "assumption": "sharers pick people who will actually use it",
           "incremental_activated": 294,
+          "north_star_lift": 147,
           "rewards_per_incremental_activated": 4.56
         },
         "reference": {
@@ -805,6 +822,7 @@
           "extra_companies_seeded_by_customers": 3.4,
           "assumption": "sharers pick people who will actually use it",
           "incremental_activated": 294,
+          "north_star_lift": 147,
           "rewards_per_incremental_activated": 4.56
         },
         "status_quo": {
@@ -816,10 +834,11 @@
           "extra_companies_seeded_by_customers": 0.0,
           "assumption": "status quo",
           "incremental_activated": 0,
+          "north_star_lift": 0,
           "rewards_per_incremental_activated": null
         }
       },
-      "outcome": "Compared with offering no reward, this policy would add about 294 activated users, push about 7.3 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 3.4 new companies. It would pay about 1,340 rewards, or 4.56 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
+      "outcome": "Compared with offering no reward, this policy would add about 294 activated users (about 147 more weekly agent-active users, the north star), push about 7.3 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 3.4 new companies. It would pay about 1,340 rewards, or 4.56 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
     },
     "launch_blitz": {
       "path": "policies/examples/launch_blitz.md",
@@ -878,6 +897,7 @@
           "extra_companies_seeded_by_customers": 1.2,
           "assumption": "people blast links for credit; recipients learn to ignore them",
           "incremental_activated": 269,
+          "north_star_lift": 135,
           "rewards_per_incremental_activated": 465.61
         },
         "reference": {
@@ -889,6 +909,7 @@
           "extra_companies_seeded_by_customers": 3.4,
           "assumption": "sharers pick people who will actually use it",
           "incremental_activated": 294,
+          "north_star_lift": 147,
           "rewards_per_incremental_activated": 4.56
         },
         "status_quo": {
@@ -900,10 +921,11 @@
           "extra_companies_seeded_by_customers": 0.0,
           "assumption": "status quo",
           "incremental_activated": 0,
+          "north_star_lift": 0,
           "rewards_per_incremental_activated": null
         }
       },
-      "outcome": "Compared with offering no reward, this policy would add about 269 activated users, push about 2.2 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 1.2 new companies. It would pay about 125,249 rewards, or 465.61 per added activated user. For comparison, the stage-aware reference policy adds about 294 activated users and 7.3 prospect companies for about 1,340 rewards (4.56 per added activated user). These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
+      "outcome": "Compared with offering no reward, this policy would add about 269 activated users (about 135 more weekly agent-active users, the north star), push about 2.2 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 1.2 new companies. It would pay about 125,249 rewards, or 465.61 per added activated user. For comparison, the stage-aware reference policy adds about 294 activated users and 7.3 prospect companies for about 1,340 rewards (4.56 per added activated user). These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
     },
     "partner_draft": {
       "path": "policies/examples/partner_draft.md",

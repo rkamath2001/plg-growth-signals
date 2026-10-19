@@ -100,6 +100,31 @@ def retention_by(ds: Dataset, dimension: str, week: int = 8,
     return t.sort_values(f"w{week}_retention", ascending=False).round(3)
 
 
+def agent_active_rate(ds: Dataset, mask: pd.Series | None = None, weeks: range = range(1, 9)) -> float:
+    """Average share of a cohort that completes an agent action in a given week after signup
+    (weeks 1-8; weeks beyond the observation window are excluded). This is how much one more
+    user in the cohort adds to the north star in a typical week."""
+    u = ds.users if mask is None else ds.users[mask]
+    ev = ds.events[(ds.events.event_type == "agent_action") & ds.events.user_id.isin(u.user_id)]
+    ev = ev.merge(u[["user_id", "signup_week"]], on="user_id")
+    ev = ev[ev.week - ev.signup_week >= 1]
+    hits = ev.assign(rel=ev.week - ev.signup_week).groupby("rel").user_id.nunique()
+    max_rel = OBSERVE_WEEKS - 1 - u.signup_week
+    rates = [hits.get(w, 0) / max(int((max_rel >= w).sum()), 1) for w in weeks]
+    return round(float(np.mean(rates)), 4)
+
+
+def north_star_summary(ds: Dataset) -> dict:
+    """The north star and the conversion factor programs are judged by."""
+    ns = north_star(ds)
+    ss = ds.users.segment == "self_serve"
+    return {"definition": METRIC_DEFINITIONS["north_star"],
+            "peak_weekly_agent_active_users": int(ns.max()), "peak_week": int(ns.idxmax()),
+            "agent_active_rate_activated": agent_active_rate(ds, ss & ds.users.activated_agent),
+            "agent_active_rate_question_only": agent_active_rate(ds, ss & ds.users.activated_question_only),
+            "internal_excluded_users": int((ds.users.segment == "internal").sum())}
+
+
 def north_star(ds: Dataset) -> pd.Series:
     ext = ds.users.loc[ds.users.segment != "internal", "user_id"]
     e = ds.events[(ds.events.event_type == "agent_action") & ds.events.user_id.isin(ext)]

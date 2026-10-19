@@ -12,7 +12,7 @@
 - **Pay sharing rewards when the recipient completes a first agent action, and tie them to the account's stage**: same-company shares before a contract, external shares after it. In simulation that keeps the same pipeline gains as uniform rewards while paying 1,340 rewards instead of 12,488.
 - **Reward policy is written in plain language.** Teams submit prose guidelines and approve a plain-English card; the framework flags pay-per-share and uncapped schemes, and asks rather than guesses when wording is ambiguous.
 - **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is 70% accurate and invents sales-ready accounts from school clubs and side projects.
-- **Everything is graded**: 38 of 38 checks pass against planted ground truth, including tests of the grader itself.
+- **Everything is graded**: 40 of 40 checks pass against planted ground truth, including tests of the grader itself.
 
 ## Quick start
 
@@ -132,16 +132,16 @@ The guarded matcher trusts verified domains; treats a matching name as a clue th
 
 **Reward policy simulation.** Eight ways to reward sharing, on the same population:
 
-| Reward fires... | Shares | Extra activated users | Rewards paid | Rewards per extra activated user | Extra prospects over trigger | Extra companies seeded by customers |
-|---|---|---|---|---|---|---|
-| No reward (status quo) | 69,583 | +0 | 0 | - | 0.0 | 0.0 |
-| Per share sent | 125,249 | +269 | 125,249 | 465.61 | 2.2 | 1.2 |
-| Per recipient sign-up | 97,416 | +484 | 6,186 | 12.78 | 4.0 | 2.2 |
-| Per recipient first agent action | 86,979 | +605 | 12,198 | 20.16 | 5.0 | 2.7 |
-| Per first agent action, weighted by share type | 84,977 | +773 | 12,488 | 16.16 | 7.3 | 3.4 |
-| Stage-aware, sharer rewarded (see below) | 73,311 | +294 | 1,340 | 4.56 | 7.3 | 3.4 |
-| Stage-aware, recipient rewarded | 71,074 | +578 | 1,624 | 2.81 | 13.1 | 6.7 |
-| Stage-aware, sharer and recipient rewarded | 73,311 | +803 | 3,698 | 4.61 | 18.8 | 9.3 |
+| Reward fires... | Shares | Extra activated users | North-star lift (weekly agent-active users) | Rewards paid | Rewards per extra activated user | Extra prospects over trigger | Extra companies seeded by customers |
+|---|---|---|---|---|---|---|---|
+| No reward (status quo) | 69,583 | +0 | +0 | 0 | - | 0.0 | 0.0 |
+| Per share sent | 125,249 | +269 | +135 | 125,249 | 465.61 | 2.2 | 1.2 |
+| Per recipient sign-up | 97,416 | +484 | +243 | 6,186 | 12.78 | 4.0 | 2.2 |
+| Per recipient first agent action | 86,979 | +605 | +303 | 12,198 | 20.16 | 5.0 | 2.7 |
+| Per first agent action, weighted by share type | 84,977 | +773 | +388 | 12,488 | 16.16 | 7.3 | 3.4 |
+| Stage-aware, sharer rewarded (see below) | 73,311 | +294 | +147 | 1,340 | 4.56 | 7.3 | 3.4 |
+| Stage-aware, recipient rewarded | 71,074 | +578 | +290 | 1,624 | 2.81 | 13.1 | 6.7 |
+| Stage-aware, sharer and recipient rewarded | 73,311 | +803 | +403 | 3,698 | 4.61 | 18.8 | 9.3 |
 
 The **stage-aware** policy pays on the recipient's first agent action, weights agent and space shares higher, rewards *same-company* shares before a company has a contract (each activated colleague moves it toward the sales trigger), rewards *external* shares to customers and partners after a contract (customers become a distribution channel), and never pays for colleagues who are already licensed. Paying per share sent nearly doubles shares (125,249) for the smallest gain in activated users.
 
@@ -192,7 +192,7 @@ The partner draft ("reward users when their teammates start using the product in
 **Filled in where the guidelines were silent** (confirm or correct):
 - The guidelines didn't mention shares to personal email addresses; we assumed they don't count.
 
-Compared with offering no reward, this policy would add about 294 activated users, push about 7.3 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 3.4 new companies. It would pay about 1,340 rewards, or 4.56 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out.
+Compared with offering no reward, this policy would add about 294 activated users (about 147 more weekly agent-active users, the north star), push about 7.3 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 3.4 new companies. It would pay about 1,340 rewards, or 4.56 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out.
 
 </details>
 
@@ -228,7 +228,7 @@ evals/
 policies/examples/  sample guidelines: sound, sloppy and ambiguous
 ```
 
-**Dhruva, the metric layer.** Named for the pole star you navigate by. Every number, in a chart or in an agent's answer, comes from one set of definitions.
+**Dhruva, the north star and metric layer.** Named for the pole star you navigate by. The north star is weekly agent-active users, external users only (peak 7,825). Each activated user is agent-active in 50% of weeks, versus 11% for a question-only user, so every reward program is judged by its north-star lift and its cost. Every number, in a chart or in an agent's answer, comes from one set of definitions.
 
 **An agent you can check.** The agent can only call governed tools. Its instructions require sample sizes, external-only reporting, a within-segment check before crediting any feature, a named alternative explanation, and a confirming experiment. The eval rubric scores each answer on required facts, required caveats and forbidden claims, and the rubric is itself tested: a known-good answer must pass and a known-bad one must fail. That self-test once caught the grader reading "5 activated users" as "5%" and failing a correct answer.
 
@@ -260,6 +260,8 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
   PASS  Embeds and digests convert worst per share
   PASS  Referral sign-ups activate least
   PASS  Rewarding shares sent maximizes shares but not activated users
+  PASS  North star: an activated user adds more weekly agent activity than a question-only user
+  PASS  Every reward program reports its north-star lift
   PASS  Stage-aware rewards keep the pipeline gains at a fraction of the cost
 [policy]
   PASS  Sound guidelines: no warnings, and activation gains at a low reward cost
@@ -276,7 +278,7 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
   PASS  Rubric separates good from bad answer: sales-trigger
   PASS  Rubric separates good from bad answer: connector-identity
   PASS  Rubric separates good from bad answer: reward-policy
-38/38 checks passed
+40/40 checks passed
 ```
 
 ## Limits

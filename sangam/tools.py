@@ -29,6 +29,13 @@ def metric_definitions() -> dict:
     return {"definitions": METRIC_DEFINITIONS, "min_cohort_size": MIN_COHORT}
 
 
+def north_star() -> dict:
+    """Dhruva's north star (weekly agent-active external users) and how much one more activated
+    user adds to it in a typical week; every program is judged by its lift to this number."""
+    from .dhruva import north_star_summary
+    return north_star_summary(dataset())
+
+
 def retention_by_dimension(dimension: str, week: int = 8, exclude_internal: bool = True) -> dict:
     if dimension not in DIMENSIONS:
         return {"error": f"Unknown dimension. Choose one of {DIMENSIONS}."}
@@ -119,7 +126,7 @@ def viral_loops() -> dict:
     return out
 
 
-ALL_TOOLS = [metric_definitions, retention_by_dimension, headline_inflation, activation_test,
+ALL_TOOLS = [metric_definitions, north_star, retention_by_dimension, headline_inflation, activation_test,
              connector_breadth, check_feature_lift, identity_resolution, product_qualified_accounts,
              sales_trigger_threshold, acquisition_channel_ranking, signin_provider_ranking,
              connector_identity, viral_loops]

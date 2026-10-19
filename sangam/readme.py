@@ -67,12 +67,14 @@ ARM_LABEL = {"no_reward": "No reward (status quo)", "per_share_sent": "Per share
 
 
 def _reward_table(lp: dict) -> str:
-    rows = ["| Reward fires... | Shares | Extra activated users | Rewards paid | Rewards per extra activated user | "
-            "Extra prospects over trigger | Extra companies seeded by customers |",
-            "|---|---|---|---|---|---|---|"]
+    rows = ["| Reward fires... | Shares | Extra activated users | North-star lift (weekly agent-active users) | "
+            "Rewards paid | Rewards per extra activated user | Extra prospects over trigger | "
+            "Extra companies seeded by customers |",
+            "|---|---|---|---|---|---|---|---|"]
     for arm, r in lp["reward_simulation"].items():
         per = r["rewards_per_incremental_activated"]
-        rows.append(f"| {ARM_LABEL[arm]} | {r['shares']:,} | {r['incremental_activated']:+,} | {r['rewards_paid']:,} | "
+        rows.append(f"| {ARM_LABEL[arm]} | {r['shares']:,} | {r['incremental_activated']:+,} | {r.get('north_star_lift', 0):+,} | "
+                    f"{r['rewards_paid']:,} | "
                     f"{per if per is not None else '-'} | {r['extra_prospects_over_trigger']} | "
                     f"{r['extra_companies_seeded_by_customers']} |")
     return "\n".join(rows)
@@ -294,7 +296,7 @@ evals/
 policies/examples/  sample guidelines: sound, sloppy and ambiguous
 ```
 
-**Dhruva, the metric layer.** Named for the pole star you navigate by. Every number, in a chart or in an agent's answer, comes from one set of definitions.
+**Dhruva, the north star and metric layer.** Named for the pole star you navigate by. The north star is weekly agent-active users, external users only (peak {r['north_star']['peak_weekly_agent_active_users']:,}). Each activated user is agent-active in {r['north_star']['agent_active_rate_activated']:.0%} of weeks, versus {r['north_star']['agent_active_rate_question_only']:.0%} for a question-only user, so every reward program is judged by its north-star lift and its cost. Every number, in a chart or in an agent's answer, comes from one set of definitions.
 
 **An agent you can check.** The agent can only call governed tools. Its instructions require sample sizes, external-only reporting, a within-segment check before crediting any feature, a named alternative explanation, and a confirming experiment. The eval rubric scores each answer on required facts, required caveats and forbidden claims, and the rubric is itself tested: a known-good answer must pass and a known-bad one must fail. That self-test once caught the grader reading "5 activated users" as "5%" and failing a correct answer.
 

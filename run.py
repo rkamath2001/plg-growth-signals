@@ -27,7 +27,9 @@ def main():
     ds = dataset("data")
 
     print("2/4 Running cohort analyses ...")
+    from sangam.dhruva import north_star_summary
     results = {
+        "north_star": north_star_summary(ds),
         "headline_inflation": cohorts.headline_inflation(ds),
         "activation_test": cohorts.activation_test(ds),
         "connector_breadth": cohorts.connector_breadth(ds),

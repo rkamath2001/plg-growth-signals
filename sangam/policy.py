@@ -350,21 +350,29 @@ def _simulate_one(ctx: dict, p: Policy) -> dict:
             "extra_companies_seeded_by_customers": round(seeded, 1), "assumption": b["note"]}
 
 
-def _finish(r: dict, base: dict) -> dict:
+def _finish(r: dict, base: dict, ns_rate: float | None = None) -> dict:
     inc = r["activated_new_users"] - base["activated_new_users"]
     r["incremental_activated"] = round(inc)
+    if ns_rate is not None:      # Dhruva: added weekly agent-active users in a typical week
+        r["north_star_lift"] = round(inc * ns_rate)
     r["rewards_per_incremental_activated"] = round(r["rewards_paid"] / inc, 2) if inc > 0 else None
     return r
 
 
+def _north_star_rate(ds: Dataset) -> float:
+    from .dhruva import agent_active_rate
+    return agent_active_rate(ds, (ds.users.segment == "self_serve") & ds.users.activated_agent)
+
+
 def simulate_builtins(ds: Dataset, ready_rule: dict, outcomes: pd.DataFrame, data_dir="data") -> dict:
     ctx = _context(ds, ready_rule, outcomes, data_dir)
+    ctx["ns_rate"] = _north_star_rate(ds)
     out = {k: _simulate_one(ctx, p) for k, p in BUILTIN.items()}
     if not BUILTIN["stage_aware"].pay_for_licensed_recipients:
         out["stage_aware"]["assumption"] = ("pre-contract: reward same-company shares; post-contract: reward "
                                             "external shares to non-customers; never pay for licensed colleagues")
     out["per_activation_weighted"]["assumption"] = "agent and space shares, which show the product working, earn more"
-    return {k: _finish(v, out["no_reward"]) for k, v in out.items()}
+    return {k: _finish(v, out["no_reward"], ctx["ns_rate"]) for k, v in out.items()}
 
 
 class NotReady(Exception):
@@ -376,10 +384,11 @@ def simulate(p: Policy, ds: Dataset, ready_rule: dict, outcomes: pd.DataFrame, d
     if p.open_questions:
         raise NotReady("This policy has open questions. Answer them in the guidelines and compile again.")
     ctx = _context(ds, ready_rule, outcomes, data_dir)
+    rate = _north_star_rate(ds)
     base = _simulate_one(ctx, BUILTIN["no_reward"])
-    return {"policy": _finish(_simulate_one(ctx, p), base),
-            "reference": _finish(_simulate_one(ctx, BUILTIN["stage_aware"]), base),
-            "status_quo": _finish(base, base)}
+    return {"policy": _finish(_simulate_one(ctx, p), base, rate),
+            "reference": _finish(_simulate_one(ctx, BUILTIN["stage_aware"]), base, rate),
+            "status_quo": _finish(base, base, rate)}
 
 
 def describe(sim: dict) -> str:
@@ -389,7 +398,8 @@ def describe(sim: dict) -> str:
         head = "Compared with offering no reward, this policy adds no activated users."
     else:
         head = (f"Compared with offering no reward, this policy would add about {p['incremental_activated']:,} "
-                f"activated users, push about {p['extra_prospects_over_trigger']} more prospect companies to the "
+                f"activated users (about {p.get('north_star_lift', 0):,} more weekly agent-active users, the north "
+                f"star), push about {p['extra_prospects_over_trigger']} more prospect companies to the "
                 f"point where a sales conversation makes sense, and help customers bring in about "
                 f"{p['extra_companies_seeded_by_customers']} new companies. It would pay about "
                 f"{p['rewards_paid']:,} rewards, or {p['rewards_per_incremental_activated']} per added "

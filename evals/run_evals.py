@@ -145,6 +145,13 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
           and sim["per_share_sent"]["incremental_activated"] < sim["per_activation_weighted"]["incremental_activated"],
           f"shares {sim['per_share_sent']['shares']:,}; activated {sim['per_share_sent']['incremental_activated']:+} "
           f"vs {sim['per_activation_weighted']['incremental_activated']:+}")
+    from sangam.dhruva import north_star_summary
+    ns = north_star_summary(ds)
+    check("North star: an activated user adds more weekly agent activity than a question-only user",
+          ns["agent_active_rate_activated"] > 2 * ns["agent_active_rate_question_only"],
+          f"{ns['agent_active_rate_activated']:.0%} vs {ns['agent_active_rate_question_only']:.0%} agent-active per week")
+    check("Every reward program reports its north-star lift",
+          all("north_star_lift" in v for v in sim.values()), f"{len(sim)} programs")
     sa, wt = sim["stage_aware"], sim["per_activation_weighted"]
     check("Stage-aware rewards keep the pipeline gains at a fraction of the cost",
           sa["extra_prospects_over_trigger"] >= 0.9 * wt["extra_prospects_over_trigger"]

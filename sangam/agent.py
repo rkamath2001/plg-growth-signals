@@ -26,7 +26,8 @@ tools; never estimate a number yourself. For every finding:
 2. Report external users separately from the internal customer-zero deployment, whose use is mandated.
 3. Before claiming a feature drives retention, check it within segments; if the lift disappears, say it is confounded.
 4. Separate signal from noise: name the most likely alternative explanation and your confidence (high, medium, low).
-5. End with one recommended action and the experiment that would confirm it.
+5. Express the impact of any program as its lift to the north star (weekly agent-active users) and its cost.
+6. End with one recommended action and the experiment that would confirm it.
 Observational findings are hypotheses, not proof. Keep answers under 250 words."""
 
 
@@ -34,6 +35,13 @@ Observational findings are hypotheses, not proof. Keep answers under 250 words."
 def metric_definitions() -> str:
     """Governed definitions of every metric and the minimum cohort size."""
     return json.dumps(T.metric_definitions())
+
+
+@tool
+def north_star() -> str:
+    """The north-star metric (weekly agent-active external users), its peak, and how much one more
+    activated user adds to it in a typical week. Judge every program by its lift to this number."""
+    return json.dumps(T.north_star())
 
 
 @tool
@@ -113,7 +121,7 @@ def build_agent() -> Agent:
     region = os.environ.get("AWS_REGION", "us-west-2")
     model = BedrockModel(model_id=model_id, region_name=region) if model_id else BedrockModel(region_name=region)
     return Agent(model=model, system_prompt=SYSTEM_PROMPT, callback_handler=None,
-                 tools=[metric_definitions, retention_by_dimension, headline_inflation,
+                 tools=[metric_definitions, north_star, retention_by_dimension, headline_inflation,
                         activation_test, connector_breadth, check_feature_lift,
                         identity_resolution, product_qualified_accounts,
                         sales_trigger_threshold, acquisition_channel_ranking,
