@@ -28,7 +28,8 @@ import pandas as pd
 from sangam import cohorts
 from sangam.experiment import simulate
 from sangam.pqa import account_rollup, score
-from sangam.tools import acquisition_channel_ranking, dataset, sales_trigger_threshold
+from sangam.tools import (acquisition_channel_ranking, dataset, sales_trigger_threshold,
+                          signin_provider_ranking, work_email_prompt_whatif)
 
 ROOT = Path(__file__).resolve().parent
 GOLDEN = json.loads((ROOT / "golden.json").read_text())
@@ -95,6 +96,18 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
     check("Low-intent social channels rank in the bottom half on retention",
           all(chan[c]["by_retention"] > len(chan) / 2 for c in ("x", "reddit")),
           f"x {chan['x']['by_retention']}, reddit {chan['reddit']['by_retention']} of {len(chan)}")
+    prov = {r["provider"]: r for r in signin_provider_ranking()["table"]}
+    top2 = {k for k, v in prov.items() if v["by_visibility"] <= 2}
+    bottom2 = {k for k, v in prov.items() if v["by_visibility"] >= len(prov) - 1}
+    check("Google and email are the most visible providers; Apple and Amazon the least",
+          top2 == {"google", "email"} and bottom2 == {"apple", "amazon"},
+          f"top {sorted(top2)}, bottom {sorted(bottom2)}")
+    wif = work_email_prompt_whatif()
+    check("Making hidden adopters visible adds sales-ready accounts",
+          wif["ready_accounts_if_all_visible"] > wif["ready_accounts_visible_today"]
+          and wif["extra_ready_accounts_at_uptake"] > 0,
+          f"{wif['ready_accounts_visible_today']} -> {wif['ready_accounts_if_all_visible']} with full visibility; "
+          f"+{wif['extra_ready_accounts_at_uptake']} at {wif['uptake_assumed']:.0%} uptake")
     return out
 
 

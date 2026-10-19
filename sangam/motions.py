@@ -55,45 +55,78 @@ def _rule_stats(flag: pd.Series, y: pd.Series) -> dict:
             "precision": round(precision, 3), "recall": round(recall, 3), "f1": round(f1, 3)}
 
 
-def find_threshold(r: pd.DataFrame, min_flagged: int = 15) -> dict:
-    """Search simple, explainable trigger rules and keep the best by F1."""
-    y = r.converted.astype(bool)
-    best = None
-    for k in range(1, 13):
-        for f in range(1, 5):
-            flag = (r.activated >= k) & (r.functions >= f)
-            if flag.sum() < min_flagged:
-                continue
-            s = _rule_stats(flag, y) | {"min_activated": k, "min_functions": f}
-            if best is None or s["f1"] > best["f1"]:
-                best = s
-    # Naive alternative: count sign-ups, the number most dashboards show.
-    naive = None
+def find_threshold(r: pd.DataFrame, min_flagged: int = 15, boots: int = 300, seed: int = 3) -> dict:
+    """Pick an explainable trigger rule without over-fitting a small number of contracts.
+
+    Rules have the form "at least k activated users across at least f functions",
+    kept canonical (k >= f, since f functions need at least f users). F1 is
+    bootstrapped; every rule within one standard error of the best is treated as
+    tied, and the simplest tied rule wins (fewest conditions, then highest
+    precision, so a small sales team chases fewer, better accounts)."""
+    y = r.converted.astype(bool).to_numpy()
+    act, fun, n = r.activated.to_numpy(), r.functions.to_numpy(), len(r)
+    cands = [(k, f) for k in range(1, 13) for f in range(1, 5)
+             if k >= f and ((act >= k) & (fun >= f)).sum() >= min_flagged]
+    flags = {c: (act >= c[0]) & (fun >= c[1]) for c in cands}
+
+    def f1(flag, yy):
+        tp = (flag & yy).sum()
+        return 0.0 if tp == 0 else 2 * tp / (flag.sum() + yy.sum())
+
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, n, (boots, n))
+    boot = {c: np.array([f1(flags[c][i], y[i]) for i in idx]) for c in cands}
+    mean = {c: boot[c].mean() for c in cands}
+    best = max(cands, key=lambda c: mean[c])
+    se = boot[best].std()
+    tied = [c for c in cands if mean[c] >= mean[best] - se]
+    yy = pd.Series(y, index=r.index)
+    stats = {c: _rule_stats(pd.Series(flags[c], index=r.index), yy) for c in tied}
+    pick = min(tied, key=lambda c: (c[1] > 1, -stats[c]["precision"], c[0]))
+    rule = stats[pick] | {"min_activated": pick[0], "min_functions": pick[1]}
+
+    naive_best, naive = -1, None
     for k in range(1, 40):
         flag = r.signups >= k
         if flag.sum() < min_flagged:
             continue
-        s = _rule_stats(flag, y) | {"min_signups": k}
-        if naive is None or s["f1"] > naive["f1"]:
-            naive = s
+        st = _rule_stats(flag, yy) | {"min_signups": k}
+        if st["f1"] > naive_best:
+            naive_best, naive = st["f1"], st
+
     base = round(float(y.mean()), 3)
-    lift = round(best["precision"] / base, 1) if base else None
+    lift = round(rule["precision"] / base, 1) if base else None
+    k = rule["min_activated"]
+    warm = r[(r.activated == k - 1)]
+    tiers = {
+        "sales_motion": {"rule": f"{k}+ activated users", "accounts": rule["accounts_flagged"],
+                         "conversion": rule["precision"]},
+        "warm_champion": {"rule": f"{k - 1} activated users", "accounts": int(len(warm)),
+                          "conversion": round(float(warm.converted.mean()), 3) if len(warm) else None},
+        "self_serve": {"rule": f"fewer than {k - 1}", "accounts": int((r.activated < k - 1).sum()),
+                       "conversion": round(float(r.loc[r.activated < k - 1, "converted"].mean()), 3)},
+    }
+    fn_note = ("Requiring a minimum number of functions did not beat the simple count within noise."
+               if rule["min_functions"] == 1 else
+               f"Requiring {rule['min_functions']}+ functions adds signal beyond the user count.")
     return {
         "question": "How many independent adopters should a company have before we start an enterprise sales motion?",
         "baseline_conversion": base,
-        "recommended_rule": best,
+        "recommended_rule": rule,
+        "tied_rules": [f"{c[0]}+ users across {c[1]}+ functions" for c in sorted(tied)],
         "signup_count_rule": naive,
         "lift_over_baseline": lift,
+        "tiers": tiers,
         "finding": (
-            f"Trigger an enterprise sales motion when a company has at least {best['min_activated']} "
-            f"activated independent users across {best['min_functions']}+ functions. Those accounts convert at "
-            f"{best['precision']:.0%} versus a {base:.0%} baseline ({lift}x), and the rule captures "
-            f"{best['recall']:.0%} of contracts while flagging {best['accounts_flagged']} accounts. "
-            f"The best rule built on raw sign-up counts scores F1 {naive['f1']:.2f} against "
-            f"{best['f1']:.2f}: sign-ups include event spikes that never activate."),
-        "caveat": ("Counts only users resolvable to a company by email domain; private-relay and personal "
-                   "addresses are invisible, so the true number of adopters is higher. Re-fit the rule each "
-                   "quarter against new outcomes."),
+            f"Start an enterprise sales motion at {k}+ activated independent users. Those companies convert at "
+            f"{rule['precision']:.0%} versus a {base:.0%} baseline ({lift}x); the rule captures "
+            f"{rule['recall']:.0%} of contracts while flagging {rule['accounts_flagged']} accounts. At {k - 1} activated "
+            f"users conversion is {tiers['warm_champion']['conversion']:.0%}: run champion enablement there, not sales. "
+            f"{fn_note} The best sign-up-count rule scores F1 {naive['f1']:.2f} against {rule['f1']:.2f}, because "
+            "sign-ups include event spikes that never activate."),
+        "caveat": (f"Fit on {int(y.sum())} contracts: {len(tied)} rules are statistically tied, so the simplest was "
+                   "chosen. Counts only users resolvable to a company by email domain, so the true number of adopters "
+                   "is higher. Refit each quarter and by segment as outcomes accumulate."),
     }
 
 
@@ -145,4 +178,93 @@ def channel_ranking(ds: Dataset, ready_accounts: set[str], outcomes: pd.DataFram
             f"retained users, not sign-ups. Pipeline ranks for {', '.join(repr(x) for x in thin)} rest on fewer "
             "than 5 accounts each; treat their order as noise."),
         "caveat": "Channels and intent are entangled: invited users arrive with a colleague's context. Test channel spend with geo or time holdouts before reallocating budget.",
+    }
+
+
+# ---------- sign-in providers ----------
+
+def provider_ranking(ds: Dataset, ready_accounts: set[str]) -> dict:
+    """Sign-in provider is an identity channel, not an acquisition channel: it
+    decides whether we can see which company a user belongs to."""
+    u = ds.users[ds.users.channel == "self_serve"].copy()
+    u["w8"] = ds.activity.loc[u.user_id, W].to_numpy()
+    g = u.groupby("provider")
+    t = pd.DataFrame({
+        "signups": g.size(),
+        "activation_rate": g.activated_agent.mean(),
+        "w8_retention": g.w8.mean(),
+        "company_resolved": g.account_id.apply(lambda s: s.notna().mean()),
+        "private_relay": g.resolution.apply(lambda s: (s == "private_relay").mean()),
+    })
+    in_ready = u[u.account_id.isin(ready_accounts)]
+    t["users_at_ready_accounts"] = in_ready.groupby("provider").size().reindex(t.index).fillna(0).astype(int)
+    t["ready_users_per_1k"] = (t.users_at_ready_accounts / t.signups * 1000).round(1)
+    t = t.round(3)
+    rank = pd.DataFrame({
+        "by_volume": t.signups.rank(ascending=False, method="min").astype(int),
+        "by_retention": t.w8_retention.rank(ascending=False, method="min").astype(int),
+        "by_visibility": t.company_resolved.rank(ascending=False, method="min").astype(int),
+        "by_pipeline": t.ready_users_per_1k.rank(ascending=False, method="min").astype(int),
+    })
+    t = t.join(rank).sort_values("by_pipeline")
+    dark = t.sort_values("company_resolved").index[:2].tolist()
+    best_ret = t.sort_values("w8_retention", ascending=False).index[0]
+    return {
+        "question": "How do sign-in providers differ, and what do they hide?",
+        "table": t.reset_index().to_dict("records"),
+        "finding": (
+            f"Provider decides visibility more than quality. {t.loc['google','company_resolved']:.0%} of Google and "
+            f"{t.loc['email','company_resolved']:.0%} of email sign-ups can be tied to a company, versus "
+            f"{t.loc[dark[0],'company_resolved']:.0%} for '{dark[0]}' and {t.loc[dark[1],'company_resolved']:.0%} for "
+            f"'{dark[1]}'. '{best_ret}' users retain best ({t.loc[best_ret,'w8_retention']:.0%}), consistent with a "
+            "builder persona. The pipeline ranking mostly mirrors visibility: an account you cannot see never "
+            "reaches the sales trigger."),
+        "caveat": "Provider retention differences are small and partly persona mix; do not steer users between sign-in options on retention alone.",
+    }
+
+
+def work_email_whatif(ds: Dataset, truth_users: pd.DataFrame, outcomes: pd.DataFrame,
+                      rule: dict, uptake: float = 0.3, runs: int = 200, seed: int = 5) -> dict:
+    """SIMULATION using ground truth: if a share of hidden adopters added a work
+    email (e.g. prompted when they create a shared space), how many more companies
+    would cross the sales trigger?"""
+    rng = np.random.default_rng(seed)
+    prospects = set(outcomes.account_id)
+    u = ds.users[ds.users.channel == "self_serve"].merge(
+        truth_users[["user_id", "account_id_truth"]], on="user_id")
+    hidden = u[u.account_id.isna() & u.account_id_truth.isin(prospects)]
+    visible = u[u.account_id.notna() & u.account_id.isin(prospects)]
+
+    def ready(df):
+        act = df[df.activated_agent]
+        a = act.groupby("acct").size()
+        f = act.groupby("acct").function.nunique()
+        return set(a[(a >= rule["min_activated"]) & (f.reindex(a.index) >= rule["min_functions"])].index)
+
+    base = ready(visible.assign(acct=visible.account_id))
+    full = ready(pd.concat([visible.assign(acct=visible.account_id),
+                            hidden.assign(acct=hidden.account_id_truth)]))
+    gains = []
+    for _ in range(runs):
+        take = hidden[rng.random(len(hidden)) < uptake]
+        r = ready(pd.concat([visible.assign(acct=visible.account_id), take.assign(acct=take.account_id_truth)]))
+        gains.append(len(r - base))
+    by_provider = hidden.groupby("provider").size().sort_values(ascending=False).to_dict()
+    won = set(outcomes.loc[outcomes.converted_to_contract, "account_id"])
+    return {
+        "question": "What if hidden adopters added a work email?",
+        "hidden_adopters_at_prospects": int(len(hidden)),
+        "hidden_by_provider": by_provider,
+        "ready_accounts_visible_today": len(base),
+        "ready_accounts_if_all_visible": len(full),
+        "uptake_assumed": uptake,
+        "extra_ready_accounts_at_uptake": round(float(np.mean(gains)), 1),
+        "extra_ready_that_converted": len((full - base) & won),
+        "finding": (
+            f"{len(hidden)} self-serve users at prospect companies are invisible today, mostly via "
+            f"{', '.join(list(by_provider)[:2])} sign-ins. If {uptake:.0%} added a work email, about "
+            f"{np.mean(gains):.0f} more companies would cross the sales trigger, on top of {len(base)} visible "
+            f"today; with full visibility, {len(full) - len(base)} more would. A 'connect your work email to share "
+            "with your team' prompt is a pipeline lever, not just an identity feature."),
+        "method": "Simulation on synthetic ground truth; real uptake must be measured with an A/B test of the prompt.",
     }

@@ -8,6 +8,7 @@ It is an agentic growth-analytics prototype that:
 - runs cohort and retention analysis that handles the classic traps,
 - ranks **acquisition channels** by volume, retention and pipeline, which give different answers,
 - learns **how many independent freemium adopters a company needs** before an enterprise sales motion pays off,
+- shows how **sign-in providers** (Google, email, GitHub, Apple, Amazon) decide whether you can see the company at all,
 - scores **product-qualified accounts** with plain-language reasons and a recommended sales or champion play,
 - simulates how to test sales outreach so it can prove its own lift,
 - lets a **Strands agent on Amazon Bedrock** answer growth questions only through governed metrics,
@@ -33,7 +34,7 @@ python -m evals.run_evals --agent      # grade the agent's answers to the golden
 
 ## What it finds
 
-Seven findings, each verified against a known planted answer ([full memo](reports/findings.md)).
+Eight findings, each verified against a known planted answer ([full memo](reports/findings.md)).
 
 **1. Activation is the first agent action, not the first question.** External users who complete an agent action in week 0 retain at about three times the rate of question-only users at week 8. The gap holds in every segment. It is observational, so the recommended next step is an onboarding experiment.
 
@@ -51,24 +52,38 @@ Seven findings, each verified against a known planted answer ([full memo](report
 
 ![Experiment design comparison](reports/experiment_design.png)
 
-**6. Start the enterprise sales motion at 5 activated adopters, not at a sign-up count.** Learned from observed contract outcomes: companies with 5+ independent users who completed an agent action, across 2+ functions, convert at 70% versus a 5% baseline (14x), and that rule captures 56% of contracts while flagging only 33 accounts. The best rule built on raw sign-up counts does markedly worse (F1 0.47 vs 0.62) because event spikes inflate sign-ups without activating.
+**6. Start the enterprise sales motion at 5 activated adopters, not at a sign-up count.** Learned from 47 observed contracts. Companies with 5+ independent users who completed an agent action convert at 63%, versus a 6% baseline (11x); at exactly 4 they convert at 26%, which is a champion-enablement tier, not a sales one; below 4 they convert at 2%. Requiring breadth across functions did not beat the simple count within noise. The best rule built on raw sign-up counts does markedly worse (F1 0.42 vs 0.54), because event spikes inflate sign-ups without activating.
 
 ![Sales trigger threshold](reports/sales_trigger_threshold.png)
 
-**7. Rank channels by pipeline, not volume.** Search brings the most sign-ups; teammate invites rank 7th on volume but 1st on both retention and sales-ready accounts per 1,000 sign-ups. LinkedIn is the strongest broad channel because work identities resolve to companies. X and Reddit bring volume that rarely retains or resolves.
+With this few contracts, eight candidate rules are statistically tied (all at 4 or 5 activated users), so the method bootstraps F1, treats everything within one standard error of the best as a tie, and picks the simplest rule. A plain "pick the highest F1" search chose "1+ users across 4+ functions" on one data draw: a rule that is technically equivalent to 4 users across 4 functions but reads as nonsense to a seller.
+
+**7. Rank acquisition channels by pipeline, not volume.** Search brings the most sign-ups; teammate invites rank 6th on volume but 1st on both retention and sales-ready accounts per 1,000 sign-ups, with LinkedIn second because work identities resolve to companies. X and Reddit bring volume that rarely retains or resolves.
 
 | Channel | Sign-ups | Activation | Week-8 retention | Resolved to a company | Sales-ready accounts per 1,000 | Rank: volume / retention / pipeline |
 |---|---|---|---|---|---|---|
-| teammate_invite | 1,147 | 54% | 28% | 67% | 9.6 | 7 / 1 / 1 |
-| linkedin | 1,395 | 44% | 19% | 61% | 5.0 | 2 / 3 / 2 |
-| search | 1,971 | 42% | 20% | 38% | 3.6 | 1 / 2 / 3 |
-| reddit | 1,285 | 32% | 14% | 16% | 3.1 | 4 / 6 / 4 |
-| direct | 1,160 | 40% | 19% | 38% | 2.6 | 6 / 3 / 5 |
-| youtube | 1,238 | 41% | 16% | 27% | 0.8 | 5 / 5 / 6 |
-| webinar | 272 | 14% | 1% | 90% | 0.0 | 8 / 8 / 7 |
-| x | 1,295 | 33% | 14% | 20% | 0.0 | 3 / 7 / 7 |
+| teammate_invite | 1,157 | 54% | 27% | 63% | 10.4 | 6 / 1 / 1 |
+| linkedin | 1,429 | 46% | 22% | 61% | 6.3 | 2 / 2 / 2 |
+| webinar | 290 | 11% | 1% | 90% | 3.4 | 8 / 8 / 3 |
+| search | 1,976 | 41% | 19% | 38% | 2.5 | 1 / 3 / 4 |
+| direct | 1,151 | 40% | 18% | 37% | 1.7 | 7 / 4 / 5 |
+| reddit | 1,281 | 31% | 13% | 14% | 1.6 | 4 / 7 / 6 |
+| youtube | 1,231 | 37% | 18% | 26% | 1.6 | 5 / 5 / 6 |
+| x | 1,314 | 35% | 16% | 19% | 1.5 | 3 / 6 / 8 |
 
-Pipeline ranks below the top three rest on fewer than 5 accounts each, so treat their order as noise. Accounts are credited to the channel of their first sign-up (first-touch); that choice is stated so it can be challenged, and channel budget shifts should be confirmed with geo or time holdouts.
+Pipeline ranks below the top two rest on fewer than 5 accounts each (webinar's third place is a single account), so treat their order as noise. Accounts are credited to the channel of their first sign-up (first-touch); that choice is stated so it can be challenged, and budget shifts should be confirmed with geo or time holdouts.
+
+**8. Sign-in provider decides who you can see.** Provider is an identity channel, not an acquisition channel. Half of Google and 58% of work-email sign-ups can be tied to a company; Apple's private relay hides 60% of its users and Amazon sign-ins reveal a company 1% of the time. GitHub users retain slightly best, consistent with a builder persona, but provider differences in retention are small. The pipeline ranking mirrors visibility: an account you cannot see never reaches the sales trigger.
+
+| Provider | Sign-ups | Activation | Week-8 retention | Resolved to a company | Private relay | Users at sales-ready accounts per 1,000 | Rank: volume / retention / visibility / pipeline |
+|---|---|---|---|---|---|---|---|
+| email | 1,902 | 39% | 19% | 58% | 0% | 84.6 | 2 / 2 / 1 / 1 |
+| google | 4,505 | 41% | 19% | 50% | 0% | 69.9 | 1 / 3 / 2 / 2 |
+| github | 1,017 | 45% | 20% | 29% | 0% | 35.4 | 4 / 1 / 3 / 3 |
+| apple | 1,631 | 35% | 17% | 9% | 60% | 8.0 | 3 / 4 / 4 / 4 |
+| amazon | 774 | 38% | 16% | 1% | 0% | 3.9 | 5 / 5 / 5 / 5 |
+
+A what-if on the synthetic ground truth: 417 adopters at prospect companies are invisible today, mostly through Apple and GitHub sign-ins. Full visibility would put 11 more companies over the sales trigger (on top of 35); a work-email prompt with 30% uptake would add about 3. That makes "connect your work email to share with your team" a pipeline lever, and its real uptake is an A/B test away.
 
 ## How it works
 
@@ -79,7 +94,7 @@ sangam/
   dhruva.py      the governed metric layer: one definition of "active", "retained", "activated"
   cohorts.py     retention, activation, breadth, Simpson's-paradox check
   pqa.py         product-qualified account scoring, reasons, plays, noise suppression
-  motions.py     sales-trigger threshold and acquisition-channel ranking
+  motions.py     sales-trigger threshold, channel and sign-in provider rankings, work-email what-if
   experiment.py  outreach holdout simulation: account vs user randomization
   tools.py       the functions the agent may call (testable without a model)
   agent.py       Strands agent on Amazon Bedrock
@@ -113,19 +128,21 @@ evals/
   PASS  Account-level design recovers true lift
   PASS  User-level design underestimates (interference)
   PASS  Sales trigger recovers the planted tipping point (5 activated users)
-  PASS  Activated-user trigger beats a sign-up-count trigger   (F1 0.62 vs 0.47)
+  PASS  Activated-user trigger beats a sign-up-count trigger   (F1 0.54 vs 0.42)
   PASS  Teammate invites rank first on pipeline and retention
   PASS  Low-intent social channels rank in the bottom half on retention
+  PASS  Google and email are the most visible providers; Apple and Amazon the least
+  PASS  Making hidden adopters visible adds sales-ready accounts
 [rubric_self_test]
   PASS  x5 golden questions: good answer passes, bad answer fails
-18/18 checks passed
+20/20 checks passed
 ```
 
 The rubric self-test earns its place: while adding the sales-trigger question, it caught the grader reading "5 activated users" as "5%" and failing a correct answer.
 
 ## Limits
 
-- The sales trigger is fit on about 40 historical contracts. It recovered the planted tipping point (5 activated users) but loosened the planted 3-function requirement to 2, because nearly every company that reaches 5 activated users already spans 3 functions. With so few outcomes, refit it as contracts accumulate and by segment.
+- The sales trigger is fit on 47 historical contracts, so several rules tie; the simplest is chosen and the tie is reported. The planted rule also required 3+ functions, which the data could not distinguish from the count alone. Refit as contracts accumulate and by segment.
 - Planted effects are deliberately clear. Real data is noisier, and thresholds (3+ functions, the 60-point score, the noise filter) are starting points to tune against real conversion outcomes.
 - The activation finding is observational: high-intent users both act and stay. Only an experiment settles cause.
 - Using a personal sign-up's activity to prompt outreach to their employer must respect the privacy terms users accepted and regional law. Self-serve individuals get in-product nudges, not sales calls.

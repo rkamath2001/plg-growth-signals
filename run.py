@@ -14,7 +14,8 @@ from sangam import cohorts, report
 from sangam.experiment import simulate
 from sangam.generate import generate
 from sangam.pqa import account_rollup, score
-from sangam.tools import acquisition_channel_ranking, dataset, sales_trigger_threshold
+from sangam.tools import (acquisition_channel_ranking, dataset, sales_trigger_threshold,
+                          signin_provider_ranking, work_email_prompt_whatif)
 
 
 def main():
@@ -43,6 +44,8 @@ def main():
     prospects.to_csv(out / "product_qualified_accounts.csv")
     results["sales_trigger"] = sales_trigger_threshold()
     results["channel_ranking"] = acquisition_channel_ranking()
+    results["provider_ranking"] = signin_provider_ranking()
+    results["work_email_whatif"] = work_email_prompt_whatif()
 
     print("4/4 Writing charts and memo ...")
     report.retention_chart(cohorts.curves(ds), out / "retention_by_activation.png")

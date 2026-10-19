@@ -25,7 +25,10 @@ agent can be graded against answers we know in advance:
      addresses cannot be tied to a company.
   7. Channels: invited users carry the most intent, then LinkedIn and search;
      X and Reddit bring volume with low intent and mostly personal addresses.
-  8. Sales trigger: a prospect's chance of signing a contract jumps once it
+  8. Sign-in providers: Google Workspace and work email carry company identity;
+     employees signing in with Amazon or GitHub often use a personal address,
+     and Apple's private relay hides it, so their companies are invisible.
+  9. Sales trigger: a prospect's chance of signing a contract jumps once it
      has 5+ activated independent users, and again at 3+ functions.
 """
 
@@ -54,6 +57,17 @@ SOURCE_MIX = {  # who arrives through which channel
 }
 SOURCE_INTENT = {"teammate_invite": 0.6, "linkedin": 0.25, "search": 0.15, "direct": 0.05,
                  "youtube": 0.0, "x": -0.25, "reddit": -0.35, "webinar": 0.0}
+# Sign-in provider: work identities arrive mostly via Google Workspace or work
+# email; consumer identities skew to Apple and Amazon.
+PROVIDERS = ["google", "email", "apple", "github", "amazon"]
+PROVIDER_MIX = {
+    "personal":  [0.40, 0.15, 0.22, 0.10, 0.13],
+    "corporate": [0.52, 0.26, 0.08, 0.12, 0.02],
+}
+PROVIDER_INTENT = {"github": 0.15, "google": 0.05, "email": 0.0, "apple": -0.10, "amazon": -0.20}
+# Employees who sign in with a consumer account often use a personal address,
+# so their company is invisible even though they work there.
+PERSONAL_ADDRESS_P = {"amazon": 0.7, "github": 0.4, "google": 0.0, "email": 0.0, "apple": 0.0}
 PERSONAL_DOMAINS = ["gmail.com", "outlook.com", "yahoo.com", "icloud.com", "proton.me"]
 RELAY_DOMAIN = "privaterelay.appleid.com"
 
@@ -155,10 +169,15 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
     def mix(kind, n):
         return rng.choice(SOURCES, n, p=SOURCE_MIX[kind])
 
-    def selfserve(n, account_ids, domains, functions, weeks, source):
-        provider = rng.choice(["google", "email", "apple", "github", "amazon"], n,
-                              p=[0.45, 0.20, 0.15, 0.12, 0.08])
+    def selfserve(n, account_ids, domains, functions, weeks, source, kind="corporate"):
+        kinds = np.broadcast_to(np.asarray(kind, dtype=object), (n,))
+        provider = np.where(kinds == "personal",
+                            rng.choice(PROVIDERS, n, p=PROVIDER_MIX["personal"]),
+                            rng.choice(PROVIDERS, n, p=PROVIDER_MIX["corporate"]))
         dom = np.array(domains, dtype=object)
+        # Employees on consumer sign-ins: company is real but the address is personal.
+        hide = (kinds != "personal") & (rng.random(n) < pd.Series(provider).map(PERSONAL_ADDRESS_P).to_numpy())
+        dom[hide] = rng.choice(PERSONAL_DOMAINS, int(hide.sum()))
         # Apple users often hide their address behind a private relay.
         relay = (provider == "apple") & (rng.random(n) < 0.6)
         dom[relay] = RELAY_DOMAIN
@@ -183,7 +202,8 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
         doms[idx] = pick.domain.to_numpy()
     src = np.where(kind == "personal", mix("personal", n), mix("corporate", n))
     parts.append(selfserve(n, acct_ids, doms, rng.choice(FUNCTIONS, n),
-                           rng.integers(0, SIGNUP_WEEKS, n), src))
+                           rng.integers(0, SIGNUP_WEEKS, n), src,
+                           np.where(kind == "personal", "personal", "corporate")))
 
     # Hot PQAs: clusters of independent adopters across 3+ functions.
     for _, acc in accounts[accounts.segment == "prospect_hot"].iterrows():
@@ -219,7 +239,8 @@ def _behavior(rng: np.random.Generator, users: pd.DataFrame,
 
     # Latent intent: hot clusters are engaged, webinar bursts are not.
     intent = (rng.normal(0, 1, n) + 0.9 * hot - 1.6 * webinar + 0.3 * enterprise
-              + users.source.map(SOURCE_INTENT).fillna(0).to_numpy())
+              + users.source.map(SOURCE_INTENT).fillna(0).to_numpy()
+              + users.provider.map(PROVIDER_INTENT).fillna(0).to_numpy())
 
     def sigmoid(x):
         return 1 / (1 + np.exp(-x))

@@ -70,7 +70,7 @@
     "must_not_claim": [
       {"why": "does not recommend a raw sign-up count", "pattern": "once (a company|an account) (has|reaches) \\d+ sign-?ups"}
     ],
-    "reference_good": "Start the motion once a company has {trigger_k} or more activated independent users across at least two functions; those accounts convert at about 70% versus a 5% baseline. Count activated users, not sign-ups, because webinar spikes inflate sign-ups. The rule is learned from about 40 contracts, so refit it each quarter.",
+    "reference_good": "Start the motion once a company has {trigger_k} or more activated independent users; those companies convert at about 63% versus a 6% baseline, and at 4 users run champion enablement instead. Count activated users, not sign-ups, because webinar spikes inflate sign-ups. The rule is learned from 47 contracts, so refit it each quarter.",
     "reference_bad": "Once a company reaches 10 sign-ups, hand it to sales."
   }
 ]

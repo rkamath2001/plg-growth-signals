@@ -9,7 +9,8 @@ from functools import lru_cache
 from . import cohorts
 from .dhruva import METRIC_DEFINITIONS, MIN_COHORT, Dataset, load, retention_by
 from .identity import resolution_summary
-from .motions import channel_ranking, conversion_by_activated, find_threshold, prospect_rollup
+from .motions import (channel_ranking, conversion_by_activated, find_threshold, prospect_rollup,
+                      provider_ranking, work_email_whatif)
 from .pqa import account_rollup, score
 
 import pandas as pd
@@ -91,6 +92,21 @@ def acquisition_channel_ranking() -> dict:
     return channel_ranking(dataset(), ready, _outcomes())
 
 
+def _ready_accounts() -> tuple[set[str], dict]:
+    r = prospect_rollup(dataset(), _outcomes())
+    rule = find_threshold(r)["recommended_rule"]
+    return set(r[(r.activated >= rule["min_activated"]) & (r.functions >= rule["min_functions"])].index), rule
+
+
+def signin_provider_ranking() -> dict:
+    return provider_ranking(dataset(), _ready_accounts()[0])
+
+
+def work_email_prompt_whatif(uptake: float = 0.3) -> dict:
+    truth = pd.read_csv("data/ground_truth/users_truth.csv")
+    return work_email_whatif(dataset(), truth, _outcomes(), _ready_accounts()[1], uptake)
+
+
 ALL_TOOLS = [metric_definitions, retention_by_dimension, headline_inflation, activation_test,
              connector_breadth, check_feature_lift, identity_resolution, product_qualified_accounts,
-             sales_trigger_threshold, acquisition_channel_ranking]
+             sales_trigger_threshold, acquisition_channel_ranking, signin_provider_ranking]

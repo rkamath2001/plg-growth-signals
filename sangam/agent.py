@@ -90,6 +90,12 @@ def acquisition_channel_ranking() -> str:
     return json.dumps(T.acquisition_channel_ranking(), default=str)
 
 
+@tool
+def signin_provider_ranking() -> str:
+    """Ranks sign-in providers (Google, email, GitHub, Apple, Amazon) by volume, retention, how often the user's company can be identified, and users at sales-ready accounts."""
+    return json.dumps(T.signin_provider_ranking(), default=str)
+
+
 def build_agent() -> Agent:
     model_id = os.environ.get("SANGAM_MODEL_ID")
     region = os.environ.get("AWS_REGION", "us-west-2")
@@ -98,7 +104,8 @@ def build_agent() -> Agent:
                  tools=[metric_definitions, retention_by_dimension, headline_inflation,
                         activation_test, connector_breadth, check_feature_lift,
                         identity_resolution, product_qualified_accounts,
-                        sales_trigger_threshold, acquisition_channel_ranking])
+                        sales_trigger_threshold, acquisition_channel_ranking,
+                        signin_provider_ranking])
 
 
 def ask(question: str) -> str:
