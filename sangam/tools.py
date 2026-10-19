@@ -9,9 +9,12 @@ from functools import lru_cache
 from . import cohorts
 from .dhruva import METRIC_DEFINITIONS, MIN_COHORT, Dataset, load, retention_by
 from .identity import resolution_summary
+from .motions import channel_ranking, conversion_by_activated, find_threshold, prospect_rollup
 from .pqa import account_rollup, score
 
-DIMENSIONS = ["segment", "provider", "function", "plan", "rollout_wave", "resolution"]
+import pandas as pd
+
+DIMENSIONS = ["segment", "source", "provider", "function", "plan", "rollout_wave", "resolution"]
 
 
 @lru_cache(maxsize=1)
@@ -68,5 +71,26 @@ def product_qualified_accounts(n: int = 10, include_customers: bool = False) -> 
     }
 
 
+@lru_cache(maxsize=1)
+def _outcomes(data_dir: str = "data") -> pd.DataFrame:
+    return pd.read_csv(f"{data_dir}/account_outcomes.csv")
+
+
+def sales_trigger_threshold() -> dict:
+    r = prospect_rollup(dataset(), _outcomes())
+    res = find_threshold(r)
+    res["conversion_by_activated_users"] = (conversion_by_activated(r).rename_axis("index").reset_index()
+                                            .rename(columns={"index": "activated_users"}).to_dict("records"))
+    return res
+
+
+def acquisition_channel_ranking() -> dict:
+    r = prospect_rollup(dataset(), _outcomes())
+    rule = find_threshold(r)["recommended_rule"]
+    ready = set(r[(r.activated >= rule["min_activated"]) & (r.functions >= rule["min_functions"])].index)
+    return channel_ranking(dataset(), ready, _outcomes())
+
+
 ALL_TOOLS = [metric_definitions, retention_by_dimension, headline_inflation, activation_test,
-             connector_breadth, check_feature_lift, identity_resolution, product_qualified_accounts]
+             connector_breadth, check_feature_lift, identity_resolution, product_qualified_accounts,
+             sales_trigger_threshold, acquisition_channel_ranking]

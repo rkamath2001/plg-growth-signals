@@ -14,7 +14,7 @@ from sangam import cohorts, report
 from sangam.experiment import simulate
 from sangam.generate import generate
 from sangam.pqa import account_rollup, score
-from sangam.tools import dataset
+from sangam.tools import acquisition_channel_ranking, dataset, sales_trigger_threshold
 
 
 def main():
@@ -41,11 +41,14 @@ def main():
     test = prospects[prospects.min_signal & ~prospects.noise_flag].head(200)
     results["experiment"] = simulate(test, set(truth[truth == "prospect_hot"].index), test.users)
     prospects.to_csv(out / "product_qualified_accounts.csv")
+    results["sales_trigger"] = sales_trigger_threshold()
+    results["channel_ranking"] = acquisition_channel_ranking()
 
     print("4/4 Writing charts and memo ...")
     report.retention_chart(cohorts.curves(ds), out / "retention_by_activation.png")
     report.simpson_chart(results["simpson_check"], ds, out / "desktop_simpson.png")
     report.experiment_chart(results["experiment"], out / "experiment_design.png")
+    report.threshold_chart(results["sales_trigger"], out / "sales_trigger_threshold.png")
     report.findings_memo(results, prospects.head(8), out / "findings.md")
     report.write_json(results, out / "results.json")
     for k, v in results.items():

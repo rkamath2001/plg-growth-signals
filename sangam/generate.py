@@ -23,6 +23,10 @@ agent can be graded against answers we know in advance:
      activation (noise that looks like signal).
   6. Unresolvable identities: personal email domains and private-relay
      addresses cannot be tied to a company.
+  7. Channels: invited users carry the most intent, then LinkedIn and search;
+     X and Reddit bring volume with low intent and mostly personal addresses.
+  8. Sales trigger: a prospect's chance of signing a contract jumps once it
+     has 5+ activated independent users, and again at 3+ functions.
 """
 
 from __future__ import annotations
@@ -41,6 +45,15 @@ OBSERVE_WEEKS = 20                        # activity observed through week 19
 INDUSTRIES = ["financial services", "retail", "healthcare", "manufacturing",
               "media", "public sector", "technology", "consumer goods"]
 FUNCTIONS = ["sales", "marketing", "finance", "operations", "engineering", "hr"]
+# Acquisition channel for self-serve sign-ups (last-touch attribution).
+SOURCES = ["teammate_invite", "linkedin", "search", "youtube", "x", "reddit", "direct"]
+SOURCE_MIX = {  # who arrives through which channel
+    "personal":  [0.06, 0.08, 0.20, 0.16, 0.18, 0.20, 0.12],
+    "corporate": [0.18, 0.24, 0.22, 0.10, 0.08, 0.06, 0.12],
+    "hot":       [0.40, 0.25, 0.15, 0.05, 0.05, 0.02, 0.08],
+}
+SOURCE_INTENT = {"teammate_invite": 0.6, "linkedin": 0.25, "search": 0.15, "direct": 0.05,
+                 "youtube": 0.0, "x": -0.25, "reddit": -0.35, "webinar": 0.0}
 PERSONAL_DOMAINS = ["gmail.com", "outlook.com", "yahoo.com", "icloud.com", "proton.me"]
 RELAY_DOMAIN = "privaterelay.appleid.com"
 
@@ -106,9 +119,9 @@ def _accounts(rng: np.random.Generator, cfg: Config) -> pd.DataFrame:
 
 
 def _user_rows(rng, n, *, channel, provider, account_id, domain, function,
-               signup_week, plan, wave=None, prefix="U"):
+               signup_week, plan, wave=None, source="sales_led"):
     return pd.DataFrame({
-        "channel": channel, "provider": provider, "account_id_truth": account_id,
+        "channel": channel, "source": source, "provider": provider, "account_id_truth": account_id,
         "email_domain": domain, "function": function, "signup_week": signup_week,
         "plan": plan, "rollout_wave": wave,
     }, index=range(n))
@@ -137,9 +150,12 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
         rng, n, channel="enterprise", provider="sso", account_id="A9999",
         domain="customerzero.example", function=rng.choice(FUNCTIONS, n),
         signup_week=rng.integers(0, 4, n), plan="enterprise",
-        wave=np.where(rng.random(n) < 0.3, 1, 2)))
+        wave=np.where(rng.random(n) < 0.3, 1, 2), source="internal_rollout"))
 
-    def selfserve(n, account_ids, domains, functions, weeks):
+    def mix(kind, n):
+        return rng.choice(SOURCES, n, p=SOURCE_MIX[kind])
+
+    def selfserve(n, account_ids, domains, functions, weeks, source):
         provider = rng.choice(["google", "email", "apple", "github", "amazon"], n,
                               p=[0.45, 0.20, 0.15, 0.12, 0.08])
         dom = np.array(domains, dtype=object)
@@ -150,7 +166,7 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
         return _user_rows(
             rng, n, channel="self_serve", provider=provider, account_id=acct,
             domain=dom, function=functions, signup_week=weeks,
-            plan=np.where(rng.random(n) < 0.18, "plus", "free"))
+            plan=np.where(rng.random(n) < 0.18, "plus", "free"), source=source)
 
     # Background self-serve: mostly personal domains, some shadow adoption at
     # ordinary prospects and at contract customers.
@@ -165,8 +181,9 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
         pick = pool.iloc[rng.integers(0, len(pool), len(idx))]
         acct_ids[idx] = pick.account_id.to_numpy()
         doms[idx] = pick.domain.to_numpy()
+    src = np.where(kind == "personal", mix("personal", n), mix("corporate", n))
     parts.append(selfserve(n, acct_ids, doms, rng.choice(FUNCTIONS, n),
-                           rng.integers(0, SIGNUP_WEEKS, n)))
+                           rng.integers(0, SIGNUP_WEEKS, n), src))
 
     # Hot PQAs: clusters of independent adopters across 3+ functions.
     for _, acc in accounts[accounts.segment == "prospect_hot"].iterrows():
@@ -174,14 +191,15 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
         fns = rng.choice(FUNCTIONS, k)
         fns[:3] = rng.choice(FUNCTIONS, 3, replace=False)  # guarantee breadth
         parts.append(selfserve(k, [acc.account_id] * k, [acc.domain] * k, fns,
-                               rng.integers(0, SIGNUP_WEEKS, k)))
+                               rng.integers(0, SIGNUP_WEEKS, k), mix("hot", k)))
 
     # Webinar noise: a burst of signups in a single week, one function.
     for _, acc in accounts[accounts.segment == "prospect_webinar"].iterrows():
         k = int(rng.integers(15, 35))
         week = int(rng.integers(2, SIGNUP_WEEKS))
         parts.append(selfserve(k, [acc.account_id] * k, [acc.domain] * k,
-                               np.array(["marketing"] * k), np.full(k, week)))
+                               np.array(["marketing"] * k), np.full(k, week),
+                               np.array(["webinar"] * k)))
 
     users = pd.concat(parts, ignore_index=True)
     users.insert(0, "user_id", [f"U{i:06d}" for i in range(len(users))])
@@ -200,7 +218,8 @@ def _behavior(rng: np.random.Generator, users: pd.DataFrame,
     webinar = (seg == "prospect_webinar").to_numpy()
 
     # Latent intent: hot clusters are engaged, webinar bursts are not.
-    intent = rng.normal(0, 1, n) + 0.9 * hot - 1.6 * webinar + 0.3 * enterprise
+    intent = (rng.normal(0, 1, n) + 0.9 * hot - 1.6 * webinar + 0.3 * enterprise
+              + users.source.map(SOURCE_INTENT).fillna(0).to_numpy())
 
     def sigmoid(x):
         return 1 / (1 + np.exp(-x))
@@ -266,8 +285,31 @@ def _behavior(rng: np.random.Generator, users: pd.DataFrame,
         "event_type": "plan_upgraded", "count": 1})], ignore_index=True)
 
     truth = pd.DataFrame({"user_id": users.user_id, "intent": intent.round(3),
-                          "weekly_survival": survive.round(3)})
+                          "weekly_survival": survive.round(3), "agent_action_w0": agent_action})
     return events, truth
+
+
+# Planted sales-trigger threshold: conversion jumps once an account has this many
+# activated independent users, and again once they span 3+ functions.
+THRESHOLD_ACTIVATED = 5
+THRESHOLD_FUNCTIONS = 3
+
+
+def _conversions(rng, users, truth, accounts) -> pd.DataFrame:
+    """Observed outcome: did each prospect company sign an enterprise contract by
+    the end of the window? Driven by activated independent users, not sign-ups."""
+    prospects = accounts[accounts.segment.str.startswith("prospect")].account_id
+    ss = users[(users.channel == "self_serve") & users.account_id_truth.isin(prospects)]
+    ss = ss.merge(truth[["user_id", "agent_action_w0"]], on="user_id")
+    act = ss[ss.agent_action_w0]
+    g = pd.DataFrame({"activated": act.groupby("account_id_truth").size(),
+                      "functions": act.groupby("account_id_truth").function.nunique()})
+    g = g.reindex(prospects).fillna(0)
+    logit = (-4.0 + 2.2 * (g.activated >= THRESHOLD_ACTIVATED)
+             + 1.0 * (g.functions >= THRESHOLD_FUNCTIONS) + 0.15 * np.minimum(g.activated, 15))
+    p = 1 / (1 + np.exp(-logit))
+    return pd.DataFrame({"account_id": prospects.to_numpy(),
+                         "converted_to_contract": rng.random(len(p)) < p.to_numpy()})
 
 
 def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[str, Path]:
@@ -280,6 +322,8 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
     users = _users(rng, cfg, accounts)
     events, truth = _behavior(rng, users, accounts)
 
+    outcomes = _conversions(rng, users, truth, accounts)
+
     # The analyst never sees the true account; it must be resolved from email.
     public_users = users.drop(columns=["account_id_truth"])
     truth = truth.merge(users[["user_id", "account_id_truth"]], on="user_id")
@@ -288,6 +332,7 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
         "accounts": out / "accounts.csv",
         "users": out / "users.csv",
         "events": out / "events.csv.gz",
+        "account_outcomes": out / "account_outcomes.csv",
         "ground_truth_users": out / "ground_truth" / "users_truth.csv",
         "ground_truth_accounts": out / "ground_truth" / "accounts_truth.csv",
     }
@@ -295,6 +340,7 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
     accounts.drop(columns=["segment"]).to_csv(paths["accounts"], index=False)
     public_users.to_csv(paths["users"], index=False)
     events.to_csv(paths["events"], index=False)
+    outcomes.to_csv(paths["account_outcomes"], index=False)
     truth.to_csv(paths["ground_truth_users"], index=False)
     accounts[["account_id", "segment"]].to_csv(paths["ground_truth_accounts"], index=False)
     (out / "README.md").write_text(

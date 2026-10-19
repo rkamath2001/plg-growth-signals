@@ -2,10 +2,10 @@
   "headline_inflation": {
     "question": "Does the internal deployment distort headline retention?",
     "w8_retention_all_users": 0.332,
-    "n_all": 26417,
+    "n_all": 26446,
     "w8_retention_external_only": 0.266,
-    "n_external": 22917,
-    "w8_retention_internal_only": 0.767,
+    "n_external": 22946,
+    "w8_retention_internal_only": 0.766,
     "n_internal": 3500,
     "inflation_points": 6.6,
     "finding": "Including customer zero raises W8 retention from 27% to 33%. Report external users separately; internal use is mandated."
@@ -14,28 +14,28 @@
     "question": "Is activation the first agent action or the first question?",
     "cohorts": {
       "agent_action": {
-        "w8_retention": 0.454954,
-        "n": 9568
+        "w8_retention": 0.449173,
+        "n": 9798
       },
       "question_only": {
-        "w8_retention": 0.148752,
-        "n": 10541
+        "w8_retention": 0.148083,
+        "n": 10278
       },
       "neither": {
-        "w8_retention": 0.06161,
-        "n": 2808
+        "w8_retention": 0.062718,
+        "n": 2870
       }
     },
-    "lift_agent_vs_question": 0.306,
+    "lift_agent_vs_question": 0.301,
     "ci95": [
-      0.294,
-      0.319
+      0.289,
+      0.313
     ],
     "lift_within_segment": {
       "enterprise_external": 0.32,
-      "self_serve": 0.266
+      "self_serve": 0.265
     },
-    "finding": "Users who complete an agent action in week 0 retain at 45% at W8, vs 15% for question-only users (+31%, 95% CI +29% to +32%). The gap holds in every segment. Define activation as the first completed agent action.",
+    "finding": "Users who complete an agent action in week 0 retain at 45% at W8, vs 15% for question-only users (+30%, 95% CI +29% to +31%). The gap holds in every segment. Define activation as the first completed agent action.",
     "caveat": "Observational: high-intent users do both. Confirm with an onboarding experiment that nudges a first agent action."
   },
   "connector_breadth": {
@@ -43,20 +43,20 @@
     "table": [
       {
         "connectors_w0": "3+",
-        "w8_retention": 0.488,
-        "n": 6781,
+        "w8_retention": 0.489,
+        "n": 6921,
         "too_small": false
       },
       {
         "connectors_w0": "1-2",
-        "w8_retention": 0.192,
-        "n": 11228,
+        "w8_retention": 0.191,
+        "n": 11192,
         "too_small": false
       },
       {
         "connectors_w0": "0",
-        "w8_retention": 0.128,
-        "n": 4908,
+        "w8_retention": 0.12,
+        "n": 4833,
         "too_small": false
       }
     ],
@@ -64,78 +64,78 @@
   },
   "simpson_check": {
     "question": "Does 'desktop' really lift retention?",
-    "aggregate_lift": 0.196,
+    "aggregate_lift": 0.202,
     "within_segment_lift": {
-      "enterprise_external": 0.003,
-      "internal": -0.016,
-      "self_serve": 0.004
+      "enterprise_external": 0.01,
+      "internal": 0.028,
+      "self_serve": 0.008
     },
-    "weighted_within_lift": 0.001,
+    "weighted_within_lift": 0.012,
     "adoption_by_segment": {
       "enterprise_external": 0.3,
       "internal": 0.9,
-      "self_serve": 0.16
+      "self_serve": 0.15
     },
     "confounded": true,
-    "finding": "In aggregate, 'desktop' users retain +20% better, but inside each segment the difference is about +0%. The aggregate lift comes from mix: the internal rollout installed it by default. Do not claim it as a retention driver."
+    "finding": "In aggregate, 'desktop' users retain +20% better, but inside each segment the difference is about +1%. The aggregate lift comes from mix: the internal rollout installed it by default. Do not claim it as a retention driver."
   },
   "channel_view": {
     "question": "How do channels and sign-in providers compare?",
     "by_segment": [
       {
         "segment": "internal",
-        "w8_retention": 0.767,
+        "w8_retention": 0.766,
         "n": 3500,
         "too_small": false
       },
       {
         "segment": "enterprise_external",
-        "w8_retention": 0.335,
+        "w8_retention": 0.329,
         "n": 13183,
         "too_small": false
       },
       {
         "segment": "self_serve",
-        "w8_retention": 0.172,
-        "n": 9734,
+        "w8_retention": 0.181,
+        "n": 9763,
         "too_small": false
       }
     ],
     "by_provider": [
       {
         "provider": "sso",
-        "w8_retention": 0.335,
+        "w8_retention": 0.329,
         "n": 13183,
         "too_small": false
       },
       {
         "provider": "github",
-        "w8_retention": 0.192,
-        "n": 1203,
-        "too_small": false
-      },
-      {
-        "provider": "email",
-        "w8_retention": 0.178,
-        "n": 1905,
+        "w8_retention": 0.187,
+        "n": 1137,
         "too_small": false
       },
       {
         "provider": "google",
-        "w8_retention": 0.168,
-        "n": 4443,
+        "w8_retention": 0.186,
+        "n": 4426,
+        "too_small": false
+      },
+      {
+        "provider": "email",
+        "w8_retention": 0.18,
+        "n": 1983,
         "too_small": false
       },
       {
         "provider": "apple",
-        "w8_retention": 0.167,
-        "n": 1443,
+        "w8_retention": 0.174,
+        "n": 1458,
         "too_small": false
       },
       {
         "provider": "amazon",
-        "w8_retention": 0.157,
-        "n": 740,
+        "w8_retention": 0.162,
+        "n": 759,
         "too_small": false
       }
     ],
@@ -143,19 +143,215 @@
   },
   "experiment": {
     "question": "Does outreach to product-qualified accounts cause conversions, and how should we test it?",
-    "accounts_in_test": 196,
+    "accounts_in_test": 185,
     "hot_accounts_in_test": 30,
-    "true_effect": 0.04,
+    "true_effect": 0.041,
     "account_level_estimate": {
-      "mean": 0.041,
+      "mean": 0.039,
       "p05": -0.025,
-      "p95": 0.112
+      "p95": 0.104
     },
     "user_level_estimate": {
-      "mean": 0.015,
-      "p05": -0.019,
-      "p95": 0.051
+      "mean": 0.016,
+      "p05": -0.02,
+      "p95": 0.052
     },
     "finding": "Randomizing by account recovers the true lift (~+4% vs a true +4%). Randomizing users inside the same company shows ~+2%, because colleagues share the outcome. Test sales plays at the account level, and keep a standing holdout so outreach can prove its own lift."
+  },
+  "sales_trigger": {
+    "question": "How many independent adopters should a company have before we start an enterprise sales motion?",
+    "baseline_conversion": 0.049,
+    "recommended_rule": {
+      "accounts_flagged": 33,
+      "contracts_captured": 23,
+      "precision": 0.697,
+      "recall": 0.561,
+      "f1": 0.622,
+      "min_activated": 5,
+      "min_functions": 2
+    },
+    "signup_count_rule": {
+      "accounts_flagged": 39,
+      "contracts_captured": 19,
+      "precision": 0.487,
+      "recall": 0.463,
+      "f1": 0.475,
+      "min_signups": 9
+    },
+    "lift_over_baseline": 14.2,
+    "finding": "Trigger an enterprise sales motion when a company has at least 5 activated independent users across 2+ functions. Those accounts convert at 70% versus a 5% baseline (14.2x), and the rule captures 56% of contracts while flagging 33 accounts. The best rule built on raw sign-up counts scores F1 0.47 against 0.62: sign-ups include event spikes that never activate.",
+    "caveat": "Counts only users resolvable to a company by email domain; private-relay and personal addresses are invisible, so the true number of adopters is higher. Re-fit the rule each quarter against new outcomes.",
+    "conversion_by_activated_users": [
+      {
+        "activated_users": "0",
+        "conversion_rate": 0.015,
+        "accounts": 205,
+        "contracts": 3
+      },
+      {
+        "activated_users": "1",
+        "conversion_rate": 0.01,
+        "accounts": 290,
+        "contracts": 3
+      },
+      {
+        "activated_users": "2",
+        "conversion_rate": 0.031,
+        "accounts": 195,
+        "contracts": 6
+      },
+      {
+        "activated_users": "3",
+        "conversion_rate": 0.023,
+        "accounts": 88,
+        "contracts": 2
+      },
+      {
+        "activated_users": "4",
+        "conversion_rate": 0.148,
+        "accounts": 27,
+        "contracts": 4
+      },
+      {
+        "activated_users": "5-7",
+        "conversion_rate": 0.467,
+        "accounts": 15,
+        "contracts": 7
+      },
+      {
+        "activated_users": "8+",
+        "conversion_rate": 0.8,
+        "accounts": 20,
+        "contracts": 16
+      }
+    ]
+  },
+  "channel_ranking": {
+    "question": "Which acquisition channels bring users who matter?",
+    "table": [
+      {
+        "source": "teammate_invite",
+        "signups": 1147,
+        "activation_rate": 0.537,
+        "w8_retention": 0.276,
+        "company_resolved": 0.667,
+        "sales_ready_accounts": 11,
+        "contracts_sourced": 13,
+        "retained_per_100": 27.6,
+        "ready_per_1k": 9.6,
+        "too_small": false,
+        "by_volume": 7,
+        "by_retention": 1,
+        "by_pipeline": 1
+      },
+      {
+        "source": "linkedin",
+        "signups": 1395,
+        "activation_rate": 0.444,
+        "w8_retention": 0.191,
+        "company_resolved": 0.606,
+        "sales_ready_accounts": 7,
+        "contracts_sourced": 9,
+        "retained_per_100": 19.1,
+        "ready_per_1k": 5.0,
+        "too_small": false,
+        "by_volume": 2,
+        "by_retention": 3,
+        "by_pipeline": 2
+      },
+      {
+        "source": "search",
+        "signups": 1971,
+        "activation_rate": 0.423,
+        "w8_retention": 0.2,
+        "company_resolved": 0.384,
+        "sales_ready_accounts": 7,
+        "contracts_sourced": 8,
+        "retained_per_100": 20.0,
+        "ready_per_1k": 3.6,
+        "too_small": false,
+        "by_volume": 1,
+        "by_retention": 2,
+        "by_pipeline": 3
+      },
+      {
+        "source": "reddit",
+        "signups": 1285,
+        "activation_rate": 0.322,
+        "w8_retention": 0.144,
+        "company_resolved": 0.156,
+        "sales_ready_accounts": 4,
+        "contracts_sourced": 5,
+        "retained_per_100": 14.4,
+        "ready_per_1k": 3.1,
+        "too_small": false,
+        "by_volume": 4,
+        "by_retention": 6,
+        "by_pipeline": 4
+      },
+      {
+        "source": "direct",
+        "signups": 1160,
+        "activation_rate": 0.396,
+        "w8_retention": 0.191,
+        "company_resolved": 0.378,
+        "sales_ready_accounts": 3,
+        "contracts_sourced": 0,
+        "retained_per_100": 19.1,
+        "ready_per_1k": 2.6,
+        "too_small": false,
+        "by_volume": 6,
+        "by_retention": 3,
+        "by_pipeline": 5
+      },
+      {
+        "source": "youtube",
+        "signups": 1238,
+        "activation_rate": 0.414,
+        "w8_retention": 0.164,
+        "company_resolved": 0.266,
+        "sales_ready_accounts": 1,
+        "contracts_sourced": 3,
+        "retained_per_100": 16.4,
+        "ready_per_1k": 0.8,
+        "too_small": false,
+        "by_volume": 5,
+        "by_retention": 5,
+        "by_pipeline": 6
+      },
+      {
+        "source": "webinar",
+        "signups": 272,
+        "activation_rate": 0.136,
+        "w8_retention": 0.007,
+        "company_resolved": 0.897,
+        "sales_ready_accounts": 0,
+        "contracts_sourced": 1,
+        "retained_per_100": 0.7,
+        "ready_per_1k": 0.0,
+        "too_small": false,
+        "by_volume": 8,
+        "by_retention": 8,
+        "by_pipeline": 7
+      },
+      {
+        "source": "x",
+        "signups": 1295,
+        "activation_rate": 0.334,
+        "w8_retention": 0.141,
+        "company_resolved": 0.199,
+        "sales_ready_accounts": 0,
+        "contracts_sourced": 2,
+        "retained_per_100": 14.1,
+        "ready_per_1k": 0.0,
+        "too_small": false,
+        "by_volume": 3,
+        "by_retention": 7,
+        "by_pipeline": 7
+      }
+    ],
+    "attribution": "first-touch at the account level; last-touch at the user level",
+    "finding": "Rankings disagree. 'search' brings the most sign-ups, but 'teammate_invite' produces the most sales-ready accounts per 1,000 sign-ups (9.6) and retains 28% at week 8. 'webinar' and 'x' retain worst. Invest in invite loops and work-identity channels for pipeline; judge broad social channels on retained users, not sign-ups. Pipeline ranks for 'reddit', 'direct', 'youtube', 'webinar', 'x' rest on fewer than 5 accounts each; treat their order as noise.",
+    "caveat": "Channels and intent are entangled: invited users arrive with a colleague's context. Test channel spend with geo or time holdouts before reallocating budget."
   }
 }

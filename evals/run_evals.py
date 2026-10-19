@@ -28,7 +28,7 @@ import pandas as pd
 from sangam import cohorts
 from sangam.experiment import simulate
 from sangam.pqa import account_rollup, score
-from sangam.tools import dataset
+from sangam.tools import acquisition_channel_ranking, dataset, sales_trigger_threshold
 
 ROOT = Path(__file__).resolve().parent
 GOLDEN = json.loads((ROOT / "golden.json").read_text())
@@ -80,6 +80,21 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
           f"estimate {a:+.3f} vs true {exp['true_effect']:+.3f}")
     check("User-level design underestimates (interference)", u < 0.6 * exp["true_effect"],
           f"user-level {u:+.3f} vs true {exp['true_effect']:+.3f}")
+    trig = sales_trigger_threshold()
+    rule, naive = trig["recommended_rule"], trig["signup_count_rule"]
+    check("Sales trigger recovers the planted tipping point (5 activated users)",
+          4 <= rule["min_activated"] <= 6,
+          f"learned {rule['min_activated']}+ activated users across {rule['min_functions']}+ functions")
+    check("Activated-user trigger beats a sign-up-count trigger", rule["f1"] >= naive["f1"] + 0.1,
+          f"F1 {rule['f1']} vs {naive['f1']}")
+
+    chan = {r["source"]: r for r in acquisition_channel_ranking()["table"]}
+    check("Teammate invites rank first on pipeline and retention",
+          chan["teammate_invite"]["by_pipeline"] == 1 and chan["teammate_invite"]["by_retention"] == 1,
+          f"pipeline rank {chan['teammate_invite']['by_pipeline']}, retention rank {chan['teammate_invite']['by_retention']}")
+    check("Low-intent social channels rank in the bottom half on retention",
+          all(chan[c]["by_retention"] > len(chan) / 2 for c in ("x", "reddit")),
+          f"x {chan['x']['by_retention']}, reddit {chan['reddit']['by_retention']} of {len(chan)}")
     return out
 
 
@@ -89,7 +104,12 @@ def _numbers(text: str) -> list[float]:
     vals = []
     for m in re.finditer(r"(-?\d+(?:\.\d+)?)\s*(%|pts|points|pp)?", text):
         v = float(m.group(1))
-        vals.append(v / 100 if m.group(2) == "%" or v > 1 else v)
+        if m.group(2) == "%":
+            vals.append(v / 100)
+            continue
+        vals.append(v)            # a count, e.g. "5 activated users"
+        if v > 1:
+            vals.append(v / 100)  # a percentage written without the sign
     return vals
 
 
@@ -123,13 +143,15 @@ def fact_sheet() -> dict:
         "ret_external": inf["w8_retention_external_only"],
         "ret_all": inf["w8_retention_all_users"],
         "desktop_agg": sim["aggregate_lift"],
+        "trigger_k": sales_trigger_threshold()["recommended_rule"]["min_activated"],
     }
 
 
 def rubric_self_test(facts: dict) -> list[dict]:
     out = []
     for item in GOLDEN:
-        good = item.get("reference_good", "").format(**{k: f"{v:.0%}" for k, v in facts.items()})
+        fmt = {k: (f"{v:.0%}" if isinstance(v, float) else v) for k, v in facts.items()}
+        good = item.get("reference_good", "").format(**fmt)
         bad = item.get("reference_bad", "")
         if not good or not bad:
             continue

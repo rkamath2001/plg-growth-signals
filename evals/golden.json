@@ -56,5 +56,21 @@
     "must_not_claim": [],
     "reference_good": "Start with Ulnex Holdings and Gargate Group: each has around 20 independent users across 6 functions, about two-thirds completed an agent action in week 0, and several shared agents. Ignore the accounts flagged as noise: their signups came in one week from a webinar spike with low activation. Keep a holdout of qualified accounts so outreach can prove its lift.",
     "reference_bad": "Contact every company with more than 15 signups, starting with the biggest."
+  },
+  {
+    "id": "sales-trigger",
+    "question": "How many independent freemium users does a company need before we start an enterprise sales motion?",
+    "facts": [
+      {"key": "trigger_k", "tol": 0}
+    ],
+    "must_mention": [
+      {"why": "counts activated users, not sign-ups", "any_of": ["activated", "agent action"]},
+      {"why": "notes the rule is learned from limited outcomes or must be refit", "any_of": ["refit", "re-fit", "limited", "small sample", "few contracts", "revisit", "recalibrat"]}
+    ],
+    "must_not_claim": [
+      {"why": "does not recommend a raw sign-up count", "pattern": "once (a company|an account) (has|reaches) \\d+ sign-?ups"}
+    ],
+    "reference_good": "Start the motion once a company has {trigger_k} or more activated independent users across at least two functions; those accounts convert at about 70% versus a 5% baseline. Count activated users, not sign-ups, because webinar spikes inflate sign-ups. The rule is learned from about 40 contracts, so refit it each quarter.",
+    "reference_bad": "Once a company reaches 10 sign-ups, hand it to sales."
   }
 ]

@@ -38,7 +38,7 @@ def metric_definitions() -> str:
 
 @tool
 def retention_by_dimension(dimension: str, week: int = 8, exclude_internal: bool = True) -> str:
-    """Week-N retention grouped by a dimension: segment, provider, function, plan, rollout_wave or resolution."""
+    """Week-N retention grouped by a dimension: segment, source, provider, function, plan, rollout_wave or resolution."""
     return json.dumps(T.retention_by_dimension(dimension, week, exclude_internal), default=str)
 
 
@@ -78,6 +78,18 @@ def product_qualified_accounts(n: int = 10, include_customers: bool = False) -> 
     return json.dumps(T.product_qualified_accounts(n, include_customers), default=str)
 
 
+@tool
+def sales_trigger_threshold() -> str:
+    """Learns from observed contract outcomes how many activated independent users (and functions) a company needs before an enterprise sales motion pays off; compares with a sign-up-count rule."""
+    return json.dumps(T.sales_trigger_threshold(), default=str)
+
+
+@tool
+def acquisition_channel_ranking() -> str:
+    """Ranks self-serve acquisition channels (teammate invite, LinkedIn, search, YouTube, X, Reddit, direct, webinar) by volume, week-8 retention and sales-ready accounts per 1,000 sign-ups."""
+    return json.dumps(T.acquisition_channel_ranking(), default=str)
+
+
 def build_agent() -> Agent:
     model_id = os.environ.get("SANGAM_MODEL_ID")
     region = os.environ.get("AWS_REGION", "us-west-2")
@@ -85,7 +97,8 @@ def build_agent() -> Agent:
     return Agent(model=model, system_prompt=SYSTEM_PROMPT, callback_handler=None,
                  tools=[metric_definitions, retention_by_dimension, headline_inflation,
                         activation_test, connector_breadth, check_feature_lift,
-                        identity_resolution, product_qualified_accounts])
+                        identity_resolution, product_qualified_accounts,
+                        sales_trigger_threshold, acquisition_channel_ranking])
 
 
 def ask(question: str) -> str:
