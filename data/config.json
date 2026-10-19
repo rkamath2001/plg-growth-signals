@@ -1,0 +1,9 @@
+{
+  "seed": 7,
+  "n_accounts": 900,
+  "n_contract_accounts": 60,
+  "n_hot_pqa": 30,
+  "n_webinar_noise": 12,
+  "n_selfserve_background": 9000,
+  "internal_seats": 3500
+}

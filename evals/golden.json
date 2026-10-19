@@ -1,0 +1,60 @@
+[
+  {
+    "id": "activation-definition",
+    "question": "What should we treat as activation for new users, and how confident are you?",
+    "facts": [
+      {"key": "act_agent", "tol": 0.02},
+      {"key": "act_question", "tol": 0.02}
+    ],
+    "must_mention": [
+      {"why": "names the first agent action as activation", "any_of": ["agent action"]},
+      {"why": "flags that the result is observational", "any_of": ["observational", "correlat", "experiment", "a/b", "causal"]}
+    ],
+    "must_not_claim": [
+      {"why": "does not crown question-asking as activation", "pattern": "activation (is|should be) (the )?first question"}
+    ],
+    "reference_good": "Treat the first completed agent action as activation. External users who complete one in week 0 retain at {act_agent} at week 8 (n=9,568), versus {act_question} for question-only users. Confidence is medium: this is observational, so confirm with an onboarding experiment that nudges a first agent action.",
+    "reference_bad": "Activation should be the first question. Most users ask one, so it is easy to hit and retention looks great."
+  },
+  {
+    "id": "headline-retention",
+    "question": "What is our week-8 retention?",
+    "facts": [
+      {"key": "ret_external", "tol": 0.02}
+    ],
+    "must_mention": [
+      {"why": "separates the internal customer-zero deployment", "any_of": ["internal", "customer zero", "customer-zero"]}
+    ],
+    "must_not_claim": [],
+    "reference_good": "For external users, week-8 retention is {ret_external}. Including the internal customer-zero deployment raises it to {ret_all}, but internal use is mandated, so report external users separately.",
+    "reference_bad": "Week-8 retention is 33% across all users, which is strong."
+  },
+  {
+    "id": "desktop-app",
+    "question": "Should we push the desktop app because it drives retention?",
+    "facts": [
+      {"key": "desktop_agg", "tol": 0.03}
+    ],
+    "must_mention": [
+      {"why": "explains the lift disappears within segments", "any_of": ["within segment", "within each segment", "inside each segment", "confound", "simpson", "mix"]}
+    ],
+    "must_not_claim": [
+      {"why": "does not claim desktop causes retention", "pattern": "desktop (app )?(drives|causes|increases|improves) retention"}
+    ],
+    "reference_good": "No. Desktop users retain {desktop_agg} better in aggregate, but within each segment the difference is about zero. It is confounded by mix: the internal rollout installed it by default.",
+    "reference_bad": "Yes. The desktop app drives retention by 20 points, so we should push it to everyone."
+  },
+  {
+    "id": "sales-targets",
+    "question": "Which prospect accounts should business development contact this week, and which signups should they ignore?",
+    "facts": [],
+    "must_mention": [
+      {"why": "gives reasons, not just names", "any_of": ["functions", "agent action", "shared"]},
+      {"why": "calls out the noise accounts", "any_of": ["noise", "webinar", "spike", "one week"]},
+      {"why": "recommends testing outreach with a holdout", "any_of": ["holdout", "hold out", "control"]}
+    ],
+    "must_not_claim": [],
+    "reference_good": "Start with Ulnex Holdings and Gargate Group: each has around 20 independent users across 6 functions, about two-thirds completed an agent action in week 0, and several shared agents. Ignore the accounts flagged as noise: their signups came in one week from a webinar spike with low activation. Keep a holdout of qualified accounts so outreach can prove its lift.",
+    "reference_bad": "Contact every company with more than 15 signups, starting with the biggest."
+  }
+]

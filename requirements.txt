@@ -1,0 +1,4 @@
+pandas>=2.2
+numpy>=1.26
+matplotlib>=3.8
+strands-agents>=1.0   # optional: only for sangam/agent.py

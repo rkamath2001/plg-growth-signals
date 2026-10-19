@@ -1,0 +1,902 @@
+account_id,company,domain,industry,size_band,has_account_team
+A0000,Belwick Co,belwickco.example,financial services,enterprise,True
+A0001,Lumport Holdings,lumportholdings.example,consumer goods,enterprise,False
+A0002,Yarton Retail,yartonretail.example,healthcare,mid-market,False
+A0003,Lumia Co,lumiaco.example,retail,mid-market,False
+A0004,Eldale Industries,eldaleindustries.example,media,enterprise,True
+A0005,Istvale Works,istvaleworks.example,public sector,mid-market,False
+A0006,Dunby Systems,dunbysystems.example,consumer goods,mid-market,True
+A0007,Jorford Co,jorfordco.example,public sector,enterprise,False
+A0008,Halley Group,halleygroup.example,technology,mid-market,True
+A0009,Jorvale Works,jorvaleworks.example,consumer goods,mid-market,True
+A0010,Pelley Industries,pelleyindustries.example,public sector,enterprise,False
+A0011,Jorvale Industries,jorvaleindustries.example,media,mid-market,True
+A0012,Ulford Holdings,ulfordholdings.example,media,mid-market,True
+A0013,Istridge Partners,istridgepartners.example,retail,enterprise,True
+A0014,Jordale Health,jordalehealth.example,financial services,mid-market,False
+A0015,Torford Industries,torfordindustries.example,financial services,mid-market,True
+A0016,Zenton Health,zentonhealth.example,consumer goods,enterprise,True
+A0017,Ostia Systems,ostiasystems.example,healthcare,mid-market,False
+A0018,Quinworth Holdings,quinworthholdings.example,financial services,enterprise,False
+A0019,Kelgate Labs,kelgatelabs.example,retail,enterprise,False
+A0020,Elridge Co,elridgeco.example,retail,enterprise,False
+A0021,Jornex Partners,jornexpartners.example,manufacturing,mid-market,True
+A0022,Roston Co,rostonco.example,public sector,mid-market,False
+A0023,Kelholm Retail,kelholmretail.example,technology,enterprise,False
+A0024,Istnex Systems,istnexsystems.example,technology,enterprise,False
+A0025,Ulwick Retail,ulwickretail.example,consumer goods,mid-market,False
+A0026,Dunworth Co,dunworthco.example,technology,mid-market,True
+A0027,Pelport Retail,pelportretail.example,healthcare,mid-market,True
+A0028,Torworth Labs,torworthlabs.example,manufacturing,mid-market,False
+A0029,Kelport Financial,kelportfinancial.example,public sector,enterprise,False
+A0030,Rosora Media,rosoramedia.example,retail,enterprise,True
+A0031,Verworth Retail,verworthretail.example,public sector,enterprise,True
+A0032,Yaria Systems,yariasystems.example,financial services,mid-market,False
+A0033,Garora Media,garoramedia.example,retail,mid-market,True
+A0034,Corridge Financial,corridgefinancial.example,technology,mid-market,False
+A0035,Dunport Health,dunporthealth.example,healthcare,mid-market,True
+A0036,Fenton Group,fentongroup.example,consumer goods,mid-market,False
+A0037,Salnex Systems,salnexsystems.example,technology,enterprise,True
+A0038,Roston Works,rostonworks.example,retail,mid-market,False
+A0039,Corgate Works,corgateworks.example,consumer goods,mid-market,True
+A0040,Marwick Retail,marwickretail.example,technology,enterprise,False
+A0041,Kelvale Works,kelvaleworks.example,consumer goods,enterprise,False
+A0042,Zennex Works,zennexworks.example,manufacturing,enterprise,True
+A0043,Yarnex Systems,yarnexsystems.example,consumer goods,enterprise,False
+A0044,Garwick Media,garwickmedia.example,healthcare,mid-market,False
+A0045,Salholm Partners,salholmpartners.example,healthcare,enterprise,True
+A0046,Tordale Industries,tordaleindustries.example,media,mid-market,False
+A0047,Tornex Group,tornexgroup.example,healthcare,enterprise,True
+A0048,Norford Health,norfordhealth.example,financial services,enterprise,False
+A0049,Garnex Co,garnexco.example,public sector,enterprise,True
+A0050,Rosvale Health,rosvalehealth.example,manufacturing,enterprise,False
+A0051,Marport Financial,marportfinancial.example,technology,enterprise,True
+A0052,Salnex Financial,salnexfinancial.example,retail,enterprise,False
+A0053,Wilford Group,wilfordgroup.example,retail,mid-market,True
+A0054,Istby Group,istbygroup.example,public sector,mid-market,False
+A0055,Nordale Financial,nordalefinancial.example,public sector,mid-market,False
+A0056,Fenwick Retail,fenwickretail.example,media,enterprise,True
+A0057,Garvale Labs,garvalelabs.example,media,enterprise,True
+A0058,Marton Partners,martonpartners.example,technology,enterprise,True
+A0059,Elgate Labs,elgatelabs.example,consumer goods,enterprise,False
+A0060,Salora Health,salorahealth.example,consumer goods,mid-market,True
+A0061,Wilmont Industries,wilmontindustries.example,consumer goods,mid-market,False
+A0062,Jorholm Systems,jorholmsystems.example,healthcare,enterprise,True
+A0063,Verworth Holdings,verworthholdings.example,technology,smb,True
+A0064,Yaria Holdings,yariaholdings.example,healthcare,mid-market,False
+A0065,Ulford Labs,ulfordlabs.example,technology,mid-market,False
+A0066,Ulnex Holdings,ulnexholdings.example,consumer goods,smb,False
+A0067,Ulholm Holdings,ulholmholdings.example,manufacturing,smb,False
+A0068,Torgate Labs,torgatelabs.example,media,smb,False
+A0069,Ulwick Holdings,ulwickholdings.example,financial services,mid-market,True
+A0070,Fenby Co,fenbyco.example,financial services,smb,True
+A0071,Arford Industries,arfordindustries.example,retail,smb,False
+A0072,Ulford Partners,ulfordpartners.example,financial services,enterprise,True
+A0073,Lumora Retail,lumoraretail.example,manufacturing,mid-market,True
+A0074,Ulia Financial,uliafinancial.example,consumer goods,mid-market,False
+A0075,Gargate Group,gargategroup.example,public sector,enterprise,False
+A0076,Coria Retail,coriaretail.example,media,smb,False
+A0077,Verwick Holdings,verwickholdings.example,public sector,mid-market,True
+A0078,Fenmont Holdings,fenmontholdings.example,financial services,smb,False
+A0079,Torford Media,torfordmedia.example,public sector,smb,False
+A0080,Fenport Media,fenportmedia.example,media,enterprise,True
+A0081,Wilworth Group,wilworthgroup.example,financial services,smb,False
+A0082,Garton Partners,gartonpartners.example,media,mid-market,False
+A0083,Rosia Group,rosiagroup.example,public sector,enterprise,False
+A0084,Beldale Industries,beldaleindustries.example,manufacturing,mid-market,False
+A0085,Ostwick Labs,ostwicklabs.example,consumer goods,mid-market,False
+A0086,Rosridge Retail,rosridgeretail.example,consumer goods,smb,True
+A0087,Quinworth Works,quinworthworks.example,healthcare,smb,False
+A0088,Torgate Retail,torgateretail.example,consumer goods,mid-market,True
+A0089,Jorora Health,jororahealth.example,retail,smb,False
+A0090,Belia Media,beliamedia.example,financial services,smb,True
+A0091,Ulgate Works,ulgateworks.example,public sector,smb,True
+A0092,Rosgate Group,rosgategroup.example,retail,enterprise,False
+A0093,Norley Industries,norleyindustries.example,healthcare,smb,True
+A0094,Belgate Media,belgatemedia.example,manufacturing,smb,False
+A0095,Lumholm Health,lumholmhealth.example,public sector,enterprise,False
+A0096,Jorholm Media,jorholmmedia.example,technology,smb,False
+A0097,Yarton Health,yartonhealth.example,consumer goods,enterprise,False
+A0098,Ulora Co,uloraco.example,media,enterprise,False
+A0099,Halmont Works,halmontworks.example,consumer goods,mid-market,False
+A0100,Corwick Works,corwickworks.example,public sector,smb,False
+A0101,Corley Media,corleymedia.example,technology,smb,False
+A0102,Yarnex Group,yarnexgroup.example,media,smb,True
+A0103,Elia Labs,elialabs.example,financial services,smb,True
+A0104,Fenford Financial,fenfordfinancial.example,retail,smb,True
+A0105,Zendale Systems,zendalesystems.example,manufacturing,smb,True
+A0106,Elworth Financial,elworthfinancial.example,technology,enterprise,True
+A0107,Pelton Group,peltongroup.example,manufacturing,mid-market,False
+A0108,Mardale Systems,mardalesystems.example,financial services,enterprise,True
+A0109,Lumton Partners,lumtonpartners.example,manufacturing,mid-market,True
+A0110,Zengate Retail,zengateretail.example,public sector,smb,False
+A0111,Keldale Works,keldaleworks.example,consumer goods,mid-market,True
+A0112,Armont Industries,armontindustries.example,retail,smb,True
+A0113,Jorport Financial,jorportfinancial.example,healthcare,smb,False
+A0114,Yarport Partners,yarportpartners.example,manufacturing,enterprise,False
+A0115,Jorton Media,jortonmedia.example,manufacturing,smb,False
+A0116,Yarwick Financial,yarwickfinancial.example,consumer goods,smb,True
+A0117,Arholm Industries,arholmindustries.example,manufacturing,smb,True
+A0118,Lumton Labs,lumtonlabs.example,media,mid-market,False
+A0119,Istholm Labs,istholmlabs.example,healthcare,mid-market,False
+A0120,Ostvale Holdings,ostvaleholdings.example,financial services,smb,True
+A0121,Garvale Health,garvalehealth.example,manufacturing,mid-market,False
+A0122,Zendale Group,zendalegroup.example,manufacturing,smb,True
+A0123,Dundale Holdings,dundaleholdings.example,retail,mid-market,False
+A0124,Quinby Works,quinbyworks.example,public sector,mid-market,True
+A0125,Norby Health,norbyhealth.example,healthcare,mid-market,True
+A0126,Zennex Labs,zennexlabs.example,financial services,mid-market,True
+A0127,Belwick Systems,belwicksystems.example,media,mid-market,True
+A0128,Wilnex Holdings,wilnexholdings.example,healthcare,enterprise,False
+A0129,Yarton Holdings,yartonholdings.example,public sector,mid-market,False
+A0130,Ostridge Partners,ostridgepartners.example,financial services,smb,False
+A0131,Torora Retail,tororaretail.example,technology,mid-market,False
+A0132,Corora Group,cororagroup.example,media,smb,True
+A0133,Elley Retail,elleyretail.example,public sector,smb,True
+A0134,Jorworth Financial,jorworthfinancial.example,manufacturing,smb,False
+A0135,Dunworth Health,dunworthhealth.example,consumer goods,smb,False
+A0136,Ostworth Partners,ostworthpartners.example,media,enterprise,False
+A0137,Kelgate Health,kelgatehealth.example,consumer goods,mid-market,False
+A0138,Ostmont Group,ostmontgroup.example,healthcare,enterprise,False
+A0139,Marby Partners,marbypartners.example,technology,mid-market,False
+A0140,Rosia Retail,rosiaretail.example,public sector,smb,True
+A0141,Saldale Works,saldaleworks.example,consumer goods,smb,False
+A0142,Salport Labs,salportlabs.example,retail,smb,True
+A0143,Wilridge Systems,wilridgesystems.example,media,smb,False
+A0144,Rosport Systems,rosportsystems.example,consumer goods,smb,False
+A0145,Belholm Health,belholmhealth.example,retail,mid-market,True
+A0146,Ulgate Holdings,ulgateholdings.example,consumer goods,smb,True
+A0147,Halton Group,haltongroup.example,consumer goods,smb,False
+A0148,Istridge Health,istridgehealth.example,manufacturing,mid-market,False
+A0149,Marvale Health,marvalehealth.example,public sector,mid-market,False
+A0150,Dunby Labs,dunbylabs.example,manufacturing,mid-market,True
+A0151,Ulgate Co,ulgateco.example,public sector,mid-market,True
+A0152,Tornex Labs,tornexlabs.example,technology,smb,False
+A0153,Quinworth Co,quinworthco.example,public sector,smb,False
+A0154,Marmont Group,marmontgroup.example,healthcare,smb,False
+A0155,Kelholm Industries,kelholmindustries.example,media,smb,True
+A0156,Ulport Financial,ulportfinancial.example,technology,mid-market,False
+A0157,Tormont Financial,tormontfinancial.example,media,enterprise,False
+A0158,Garworth Retail,garworthretail.example,healthcare,mid-market,False
+A0159,Noria Labs,norialabs.example,technology,smb,False
+A0160,Halport Industries,halportindustries.example,public sector,smb,False
+A0161,Lumgate Health,lumgatehealth.example,public sector,enterprise,True
+A0162,Halvale Partners,halvalepartners.example,healthcare,enterprise,False
+A0163,Yarton Media,yartonmedia.example,media,mid-market,False
+A0164,Lumley Partners,lumleypartners.example,media,smb,False
+A0165,Corworth Financial,corworthfinancial.example,retail,smb,True
+A0166,Jormont Retail,jormontretail.example,consumer goods,mid-market,True
+A0167,Wildale Works,wildaleworks.example,media,enterprise,True
+A0168,Salmont Media,salmontmedia.example,financial services,smb,False
+A0169,Kelholm Works,kelholmworks.example,healthcare,smb,False
+A0170,Norport Industries,norportindustries.example,technology,smb,True
+A0171,Lumton Industries,lumtonindustries.example,public sector,smb,False
+A0172,Verridge Systems,verridgesystems.example,media,enterprise,True
+A0173,Elia Partners,eliapartners.example,manufacturing,mid-market,False
+A0174,Dungate Partners,dungatepartners.example,manufacturing,enterprise,False
+A0175,Jorport Industries,jorportindustries.example,consumer goods,smb,True
+A0176,Corton Labs,cortonlabs.example,healthcare,smb,True
+A0177,Quinwick Media,quinwickmedia.example,technology,mid-market,True
+A0178,Salridge Media,salridgemedia.example,financial services,mid-market,True
+A0179,Fenley Group,fenleygroup.example,media,smb,False
+A0180,Vernex Media,vernexmedia.example,healthcare,smb,True
+A0181,Torridge Media,torridgemedia.example,manufacturing,mid-market,False
+A0182,Quinley Health,quinleyhealth.example,media,mid-market,True
+A0183,Ulholm Retail,ulholmretail.example,financial services,mid-market,False
+A0184,Elley Co,elleyco.example,financial services,smb,False
+A0185,Arwick Group,arwickgroup.example,media,enterprise,True
+A0186,Kelley Media,kelleymedia.example,public sector,mid-market,False
+A0187,Pelgate Labs,pelgatelabs.example,financial services,mid-market,False
+A0188,Rosmont Partners,rosmontpartners.example,consumer goods,mid-market,False
+A0189,Istmont Partners,istmontpartners.example,manufacturing,smb,False
+A0190,Lumgate Systems,lumgatesystems.example,consumer goods,smb,False
+A0191,Salby Co,salbyco.example,retail,smb,True
+A0192,Torridge Group,torridgegroup.example,consumer goods,smb,False
+A0193,Uldale Systems,uldalesystems.example,public sector,smb,False
+A0194,Tornex Co,tornexco.example,technology,smb,False
+A0195,Quingate Group,quingategroup.example,technology,smb,True
+A0196,Elvale Health,elvalehealth.example,retail,smb,False
+A0197,Maria Health,mariahealth.example,retail,enterprise,False
+A0198,Salton Health,saltonhealth.example,consumer goods,smb,False
+A0199,Rosby Partners,rosbypartners.example,manufacturing,smb,False
+A0200,Marton Holdings,martonholdings.example,retail,enterprise,True
+A0201,Quinvale Financial,quinvalefinancial.example,public sector,mid-market,False
+A0202,Garton Health,gartonhealth.example,technology,smb,False
+A0203,Elwick Partners,elwickpartners.example,healthcare,smb,False
+A0204,Halwick Works,halwickworks.example,consumer goods,mid-market,False
+A0205,Wilworth Labs,wilworthlabs.example,financial services,smb,False
+A0206,Garby Financial,garbyfinancial.example,media,enterprise,False
+A0207,Rosora Systems,rosorasystems.example,manufacturing,enterprise,False
+A0208,Marley Systems,marleysystems.example,media,smb,False
+A0209,Belvale Works,belvaleworks.example,media,smb,True
+A0210,Kelgate Group,kelgategroup.example,retail,enterprise,False
+A0211,Mardale Labs,mardalelabs.example,financial services,smb,True
+A0212,Istport Labs,istportlabs.example,media,mid-market,False
+A0213,Ardale Labs,ardalelabs.example,consumer goods,enterprise,False
+A0214,Quinmont Co,quinmontco.example,healthcare,mid-market,True
+A0215,Dunvale Media,dunvalemedia.example,media,enterprise,False
+A0216,Elora Systems,elorasystems.example,retail,mid-market,False
+A0217,Salnex Works,salnexworks.example,healthcare,enterprise,True
+A0218,Zengate Industries,zengateindustries.example,retail,mid-market,False
+A0219,Garford Retail,garfordretail.example,financial services,smb,False
+A0220,Zenholm Labs,zenholmlabs.example,technology,mid-market,True
+A0221,Yarport Retail,yarportretail.example,consumer goods,smb,True
+A0222,Zenia Labs,zenialabs.example,consumer goods,mid-market,False
+A0223,Istholm Health,istholmhealth.example,public sector,enterprise,True
+A0224,Dunvale Group,dunvalegroup.example,retail,smb,False
+A0225,Wilmont Works,wilmontworks.example,consumer goods,smb,True
+A0226,Elvale Systems,elvalesystems.example,financial services,smb,False
+A0227,Marnex Works,marnexworks.example,healthcare,mid-market,True
+A0228,Istridge Media,istridgemedia.example,healthcare,enterprise,False
+A0229,Verdale Health,verdalehealth.example,public sector,enterprise,False
+A0230,Quinmont Holdings,quinmontholdings.example,retail,enterprise,False
+A0231,Torby Group,torbygroup.example,consumer goods,mid-market,True
+A0232,Arwick Industries,arwickindustries.example,retail,mid-market,True
+A0233,Arton Retail,artonretail.example,technology,smb,False
+A0234,Lumwick Financial,lumwickfinancial.example,media,smb,False
+A0235,Haldale Co,haldaleco.example,healthcare,smb,False
+A0236,Quinmont Retail,quinmontretail.example,manufacturing,enterprise,False
+A0237,Jorby Group,jorbygroup.example,financial services,smb,False
+A0238,Ulnex Media,ulnexmedia.example,manufacturing,smb,False
+A0239,Dunford Partners,dunfordpartners.example,public sector,smb,False
+A0240,Ardale Holdings,ardaleholdings.example,retail,smb,True
+A0241,Verora Health,verorahealth.example,consumer goods,mid-market,False
+A0242,Belwick Group,belwickgroup.example,public sector,smb,True
+A0243,Torholm Group,torholmgroup.example,healthcare,smb,False
+A0244,Halby Labs,halbylabs.example,healthcare,enterprise,False
+A0245,Arwick Partners,arwickpartners.example,technology,enterprise,True
+A0246,Lumia Industries,lumiaindustries.example,manufacturing,mid-market,True
+A0247,Arport Financial,arportfinancial.example,consumer goods,mid-market,True
+A0248,Ulridge Systems,ulridgesystems.example,manufacturing,smb,False
+A0249,Dunford Labs,dunfordlabs.example,public sector,enterprise,False
+A0250,Torford Co,torfordco.example,consumer goods,mid-market,False
+A0251,Lummont Industries,lummontindustries.example,consumer goods,mid-market,False
+A0252,Quingate Partners,quingatepartners.example,retail,smb,False
+A0253,Ulora Works,uloraworks.example,manufacturing,smb,True
+A0254,Dungate Labs,dungatelabs.example,public sector,smb,True
+A0255,Torora Group,tororagroup.example,manufacturing,smb,False
+A0256,Verford Media,verfordmedia.example,healthcare,smb,False
+A0257,Yarridge Co,yarridgeco.example,media,smb,True
+A0258,Ardale Financial,ardalefinancial.example,consumer goods,smb,True
+A0259,Salwick Systems,salwicksystems.example,manufacturing,smb,False
+A0260,Armont Health,armonthealth.example,manufacturing,smb,False
+A0261,Zenford Retail,zenfordretail.example,technology,smb,False
+A0262,Toria Media,toriamedia.example,media,smb,False
+A0263,Dunridge Systems,dunridgesystems.example,healthcare,mid-market,False
+A0264,Istdale Co,istdaleco.example,consumer goods,mid-market,False
+A0265,Marworth Industries,marworthindustries.example,media,smb,True
+A0266,Ulby Industries,ulbyindustries.example,public sector,mid-market,False
+A0267,Belridge Group,belridgegroup.example,technology,mid-market,False
+A0268,Pelby Partners,pelbypartners.example,financial services,mid-market,True
+A0269,Marmont Works,marmontworks.example,technology,mid-market,False
+A0270,Belora Financial,belorafinancial.example,retail,mid-market,True
+A0271,Salgate Financial,salgatefinancial.example,financial services,enterprise,False
+A0272,Halmont Partners,halmontpartners.example,consumer goods,enterprise,False
+A0273,Elby Industries,elbyindustries.example,healthcare,mid-market,False
+A0274,Kelton Works,keltonworks.example,financial services,mid-market,False
+A0275,Zenby Financial,zenbyfinancial.example,public sector,smb,False
+A0276,Halford Health,halfordhealth.example,healthcare,mid-market,False
+A0277,Quinport Media,quinportmedia.example,manufacturing,smb,True
+A0278,Elton Financial,eltonfinancial.example,consumer goods,smb,True
+A0279,Wilridge Media,wilridgemedia.example,media,smb,False
+A0280,Halnex Partners,halnexpartners.example,financial services,smb,False
+A0281,Jornex Financial,jornexfinancial.example,public sector,smb,False
+A0282,Halora Holdings,haloraholdings.example,retail,mid-market,False
+A0283,Belridge Systems,belridgesystems.example,healthcare,mid-market,True
+A0284,Wilwick Works,wilwickworks.example,retail,mid-market,False
+A0285,Yarmont Group,yarmontgroup.example,consumer goods,smb,False
+A0286,Zenia Group,zeniagroup.example,financial services,mid-market,False
+A0287,Tornex Partners,tornexpartners.example,media,enterprise,False
+A0288,Marton Systems,martonsystems.example,manufacturing,smb,False
+A0289,Ulvale Systems,ulvalesystems.example,media,smb,True
+A0290,Jorora Holdings,jororaholdings.example,media,smb,False
+A0291,Salley Retail,salleyretail.example,financial services,mid-market,False
+A0292,Quinia Group,quiniagroup.example,healthcare,smb,False
+A0293,Torton Group,tortongroup.example,media,mid-market,True
+A0294,Zenmont Health,zenmonthealth.example,financial services,smb,True
+A0295,Quinvale Works,quinvaleworks.example,technology,mid-market,True
+A0296,Rosford Systems,rosfordsystems.example,technology,mid-market,False
+A0297,Roswick Labs,roswicklabs.example,media,mid-market,True
+A0298,Torton Labs,tortonlabs.example,technology,smb,True
+A0299,Kelmont Industries,kelmontindustries.example,manufacturing,mid-market,True
+A0300,Torridge Systems,torridgesystems.example,media,mid-market,False
+A0301,Lumridge Holdings,lumridgeholdings.example,manufacturing,mid-market,False
+A0302,Istgate Co,istgateco.example,retail,smb,False
+A0303,Rosby Retail,rosbyretail.example,retail,enterprise,False
+A0304,Salgate Media,salgatemedia.example,media,mid-market,False
+A0305,Norworth Industries,norworthindustries.example,financial services,smb,False
+A0306,Quindale Health,quindalehealth.example,public sector,smb,False
+A0307,Gargate Industries,gargateindustries.example,healthcare,mid-market,True
+A0308,Pelford Group,pelfordgroup.example,manufacturing,mid-market,False
+A0309,Yardale Financial,yardalefinancial.example,consumer goods,smb,True
+A0310,Ostnex Systems,ostnexsystems.example,technology,smb,False
+A0311,Torholm Media,torholmmedia.example,manufacturing,smb,True
+A0312,Ostia Retail,ostiaretail.example,manufacturing,mid-market,False
+A0313,Corholm Financial,corholmfinancial.example,technology,smb,True
+A0314,Ulridge Health,ulridgehealth.example,media,smb,False
+A0315,Saldale Holdings,saldaleholdings.example,public sector,mid-market,True
+A0316,Torridge Industries,torridgeindustries.example,financial services,smb,False
+A0317,Zenholm Industries,zenholmindustries.example,public sector,smb,False
+A0318,Corport Group,corportgroup.example,media,enterprise,False
+A0319,Keldale Holdings,keldaleholdings.example,retail,smb,True
+A0320,Halia Media,haliamedia.example,technology,mid-market,True
+A0321,Vermont Co,vermontco.example,media,smb,False
+A0322,Ostford Partners,ostfordpartners.example,public sector,smb,False
+A0323,Arley Holdings,arleyholdings.example,technology,enterprise,False
+A0324,Maria Co,mariaco.example,healthcare,enterprise,False
+A0325,Garholm Co,garholmco.example,technology,smb,False
+A0326,Wilia Co,wiliaco.example,consumer goods,smb,True
+A0327,Beldale Financial,beldalefinancial.example,media,smb,False
+A0328,Wilworth Holdings,wilworthholdings.example,public sector,smb,True
+A0329,Corworth Works,corworthworks.example,technology,mid-market,False
+A0330,Mardale Holdings,mardaleholdings.example,manufacturing,mid-market,False
+A0331,Belholm Industries,belholmindustries.example,technology,mid-market,False
+A0332,Fenridge Group,fenridgegroup.example,manufacturing,mid-market,False
+A0333,Jordale Financial,jordalefinancial.example,consumer goods,smb,False
+A0334,Torholm Holdings,torholmholdings.example,technology,smb,False
+A0335,Ulia Group,uliagroup.example,media,mid-market,False
+A0336,Yarton Co,yartonco.example,retail,mid-market,False
+A0337,Belby Health,belbyhealth.example,technology,smb,False
+A0338,Argate Media,argatemedia.example,public sector,smb,False
+A0339,Salford Industries,salfordindustries.example,media,enterprise,False
+A0340,Halford Systems,halfordsystems.example,public sector,smb,False
+A0341,Lumport Partners,lumportpartners.example,consumer goods,smb,True
+A0342,Quinridge Works,quinridgeworks.example,media,smb,True
+A0343,Salridge Group,salridgegroup.example,manufacturing,enterprise,False
+A0344,Jorley Holdings,jorleyholdings.example,technology,smb,True
+A0345,Fenworth Systems,fenworthsystems.example,public sector,smb,False
+A0346,Fenley Retail,fenleyretail.example,manufacturing,smb,False
+A0347,Ostora Retail,ostoraretail.example,retail,mid-market,True
+A0348,Istdale Group,istdalegroup.example,manufacturing,smb,True
+A0349,Ostton Systems,osttonsystems.example,consumer goods,enterprise,True
+A0350,Verton Labs,vertonlabs.example,healthcare,smb,False
+A0351,Corby Industries,corbyindustries.example,consumer goods,mid-market,True
+A0352,Halley Works,halleyworks.example,consumer goods,smb,False
+A0353,Corwick Retail,corwickretail.example,technology,enterprise,False
+A0354,Haldale Partners,haldalepartners.example,healthcare,smb,False
+A0355,Salridge Labs,salridgelabs.example,technology,mid-market,False
+A0356,Ulford Systems,ulfordsystems.example,public sector,enterprise,False
+A0357,Lumia Retail,lumiaretail.example,consumer goods,smb,False
+A0358,Zenby Holdings,zenbyholdings.example,manufacturing,smb,True
+A0359,Salgate Partners,salgatepartners.example,media,mid-market,True
+A0360,Ulport Health,ulporthealth.example,consumer goods,mid-market,False
+A0361,Zenvale Media,zenvalemedia.example,consumer goods,mid-market,False
+A0362,Halora Labs,haloralabs.example,consumer goods,mid-market,False
+A0363,Quindale Media,quindalemedia.example,financial services,mid-market,True
+A0364,Arport Systems,arportsystems.example,financial services,mid-market,True
+A0365,Halvale Financial,halvalefinancial.example,financial services,mid-market,False
+A0366,Istnex Health,istnexhealth.example,consumer goods,mid-market,False
+A0367,Marport Co,marportco.example,manufacturing,smb,False
+A0368,Yarworth Systems,yarworthsystems.example,media,smb,False
+A0369,Lumora Industries,lumoraindustries.example,manufacturing,smb,True
+A0370,Corridge Co,corridgeco.example,financial services,smb,False
+A0371,Ulmont Retail,ulmontretail.example,consumer goods,smb,True
+A0372,Halmont Financial,halmontfinancial.example,manufacturing,mid-market,True
+A0373,Elwick Financial,elwickfinancial.example,healthcare,smb,True
+A0374,Corley Financial,corleyfinancial.example,financial services,smb,False
+A0375,Jorport Partners,jorportpartners.example,financial services,mid-market,False
+A0376,Corwick Health,corwickhealth.example,media,smb,False
+A0377,Wilport Works,wilportworks.example,technology,smb,True
+A0378,Dunmont Financial,dunmontfinancial.example,retail,smb,True
+A0379,Ulmont Financial,ulmontfinancial.example,media,mid-market,True
+A0380,Corworth Holdings,corworthholdings.example,healthcare,mid-market,False
+A0381,Mardale Group,mardalegroup.example,public sector,enterprise,False
+A0382,Fenia Holdings,feniaholdings.example,healthcare,enterprise,False
+A0383,Ostholm Works,ostholmworks.example,consumer goods,smb,False
+A0384,Zenworth Partners,zenworthpartners.example,media,mid-market,False
+A0385,Rosvale Industries,rosvaleindustries.example,retail,smb,True
+A0386,Dungate Works,dungateworks.example,technology,smb,True
+A0387,Kelnex Industries,kelnexindustries.example,public sector,enterprise,False
+A0388,Rosgate Holdings,rosgateholdings.example,consumer goods,smb,True
+A0389,Norora Retail,nororaretail.example,consumer goods,smb,False
+A0390,Rosworth Systems,rosworthsystems.example,healthcare,mid-market,False
+A0391,Norport Retail,norportretail.example,public sector,mid-market,True
+A0392,Istridge Works,istridgeworks.example,media,smb,True
+A0393,Marwick Partners,marwickpartners.example,manufacturing,enterprise,True
+A0394,Norridge Holdings,norridgeholdings.example,financial services,smb,True
+A0395,Rosgate Co,rosgateco.example,technology,mid-market,False
+A0396,Lumvale Systems,lumvalesystems.example,healthcare,smb,False
+A0397,Garley Systems,garleysystems.example,financial services,enterprise,False
+A0398,Garwick Labs,garwicklabs.example,consumer goods,smb,False
+A0399,Tormont Health,tormonthealth.example,manufacturing,smb,True
+A0400,Dunridge Media,dunridgemedia.example,financial services,enterprise,True
+A0401,Norora Co,nororaco.example,manufacturing,enterprise,False
+A0402,Garridge Industries,garridgeindustries.example,technology,enterprise,True
+A0403,Zenridge Co,zenridgeco.example,public sector,enterprise,False
+A0404,Jorford Holdings,jorfordholdings.example,public sector,smb,False
+A0405,Rosdale Co,rosdaleco.example,healthcare,smb,False
+A0406,Ostworth Media,ostworthmedia.example,healthcare,mid-market,True
+A0407,Garworth Group,garworthgroup.example,healthcare,smb,True
+A0408,Wilridge Labs,wilridgelabs.example,technology,enterprise,False
+A0409,Norvale Partners,norvalepartners.example,technology,smb,False
+A0410,Istora Media,istoramedia.example,healthcare,smb,True
+A0411,Elwick Works,elwickworks.example,healthcare,smb,True
+A0412,Norridge Partners,norridgepartners.example,consumer goods,smb,True
+A0413,Rosia Systems,rosiasystems.example,consumer goods,mid-market,False
+A0414,Pelwick Group,pelwickgroup.example,financial services,smb,True
+A0415,Verwick Works,verwickworks.example,healthcare,enterprise,True
+A0416,Tornex Financial,tornexfinancial.example,financial services,mid-market,False
+A0417,Halworth Media,halworthmedia.example,healthcare,smb,False
+A0418,Rosia Financial,rosiafinancial.example,technology,enterprise,False
+A0419,Wilby Industries,wilbyindustries.example,media,mid-market,True
+A0420,Elholm Health,elholmhealth.example,manufacturing,smb,False
+A0421,Elmont Partners,elmontpartners.example,retail,enterprise,True
+A0422,Quinby Labs,quinbylabs.example,retail,enterprise,True
+A0423,Kelnex Systems,kelnexsystems.example,technology,mid-market,False
+A0424,Ostora Industries,ostoraindustries.example,media,smb,False
+A0425,Dunton Media,duntonmedia.example,financial services,enterprise,True
+A0426,Belworth Works,belworthworks.example,healthcare,enterprise,False
+A0427,Noria Works,noriaworks.example,public sector,smb,False
+A0428,Rosdale Group,rosdalegroup.example,media,smb,False
+A0429,Lumora Holdings,lumoraholdings.example,public sector,enterprise,True
+A0430,Lumia Systems,lumiasystems.example,public sector,mid-market,True
+A0431,Halwick Retail,halwickretail.example,financial services,smb,False
+A0432,Norholm Financial,norholmfinancial.example,technology,mid-market,False
+A0433,Istport Industries,istportindustries.example,media,smb,False
+A0434,Istby Labs,istbylabs.example,financial services,enterprise,False
+A0435,Dunby Retail,dunbyretail.example,consumer goods,smb,False
+A0436,Uldale Holdings,uldaleholdings.example,media,smb,True
+A0437,Zenford Media,zenfordmedia.example,retail,smb,False
+A0438,Norwick Industries,norwickindustries.example,consumer goods,smb,True
+A0439,Pelton Co,peltonco.example,financial services,enterprise,False
+A0440,Corwick Financial,corwickfinancial.example,manufacturing,smb,True
+A0441,Norora Health,nororahealth.example,financial services,mid-market,True
+A0442,Wilholm Works,wilholmworks.example,technology,enterprise,True
+A0443,Fenworth Partners,fenworthpartners.example,technology,smb,True
+A0444,Verley Systems,verleysystems.example,financial services,smb,True
+A0445,Fenton Partners,fentonpartners.example,healthcare,enterprise,False
+A0446,Fenwick Systems,fenwicksystems.example,technology,smb,True
+A0447,Ulholm Financial,ulholmfinancial.example,healthcare,enterprise,True
+A0448,Salwick Co,salwickco.example,media,enterprise,False
+A0449,Pelby Industries,pelbyindustries.example,media,smb,False
+A0450,Kelmont Labs,kelmontlabs.example,consumer goods,mid-market,False
+A0451,Dunmont Partners,dunmontpartners.example,public sector,mid-market,False
+A0452,Garwick Systems,garwicksystems.example,technology,mid-market,False
+A0453,Corley Works,corleyworks.example,financial services,smb,False
+A0454,Yarridge Partners,yarridgepartners.example,technology,smb,False
+A0455,Fendale Co,fendaleco.example,manufacturing,smb,True
+A0456,Rosport Retail,rosportretail.example,financial services,smb,True
+A0457,Ulwick Media,ulwickmedia.example,financial services,smb,False
+A0458,Yardale Works,yardaleworks.example,public sector,enterprise,True
+A0459,Halia Holdings,haliaholdings.example,consumer goods,enterprise,False
+A0460,Marley Works,marleyworks.example,retail,smb,True
+A0461,Quingate Works,quingateworks.example,healthcare,mid-market,False
+A0462,Salmont Works,salmontworks.example,healthcare,mid-market,False
+A0463,Fenford Industries,fenfordindustries.example,consumer goods,smb,False
+A0464,Zenley Systems,zenleysystems.example,healthcare,smb,False
+A0465,Rosholm Holdings,rosholmholdings.example,public sector,enterprise,True
+A0466,Yarwick Works,yarwickworks.example,media,smb,False
+A0467,Dunvale Labs,dunvalelabs.example,manufacturing,mid-market,False
+A0468,Ostholm Retail,ostholmretail.example,public sector,enterprise,False
+A0469,Marport Systems,marportsystems.example,retail,smb,False
+A0470,Fenby Health,fenbyhealth.example,consumer goods,enterprise,False
+A0471,Belworth Financial,belworthfinancial.example,consumer goods,smb,False
+A0472,Noria Systems,noriasystems.example,financial services,mid-market,False
+A0473,Belia Financial,beliafinancial.example,manufacturing,enterprise,False
+A0474,Ulby Partners,ulbypartners.example,retail,enterprise,False
+A0475,Ulton Systems,ultonsystems.example,manufacturing,enterprise,False
+A0476,Jorgate Media,jorgatemedia.example,healthcare,mid-market,False
+A0477,Istworth Retail,istworthretail.example,technology,enterprise,True
+A0478,Cornex Retail,cornexretail.example,technology,smb,False
+A0479,Ostley Co,ostleyco.example,healthcare,mid-market,False
+A0480,Marton Labs,martonlabs.example,media,smb,True
+A0481,Zenport Retail,zenportretail.example,manufacturing,smb,False
+A0482,Fennex Industries,fennexindustries.example,media,smb,False
+A0483,Yarridge Holdings,yarridgeholdings.example,consumer goods,mid-market,False
+A0484,Ulvale Group,ulvalegroup.example,technology,mid-market,True
+A0485,Jorworth Partners,jorworthpartners.example,financial services,smb,False
+A0486,Cormont Retail,cormontretail.example,public sector,enterprise,False
+A0487,Salnex Health,salnexhealth.example,technology,smb,False
+A0488,Yarridge Industries,yarridgeindustries.example,healthcare,smb,False
+A0489,Fengate Systems,fengatesystems.example,public sector,enterprise,False
+A0490,Dunnex Group,dunnexgroup.example,financial services,enterprise,True
+A0491,Cordale Health,cordalehealth.example,financial services,mid-market,True
+A0492,Verwick Partners,verwickpartners.example,manufacturing,smb,True
+A0493,Arholm Works,arholmworks.example,manufacturing,mid-market,False
+A0494,Istholm Co,istholmco.example,consumer goods,enterprise,True
+A0495,Yaria Labs,yarialabs.example,technology,smb,False
+A0496,Halnex Co,halnexco.example,media,enterprise,False
+A0497,Istley Labs,istleylabs.example,media,mid-market,True
+A0498,Torvale Retail,torvaleretail.example,financial services,mid-market,True
+A0499,Torton Health,tortonhealth.example,retail,enterprise,True
+A0500,Kelridge Health,kelridgehealth.example,manufacturing,smb,False
+A0501,Torport Partners,torportpartners.example,manufacturing,mid-market,True
+A0502,Ardale Retail,ardaleretail.example,manufacturing,mid-market,False
+A0503,Kelholm Group,kelholmgroup.example,media,smb,True
+A0504,Rosley Retail,rosleyretail.example,media,mid-market,True
+A0505,Halport Systems,halportsystems.example,manufacturing,mid-market,True
+A0506,Norford Systems,norfordsystems.example,media,mid-market,False
+A0507,Kelora Systems,kelorasystems.example,financial services,smb,True
+A0508,Pelia Works,peliaworks.example,consumer goods,enterprise,False
+A0509,Pelridge Group,pelridgegroup.example,media,enterprise,False
+A0510,Arnex Health,arnexhealth.example,healthcare,smb,True
+A0511,Rosora Industries,rosoraindustries.example,manufacturing,enterprise,True
+A0512,Fennex Health,fennexhealth.example,manufacturing,mid-market,False
+A0513,Marmont Health,marmonthealth.example,healthcare,smb,False
+A0514,Salridge Retail,salridgeretail.example,media,enterprise,True
+A0515,Fenton Systems,fentonsystems.example,consumer goods,smb,True
+A0516,Pelford Co,pelfordco.example,consumer goods,mid-market,False
+A0517,Zenworth Holdings,zenworthholdings.example,retail,enterprise,False
+A0518,Verdale Retail,verdaleretail.example,public sector,mid-market,False
+A0519,Ulford Health,ulfordhealth.example,technology,smb,False
+A0520,Wilport Co,wilportco.example,manufacturing,enterprise,False
+A0521,Wilgate Retail,wilgateretail.example,public sector,mid-market,False
+A0522,Jorby Co,jorbyco.example,technology,enterprise,False
+A0523,Belford Financial,belfordfinancial.example,financial services,smb,False
+A0524,Ulby Co,ulbyco.example,manufacturing,mid-market,False
+A0525,Garton Retail,gartonretail.example,financial services,enterprise,False
+A0526,Fengate Holdings,fengateholdings.example,consumer goods,smb,True
+A0527,Ulmont Group,ulmontgroup.example,media,smb,True
+A0528,Elport Media,elportmedia.example,healthcare,smb,False
+A0529,Jorholm Holdings,jorholmholdings.example,financial services,smb,True
+A0530,Fenia Group,feniagroup.example,retail,smb,False
+A0531,Willey Labs,willeylabs.example,healthcare,smb,False
+A0532,Belworth Partners,belworthpartners.example,technology,smb,False
+A0533,Corholm Holdings,corholmholdings.example,consumer goods,mid-market,True
+A0534,Ostwick Holdings,ostwickholdings.example,healthcare,smb,False
+A0535,Elton Holdings,eltonholdings.example,healthcare,mid-market,False
+A0536,Belford Health,belfordhealth.example,technology,smb,True
+A0537,Fennex Financial,fennexfinancial.example,financial services,smb,False
+A0538,Dunnex Media,dunnexmedia.example,media,mid-market,False
+A0539,Belmont Retail,belmontretail.example,media,mid-market,True
+A0540,Jornex Media,jornexmedia.example,media,mid-market,True
+A0541,Jorholm Group,jorholmgroup.example,technology,smb,True
+A0542,Quinridge Industries,quinridgeindustries.example,financial services,mid-market,False
+A0543,Torby Systems,torbysystems.example,healthcare,enterprise,False
+A0544,Ulnex Labs,ulnexlabs.example,technology,smb,True
+A0545,Elgate Financial,elgatefinancial.example,healthcare,mid-market,True
+A0546,Yarford Industries,yarfordindustries.example,financial services,mid-market,False
+A0547,Elia Systems,eliasystems.example,manufacturing,smb,False
+A0548,Elford Systems,elfordsystems.example,consumer goods,enterprise,False
+A0549,Arridge Labs,arridgelabs.example,technology,mid-market,False
+A0550,Istby Partners,istbypartners.example,consumer goods,smb,False
+A0551,Salnex Industries,salnexindustries.example,healthcare,mid-market,False
+A0552,Lumgate Media,lumgatemedia.example,healthcare,enterprise,False
+A0553,Elport Labs,elportlabs.example,retail,mid-market,True
+A0554,Belton Industries,beltonindustries.example,retail,enterprise,True
+A0555,Salworth Partners,salworthpartners.example,healthcare,smb,False
+A0556,Corton Co,cortonco.example,consumer goods,mid-market,False
+A0557,Dunford Health,dunfordhealth.example,public sector,mid-market,True
+A0558,Istgate Systems,istgatesystems.example,manufacturing,enterprise,False
+A0559,Norgate Financial,norgatefinancial.example,manufacturing,mid-market,True
+A0560,Arvale Works,arvaleworks.example,financial services,mid-market,False
+A0561,Jordale Retail,jordaleretail.example,manufacturing,smb,True
+A0562,Rosworth Financial,rosworthfinancial.example,manufacturing,mid-market,True
+A0563,Ulley Systems,ulleysystems.example,technology,mid-market,True
+A0564,Lumdale Holdings,lumdaleholdings.example,retail,enterprise,True
+A0565,Zenia Industries,zeniaindustries.example,technology,enterprise,False
+A0566,Vermont Holdings,vermontholdings.example,manufacturing,mid-market,False
+A0567,Tormont Partners,tormontpartners.example,financial services,enterprise,False
+A0568,Ostmont Co,ostmontco.example,public sector,smb,False
+A0569,Torworth Health,torworthhealth.example,media,mid-market,False
+A0570,Marridge Partners,marridgepartners.example,consumer goods,mid-market,True
+A0571,Yarley Systems,yarleysystems.example,media,mid-market,False
+A0572,Rosholm Industries,rosholmindustries.example,technology,smb,True
+A0573,Norton Co,nortonco.example,retail,mid-market,False
+A0574,Torwick Group,torwickgroup.example,retail,enterprise,False
+A0575,Halora Works,haloraworks.example,public sector,smb,True
+A0576,Belworth Industries,belworthindustries.example,manufacturing,smb,False
+A0577,Torgate Partners,torgatepartners.example,technology,mid-market,False
+A0578,Yarby Systems,yarbysystems.example,manufacturing,enterprise,True
+A0579,Ulora Group,uloragroup.example,technology,smb,False
+A0580,Fenwick Co,fenwickco.example,consumer goods,enterprise,True
+A0581,Belford Holdings,belfordholdings.example,consumer goods,smb,True
+A0582,Ostia Co,ostiaco.example,financial services,smb,False
+A0583,Roswick Retail,roswickretail.example,consumer goods,mid-market,False
+A0584,Verport Financial,verportfinancial.example,media,mid-market,False
+A0585,Verholm Labs,verholmlabs.example,healthcare,enterprise,True
+A0586,Elnex Industries,elnexindustries.example,consumer goods,enterprise,True
+A0587,Dundale Labs,dundalelabs.example,retail,smb,False
+A0588,Marmont Media,marmontmedia.example,manufacturing,mid-market,False
+A0589,Norvale Financial,norvalefinancial.example,technology,mid-market,True
+A0590,Norton Group,nortongroup.example,healthcare,smb,False
+A0591,Torridge Labs,torridgelabs.example,consumer goods,mid-market,False
+A0592,Marora Co,maroraco.example,media,enterprise,False
+A0593,Halholm Financial,halholmfinancial.example,media,mid-market,False
+A0594,Istwick Holdings,istwickholdings.example,healthcare,enterprise,False
+A0595,Lumholm Holdings,lumholmholdings.example,retail,smb,False
+A0596,Corford Media,corfordmedia.example,consumer goods,smb,False
+A0597,Rosport Holdings,rosportholdings.example,financial services,mid-market,False
+A0598,Torora Financial,tororafinancial.example,financial services,smb,False
+A0599,Yarora Media,yaroramedia.example,financial services,mid-market,False
+A0600,Elholm Retail,elholmretail.example,retail,mid-market,True
+A0601,Ulley Holdings,ulleyholdings.example,public sector,smb,False
+A0602,Kelora Media,keloramedia.example,financial services,mid-market,False
+A0603,Halgate Partners,halgatepartners.example,retail,mid-market,True
+A0604,Salridge Industries,salridgeindustries.example,public sector,smb,False
+A0605,Arton Industries,artonindustries.example,financial services,smb,True
+A0606,Roston Financial,rostonfinancial.example,healthcare,enterprise,True
+A0607,Lumwick Co,lumwickco.example,technology,enterprise,False
+A0608,Garnex Retail,garnexretail.example,consumer goods,enterprise,True
+A0609,Pelworth Works,pelworthworks.example,manufacturing,mid-market,False
+A0610,Jorford Industries,jorfordindustries.example,consumer goods,smb,True
+A0611,Dunport Financial,dunportfinancial.example,consumer goods,smb,False
+A0612,Belvale Industries,belvaleindustries.example,consumer goods,smb,True
+A0613,Istridge Labs,istridgelabs.example,retail,mid-market,True
+A0614,Salport Media,salportmedia.example,healthcare,smb,False
+A0615,Ulia Systems,uliasystems.example,public sector,smb,False
+A0616,Kelton Co,keltonco.example,financial services,smb,True
+A0617,Rosora Partners,rosorapartners.example,healthcare,smb,True
+A0618,Belford Partners,belfordpartners.example,manufacturing,mid-market,False
+A0619,Nornex Holdings,nornexholdings.example,consumer goods,mid-market,True
+A0620,Salby Labs,salbylabs.example,consumer goods,mid-market,True
+A0621,Quingate Co,quingateco.example,healthcare,enterprise,False
+A0622,Elford Media,elfordmedia.example,technology,enterprise,False
+A0623,Norvale Media,norvalemedia.example,media,mid-market,True
+A0624,Istby Media,istbymedia.example,financial services,enterprise,False
+A0625,Peldale Group,peldalegroup.example,manufacturing,smb,False
+A0626,Zenby Co,zenbyco.example,public sector,mid-market,True
+A0627,Ostdale Works,ostdaleworks.example,public sector,smb,True
+A0628,Istgate Partners,istgatepartners.example,consumer goods,mid-market,True
+A0629,Elgate Media,elgatemedia.example,public sector,enterprise,False
+A0630,Quinport Financial,quinportfinancial.example,consumer goods,mid-market,True
+A0631,Salport Works,salportworks.example,manufacturing,mid-market,True
+A0632,Corora Works,cororaworks.example,public sector,mid-market,True
+A0633,Halworth Financial,halworthfinancial.example,media,smb,False
+A0634,Ostwick Retail,ostwickretail.example,technology,enterprise,False
+A0635,Pelley Financial,pelleyfinancial.example,consumer goods,smb,True
+A0636,Zenridge Retail,zenridgeretail.example,technology,smb,False
+A0637,Jorton Industries,jortonindustries.example,consumer goods,smb,False
+A0638,Yarmont Financial,yarmontfinancial.example,healthcare,smb,True
+A0639,Corby Holdings,corbyholdings.example,consumer goods,enterprise,False
+A0640,Zenvale Health,zenvalehealth.example,financial services,smb,True
+A0641,Norvale Works,norvaleworks.example,healthcare,smb,False
+A0642,Pelora Partners,pelorapartners.example,public sector,mid-market,True
+A0643,Marley Partners,marleypartners.example,media,mid-market,False
+A0644,Norford Works,norfordworks.example,retail,mid-market,False
+A0645,Istora Partners,istorapartners.example,public sector,smb,False
+A0646,Rosworth Retail,rosworthretail.example,manufacturing,smb,False
+A0647,Kelport Media,kelportmedia.example,technology,enterprise,False
+A0648,Garvale Group,garvalegroup.example,consumer goods,smb,True
+A0649,Ostport Industries,ostportindustries.example,retail,smb,False
+A0650,Salby Group,salbygroup.example,media,smb,True
+A0651,Verport Media,verportmedia.example,financial services,mid-market,False
+A0652,Elholm Media,elholmmedia.example,media,enterprise,False
+A0653,Ulford Financial,ulfordfinancial.example,technology,mid-market,False
+A0654,Zenton Co,zentonco.example,consumer goods,mid-market,True
+A0655,Marby Works,marbyworks.example,technology,mid-market,False
+A0656,Zennex Co,zennexco.example,healthcare,mid-market,True
+A0657,Torworth Systems,torworthsystems.example,manufacturing,mid-market,False
+A0658,Rosley Financial,rosleyfinancial.example,consumer goods,smb,False
+A0659,Zenford Labs,zenfordlabs.example,technology,smb,False
+A0660,Arworth Retail,arworthretail.example,consumer goods,smb,False
+A0661,Armont Partners,armontpartners.example,retail,mid-market,True
+A0662,Ulport Media,ulportmedia.example,healthcare,mid-market,True
+A0663,Kelora Labs,keloralabs.example,technology,mid-market,False
+A0664,Salworth Holdings,salworthholdings.example,healthcare,smb,True
+A0665,Ulton Financial,ultonfinancial.example,technology,enterprise,True
+A0666,Wilton Retail,wiltonretail.example,retail,smb,False
+A0667,Vergate Retail,vergateretail.example,financial services,enterprise,False
+A0668,Ostton Industries,osttonindustries.example,consumer goods,mid-market,True
+A0669,Kelnex Labs,kelnexlabs.example,healthcare,mid-market,False
+A0670,Marora Media,maroramedia.example,retail,enterprise,False
+A0671,Corport Media,corportmedia.example,healthcare,mid-market,False
+A0672,Marholm Industries,marholmindustries.example,financial services,mid-market,False
+A0673,Ostora Partners,ostorapartners.example,technology,smb,False
+A0674,Norton Media,nortonmedia.example,consumer goods,mid-market,False
+A0675,Verwick Health,verwickhealth.example,financial services,smb,False
+A0676,Fenton Media,fentonmedia.example,media,smb,False
+A0677,Marridge Group,marridgegroup.example,healthcare,smb,False
+A0678,Garora Systems,garorasystems.example,public sector,mid-market,True
+A0679,Belia Retail,beliaretail.example,public sector,smb,True
+A0680,Halworth Health,halworthhealth.example,public sector,mid-market,True
+A0681,Veria Group,veriagroup.example,financial services,smb,True
+A0682,Ostford Works,ostfordworks.example,financial services,smb,False
+A0683,Gardale Financial,gardalefinancial.example,consumer goods,enterprise,False
+A0684,Quinholm Labs,quinholmlabs.example,financial services,smb,True
+A0685,Rosvale Co,rosvaleco.example,media,mid-market,False
+A0686,Yarton Group,yartongroup.example,manufacturing,smb,True
+A0687,Corby Works,corbyworks.example,manufacturing,smb,False
+A0688,Halworth Group,halworthgroup.example,financial services,smb,False
+A0689,Salford Group,salfordgroup.example,retail,mid-market,False
+A0690,Jorgate Partners,jorgatepartners.example,media,smb,False
+A0691,Belwick Labs,belwicklabs.example,financial services,enterprise,False
+A0692,Lumholm Labs,lumholmlabs.example,public sector,enterprise,True
+A0693,Salworth Media,salworthmedia.example,technology,mid-market,True
+A0694,Norport Group,norportgroup.example,public sector,smb,False
+A0695,Ostby Financial,ostbyfinancial.example,technology,smb,True
+A0696,Marworth Financial,marworthfinancial.example,media,smb,False
+A0697,Eldale Holdings,eldaleholdings.example,public sector,smb,False
+A0698,Yarworth Retail,yarworthretail.example,financial services,enterprise,True
+A0699,Belworth Group,belworthgroup.example,media,smb,False
+A0700,Zendale Industries,zendaleindustries.example,retail,mid-market,False
+A0701,Jorford Systems,jorfordsystems.example,retail,mid-market,True
+A0702,Norwick Holdings,norwickholdings.example,consumer goods,smb,False
+A0703,Kelora Industries,keloraindustries.example,technology,smb,False
+A0704,Ostia Media,ostiamedia.example,financial services,mid-market,False
+A0705,Salridge Works,salridgeworks.example,consumer goods,mid-market,False
+A0706,Arton Works,artonworks.example,media,smb,False
+A0707,Beldale Group,beldalegroup.example,media,enterprise,True
+A0708,Norora Group,nororagroup.example,financial services,smb,False
+A0709,Garworth Works,garworthworks.example,consumer goods,smb,False
+A0710,Quinnex Systems,quinnexsystems.example,consumer goods,smb,True
+A0711,Marwick Works,marwickworks.example,technology,mid-market,True
+A0712,Ulmont Health,ulmonthealth.example,retail,smb,True
+A0713,Salgate Labs,salgatelabs.example,media,smb,False
+A0714,Elmont Systems,elmontsystems.example,manufacturing,mid-market,False
+A0715,Cornex Health,cornexhealth.example,manufacturing,mid-market,True
+A0716,Halwick Systems,halwicksystems.example,media,mid-market,False
+A0717,Coria Holdings,coriaholdings.example,public sector,mid-market,False
+A0718,Fenora Systems,fenorasystems.example,public sector,mid-market,False
+A0719,Yargate Group,yargategroup.example,retail,smb,True
+A0720,Wilford Partners,wilfordpartners.example,consumer goods,mid-market,False
+A0721,Elley Partners,elleypartners.example,manufacturing,smb,False
+A0722,Zennex Industries,zennexindustries.example,public sector,smb,True
+A0723,Rosmont Industries,rosmontindustries.example,technology,smb,False
+A0724,Rosmont Labs,rosmontlabs.example,healthcare,smb,True
+A0725,Kelley Works,kelleyworks.example,technology,smb,False
+A0726,Salford Co,salfordco.example,financial services,mid-market,True
+A0727,Marby Health,marbyhealth.example,healthcare,mid-market,False
+A0728,Arholm Financial,arholmfinancial.example,public sector,smb,True
+A0729,Dunby Industries,dunbyindustries.example,technology,smb,False
+A0730,Quinport Holdings,quinportholdings.example,consumer goods,smb,False
+A0731,Quinford Media,quinfordmedia.example,manufacturing,mid-market,True
+A0732,Belmont Media,belmontmedia.example,financial services,mid-market,True
+A0733,Zenby Systems,zenbysystems.example,manufacturing,enterprise,False
+A0734,Ulgate Labs,ulgatelabs.example,technology,smb,True
+A0735,Arora Retail,aroraretail.example,financial services,enterprise,True
+A0736,Arridge Retail,arridgeretail.example,retail,enterprise,True
+A0737,Arby Media,arbymedia.example,manufacturing,smb,False
+A0738,Garvale Financial,garvalefinancial.example,manufacturing,mid-market,True
+A0739,Marley Group,marleygroup.example,manufacturing,enterprise,True
+A0740,Istvale Media,istvalemedia.example,media,mid-market,False
+A0741,Pelvale Systems,pelvalesystems.example,media,smb,False
+A0742,Fenworth Media,fenworthmedia.example,media,mid-market,False
+A0743,Elvale Works,elvaleworks.example,manufacturing,enterprise,False
+A0744,Zenby Retail,zenbyretail.example,consumer goods,smb,True
+A0745,Quinworth Industries,quinworthindustries.example,manufacturing,mid-market,True
+A0746,Rosvale Systems,rosvalesystems.example,public sector,smb,False
+A0747,Joria Co,joriaco.example,public sector,enterprise,False
+A0748,Lumgate Labs,lumgatelabs.example,manufacturing,mid-market,False
+A0749,Kelora Retail,keloraretail.example,public sector,smb,False
+A0750,Kelgate Holdings,kelgateholdings.example,public sector,mid-market,True
+A0751,Garia Labs,garialabs.example,manufacturing,mid-market,False
+A0752,Salport Industries,salportindustries.example,manufacturing,smb,False
+A0753,Lumford Labs,lumfordlabs.example,media,mid-market,False
+A0754,Pelia Media,peliamedia.example,manufacturing,mid-market,False
+A0755,Salia Holdings,saliaholdings.example,technology,smb,True
+A0756,Dunridge Group,dunridgegroup.example,healthcare,mid-market,False
+A0757,Pelnex Works,pelnexworks.example,financial services,enterprise,False
+A0758,Jorholm Financial,jorholmfinancial.example,manufacturing,mid-market,False
+A0759,Pelora Industries,peloraindustries.example,consumer goods,mid-market,False
+A0760,Corholm Works,corholmworks.example,healthcare,smb,False
+A0761,Verton Group,vertongroup.example,healthcare,smb,False
+A0762,Lumport Industries,lumportindustries.example,retail,enterprise,True
+A0763,Lumholm Partners,lumholmpartners.example,consumer goods,mid-market,False
+A0764,Elora Industries,eloraindustries.example,retail,enterprise,True
+A0765,Garridge Works,garridgeworks.example,manufacturing,mid-market,True
+A0766,Arwick Co,arwickco.example,manufacturing,mid-market,True
+A0767,Kelford Health,kelfordhealth.example,media,mid-market,False
+A0768,Fenford Media,fenfordmedia.example,healthcare,mid-market,False
+A0769,Fenport Holdings,fenportholdings.example,technology,smb,False
+A0770,Arton Group,artongroup.example,technology,mid-market,True
+A0771,Salgate Works,salgateworks.example,manufacturing,mid-market,True
+A0772,Fenia Works,feniaworks.example,technology,mid-market,False
+A0773,Elnex Systems,elnexsystems.example,financial services,smb,True
+A0774,Dunholm Health,dunholmhealth.example,healthcare,smb,False
+A0775,Garworth Labs,garworthlabs.example,consumer goods,smb,False
+A0776,Ostford Holdings,ostfordholdings.example,media,smb,True
+A0777,Wilvale Retail,wilvaleretail.example,retail,enterprise,False
+A0778,Halford Industries,halfordindustries.example,consumer goods,mid-market,False
+A0779,Ostton Group,osttongroup.example,consumer goods,mid-market,False
+A0780,Lumdale Partners,lumdalepartners.example,healthcare,smb,False
+A0781,Verora Partners,verorapartners.example,retail,smb,False
+A0782,Verford Holdings,verfordholdings.example,media,mid-market,True
+A0783,Salholm Group,salholmgroup.example,media,enterprise,True
+A0784,Corvale Industries,corvaleindustries.example,manufacturing,mid-market,False
+A0785,Ulford Retail,ulfordretail.example,public sector,mid-market,True
+A0786,Belnex Group,belnexgroup.example,public sector,smb,False
+A0787,Vervale Group,vervalegroup.example,technology,smb,False
+A0788,Marton Works,martonworks.example,consumer goods,mid-market,False
+A0789,Quinwick Systems,quinwicksystems.example,technology,mid-market,True
+A0790,Roston Health,rostonhealth.example,retail,smb,True
+A0791,Rosworth Works,rosworthworks.example,financial services,smb,False
+A0792,Armont Labs,armontlabs.example,consumer goods,mid-market,True
+A0793,Uldale Group,uldalegroup.example,technology,smb,False
+A0794,Istdale Labs,istdalelabs.example,public sector,mid-market,False
+A0795,Fenora Holdings,fenoraholdings.example,healthcare,smb,True
+A0796,Yarridge Works,yarridgeworks.example,technology,mid-market,True
+A0797,Quinley Media,quinleymedia.example,financial services,smb,False
+A0798,Torridge Holdings,torridgeholdings.example,public sector,mid-market,False
+A0799,Elby Media,elbymedia.example,manufacturing,enterprise,False
+A0800,Fenwick Works,fenwickworks.example,technology,mid-market,False
+A0801,Fenmont Media,fenmontmedia.example,public sector,mid-market,False
+A0802,Verby Group,verbygroup.example,healthcare,smb,False
+A0803,Jorvale Systems,jorvalesystems.example,technology,enterprise,False
+A0804,Elwick Systems,elwicksystems.example,public sector,smb,False
+A0805,Ulora Media,uloramedia.example,healthcare,enterprise,True
+A0806,Jormont Group,jormontgroup.example,healthcare,enterprise,True
+A0807,Pelford Health,pelfordhealth.example,manufacturing,mid-market,False
+A0808,Kelora Health,kelorahealth.example,media,enterprise,False
+A0809,Belgate Financial,belgatefinancial.example,healthcare,mid-market,False
+A0810,Quinwick Group,quinwickgroup.example,public sector,mid-market,True
+A0811,Wilgate Partners,wilgatepartners.example,media,smb,False
+A0812,Salford Works,salfordworks.example,retail,enterprise,False
+A0813,Elford Financial,elfordfinancial.example,public sector,enterprise,True
+A0814,Pelport Co,pelportco.example,financial services,smb,False
+A0815,Istnex Financial,istnexfinancial.example,consumer goods,smb,True
+A0816,Torley Holdings,torleyholdings.example,technology,mid-market,True
+A0817,Dunley Works,dunleyworks.example,financial services,mid-market,False
+A0818,Corworth Partners,corworthpartners.example,technology,smb,False
+A0819,Yarworth Co,yarworthco.example,healthcare,enterprise,False
+A0820,Pelford Industries,pelfordindustries.example,public sector,smb,True
+A0821,Vernex Partners,vernexpartners.example,retail,enterprise,False
+A0822,Ulia Holdings,uliaholdings.example,healthcare,mid-market,False
+A0823,Dunholm Holdings,dunholmholdings.example,financial services,mid-market,True
+A0824,Wilton Works,wiltonworks.example,public sector,smb,False
+A0825,Ostby Works,ostbyworks.example,media,smb,False
+A0826,Pelridge Co,pelridgeco.example,financial services,smb,True
+A0827,Zenholm Works,zenholmworks.example,healthcare,mid-market,True
+A0828,Garora Financial,garorafinancial.example,public sector,mid-market,False
+A0829,Fenwick Partners,fenwickpartners.example,technology,enterprise,True
+A0830,Cordale Retail,cordaleretail.example,media,smb,False
+A0831,Dunmont Labs,dunmontlabs.example,retail,enterprise,False
+A0832,Fenton Works,fentonworks.example,media,smb,False
+A0833,Ostvale Labs,ostvalelabs.example,retail,enterprise,False
+A0834,Cornex Labs,cornexlabs.example,manufacturing,enterprise,False
+A0835,Lumgate Partners,lumgatepartners.example,manufacturing,smb,False
+A0836,Kelholm Health,kelholmhealth.example,retail,enterprise,True
+A0837,Yardale Co,yardaleco.example,technology,mid-market,False
+A0838,Rosdale Works,rosdaleworks.example,public sector,mid-market,True
+A0839,Istford Retail,istfordretail.example,financial services,enterprise,False
+A0840,Marvale Group,marvalegroup.example,manufacturing,mid-market,False
+A0841,Fendale Systems,fendalesystems.example,financial services,mid-market,False
+A0842,Pelnex Holdings,pelnexholdings.example,public sector,smb,False
+A0843,Kelia Holdings,keliaholdings.example,manufacturing,enterprise,True
+A0844,Dunby Works,dunbyworks.example,healthcare,enterprise,False
+A0845,Halia Works,haliaworks.example,retail,smb,False
+A0846,Gargate Partners,gargatepartners.example,financial services,mid-market,True
+A0847,Yarport Co,yarportco.example,retail,smb,True
+A0848,Quinvale Co,quinvaleco.example,media,smb,True
+A0849,Mardale Partners,mardalepartners.example,public sector,smb,False
+A0850,Peldale Labs,peldalelabs.example,media,mid-market,True
+A0851,Norby Systems,norbysystems.example,retail,smb,True
+A0852,Wilwick Labs,wilwicklabs.example,consumer goods,smb,True
+A0853,Kelmont Health,kelmonthealth.example,public sector,smb,False
+A0854,Kelford Holdings,kelfordholdings.example,consumer goods,smb,True
+A0855,Zenford Partners,zenfordpartners.example,financial services,mid-market,False
+A0856,Kelby Works,kelbyworks.example,financial services,smb,False
+A0857,Ulvale Health,ulvalehealth.example,financial services,mid-market,False
+A0858,Kelia Labs,kelialabs.example,technology,mid-market,False
+A0859,Pelridge Labs,pelridgelabs.example,healthcare,smb,False
+A0860,Istwick Partners,istwickpartners.example,healthcare,smb,False
+A0861,Gardale Labs,gardalelabs.example,media,enterprise,True
+A0862,Garvale Partners,garvalepartners.example,public sector,enterprise,True
+A0863,Rosby Works,rosbyworks.example,manufacturing,enterprise,False
+A0864,Arton Co,artonco.example,manufacturing,smb,True
+A0865,Marton Health,martonhealth.example,manufacturing,mid-market,True
+A0866,Yarholm Media,yarholmmedia.example,healthcare,mid-market,False
+A0867,Norby Works,norbyworks.example,manufacturing,smb,True
+A0868,Kelnex Works,kelnexworks.example,manufacturing,mid-market,True
+A0869,Pelton Media,peltonmedia.example,healthcare,enterprise,False
+A0870,Ulnex Works,ulnexworks.example,media,enterprise,False
+A0871,Ulia Retail,uliaretail.example,public sector,smb,True
+A0872,Jorley Systems,jorleysystems.example,public sector,smb,True
+A0873,Quinport Co,quinportco.example,financial services,enterprise,False
+A0874,Wilora Retail,wiloraretail.example,public sector,enterprise,True
+A0875,Lumia Group,lumiagroup.example,healthcare,mid-market,False
+A0876,Wilora Co,wiloraco.example,public sector,smb,False
+A0877,Fendale Financial,fendalefinancial.example,consumer goods,mid-market,False
+A0878,Istmont Systems,istmontsystems.example,manufacturing,mid-market,False
+A0879,Dunton Health,duntonhealth.example,financial services,mid-market,True
+A0880,Ostnex Retail,ostnexretail.example,public sector,smb,True
+A0881,Ostford Group,ostfordgroup.example,healthcare,smb,False
+A0882,Corton Systems,cortonsystems.example,healthcare,smb,False
+A0883,Norworth Systems,norworthsystems.example,media,smb,True
+A0884,Pelby Group,pelbygroup.example,media,smb,False
+A0885,Dunwick Holdings,dunwickholdings.example,financial services,enterprise,False
+A0886,Pelford Retail,pelfordretail.example,manufacturing,smb,False
+A0887,Norholm Retail,norholmretail.example,manufacturing,mid-market,True
+A0888,Ulholm Systems,ulholmsystems.example,media,mid-market,True
+A0889,Wilgate Works,wilgateworks.example,public sector,smb,False
+A0890,Elmont Holdings,elmontholdings.example,financial services,mid-market,True
+A0891,Ulridge Works,ulridgeworks.example,financial services,smb,True
+A0892,Rosvale Labs,rosvalelabs.example,manufacturing,mid-market,False
+A0893,Cormont Health,cormonthealth.example,technology,mid-market,False
+A0894,Zenford Group,zenfordgroup.example,retail,mid-market,True
+A0895,Quinnex Media,quinnexmedia.example,financial services,mid-market,False
+A0896,Belport Group,belportgroup.example,manufacturing,enterprise,True
+A0897,Dunholm Retail,dunholmretail.example,healthcare,enterprise,False
+A0898,Aria Retail,ariaretail.example,financial services,mid-market,False
+A0899,Ulby Labs,ulbylabs.example,consumer goods,mid-market,False
+A9999,Customer Zero (internal),customerzero.example,technology,enterprise,False

@@ -1,0 +1,161 @@
+{
+  "headline_inflation": {
+    "question": "Does the internal deployment distort headline retention?",
+    "w8_retention_all_users": 0.332,
+    "n_all": 26417,
+    "w8_retention_external_only": 0.266,
+    "n_external": 22917,
+    "w8_retention_internal_only": 0.767,
+    "n_internal": 3500,
+    "inflation_points": 6.6,
+    "finding": "Including customer zero raises W8 retention from 27% to 33%. Report external users separately; internal use is mandated."
+  },
+  "activation_test": {
+    "question": "Is activation the first agent action or the first question?",
+    "cohorts": {
+      "agent_action": {
+        "w8_retention": 0.454954,
+        "n": 9568
+      },
+      "question_only": {
+        "w8_retention": 0.148752,
+        "n": 10541
+      },
+      "neither": {
+        "w8_retention": 0.06161,
+        "n": 2808
+      }
+    },
+    "lift_agent_vs_question": 0.306,
+    "ci95": [
+      0.294,
+      0.319
+    ],
+    "lift_within_segment": {
+      "enterprise_external": 0.32,
+      "self_serve": 0.266
+    },
+    "finding": "Users who complete an agent action in week 0 retain at 45% at W8, vs 15% for question-only users (+31%, 95% CI +29% to +32%). The gap holds in every segment. Define activation as the first completed agent action.",
+    "caveat": "Observational: high-intent users do both. Confirm with an onboarding experiment that nudges a first agent action."
+  },
+  "connector_breadth": {
+    "question": "Does connecting more apps in week 0 predict retention?",
+    "table": [
+      {
+        "connectors_w0": "3+",
+        "w8_retention": 0.488,
+        "n": 6781,
+        "too_small": false
+      },
+      {
+        "connectors_w0": "1-2",
+        "w8_retention": 0.192,
+        "n": 11228,
+        "too_small": false
+      },
+      {
+        "connectors_w0": "0",
+        "w8_retention": 0.128,
+        "n": 4908,
+        "too_small": false
+      }
+    ],
+    "finding": "Users linking 3+ connectors in week 0 retain markedly better; make the third connector a guided step."
+  },
+  "simpson_check": {
+    "question": "Does 'desktop' really lift retention?",
+    "aggregate_lift": 0.196,
+    "within_segment_lift": {
+      "enterprise_external": 0.003,
+      "internal": -0.016,
+      "self_serve": 0.004
+    },
+    "weighted_within_lift": 0.001,
+    "adoption_by_segment": {
+      "enterprise_external": 0.3,
+      "internal": 0.9,
+      "self_serve": 0.16
+    },
+    "confounded": true,
+    "finding": "In aggregate, 'desktop' users retain +20% better, but inside each segment the difference is about +0%. The aggregate lift comes from mix: the internal rollout installed it by default. Do not claim it as a retention driver."
+  },
+  "channel_view": {
+    "question": "How do channels and sign-in providers compare?",
+    "by_segment": [
+      {
+        "segment": "internal",
+        "w8_retention": 0.767,
+        "n": 3500,
+        "too_small": false
+      },
+      {
+        "segment": "enterprise_external",
+        "w8_retention": 0.335,
+        "n": 13183,
+        "too_small": false
+      },
+      {
+        "segment": "self_serve",
+        "w8_retention": 0.172,
+        "n": 9734,
+        "too_small": false
+      }
+    ],
+    "by_provider": [
+      {
+        "provider": "sso",
+        "w8_retention": 0.335,
+        "n": 13183,
+        "too_small": false
+      },
+      {
+        "provider": "github",
+        "w8_retention": 0.192,
+        "n": 1203,
+        "too_small": false
+      },
+      {
+        "provider": "email",
+        "w8_retention": 0.178,
+        "n": 1905,
+        "too_small": false
+      },
+      {
+        "provider": "google",
+        "w8_retention": 0.168,
+        "n": 4443,
+        "too_small": false
+      },
+      {
+        "provider": "apple",
+        "w8_retention": 0.167,
+        "n": 1443,
+        "too_small": false
+      },
+      {
+        "provider": "amazon",
+        "w8_retention": 0.157,
+        "n": 740,
+        "too_small": false
+      }
+    ],
+    "min_cohort": 150
+  },
+  "experiment": {
+    "question": "Does outreach to product-qualified accounts cause conversions, and how should we test it?",
+    "accounts_in_test": 196,
+    "hot_accounts_in_test": 30,
+    "true_effect": 0.04,
+    "account_level_estimate": {
+      "mean": 0.041,
+      "p05": -0.025,
+      "p95": 0.112
+    },
+    "user_level_estimate": {
+      "mean": 0.015,
+      "p05": -0.019,
+      "p95": 0.051
+    },
+    "finding": "Randomizing by account recovers the true lift (~+4% vs a true +4%). Randomizing users inside the same company shows ~+2%, because colleagues share the outcome. Test sales plays at the account level, and keep a standing holdout so outreach can prove its own lift."
+  }
+}
