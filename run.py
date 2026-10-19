@@ -49,6 +49,8 @@ def main():
     results["work_email_whatif"] = work_email_prompt_whatif()
     results["connector_identity"] = connector_identity()
     results["viral_loops"] = viral_loops()
+    from sangam.policy import examples
+    results["reward_guidelines"] = examples()
 
     print("4/4 Writing charts and memo ...")
     report.retention_chart(cohorts.curves(ds), out / "retention_by_activation.png")
@@ -66,8 +68,8 @@ def main():
     for k, v in results.items():
         if "finding" in v:
             print(f"  - {v['finding']}")
-    n = sum(r["passed"] for k in ("analytics", "rubric_self_test") for r in ev[k])
-    t = sum(len(ev[k]) for k in ("analytics", "rubric_self_test"))
+    n = sum(r["passed"] for k in ("analytics", "policy", "rubric_self_test") for r in ev[k])
+    t = sum(len(ev[k]) for k in ("analytics", "policy", "rubric_self_test"))
     print(f"Done. {n}/{t} eval checks passed. See reports/ and README.md.")
 
 

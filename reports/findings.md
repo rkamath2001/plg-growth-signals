@@ -76,7 +76,7 @@ Naive errors by the guard that blocks them: community or side-project workspace:
 
 ![Viral loops](viral_loops.png)
 
-Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see ASSUMPTIONS in sangam/loops.py); test the policy with an A/B test, randomized by workspace, before rolling it out.
+Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see BEHAVIOR in sangam/policy.py); test the policy with an A/B test, randomized by workspace, before rolling it out.
 
 ## Product-qualified accounts this week
 

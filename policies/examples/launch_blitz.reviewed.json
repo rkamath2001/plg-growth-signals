@@ -1,0 +1,30 @@
+{
+  "name": "Launch blitz",
+  "reward_event": "share_sent",
+  "loops": [
+    "agent",
+    "asset",
+    "space",
+    "embed",
+    "digest",
+    "referral"
+  ],
+  "loop_weights": {},
+  "pre_contract": [
+    "same_company",
+    "other_company",
+    "personal"
+  ],
+  "post_contract": [
+    "same_company",
+    "other_company",
+    "personal"
+  ],
+  "pay_for_licensed_recipients": true,
+  "require_admin_ok_external": false,
+  "reward": "$10 in credits",
+  "cap_per_user_per_month": null,
+  "monthly_budget": "",
+  "defaults_applied": [],
+  "open_questions": []
+}

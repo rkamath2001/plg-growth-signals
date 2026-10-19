@@ -78,7 +78,7 @@ def _reward_table(lp: dict) -> str:
 
 def _evals_block(ev: dict) -> str:
     lines, total, passed = [], 0, 0
-    for layer in ("analytics", "rubric_self_test"):
+    for layer in ("analytics", "policy", "rubric_self_test"):
         lines.append(f"[{layer}]")
         for r in ev[layer]:
             total += 1
@@ -86,6 +86,24 @@ def _evals_block(ev: dict) -> str:
             lines.append(f"  {'PASS' if r['passed'] else 'FAIL'}  {r['check']}")
     lines.append(f"{passed}/{total} checks passed")
     return "\n".join(lines), passed, total
+
+
+def _guidelines(g: dict) -> str:
+    rows = ["| Guidelines (prose) | What the policy owner sees |", "|---|---|"]
+    for k, x in g.items():
+        warns = [i for i in x["issues"] if i["severity"] == "warning"]
+        if x["open_questions"]:
+            seen = f"{len(x['open_questions'])} questions to answer; simulation and approval blocked until they are"
+        elif warns:
+            sim = x["simulation"]["policy"]
+            seen = (f"{len(warns)} warnings; {sim['rewards_paid']:,} rewards for {sim['incremental_activated']:+,} "
+                    f"activated users ({sim['rewards_per_incremental_activated']} each)")
+        else:
+            sim = x["simulation"]["policy"]
+            seen = (f"No warnings; {sim['rewards_paid']:,} rewards for {sim['incremental_activated']:+,} activated "
+                    f"users ({sim['rewards_per_incremental_activated']} each); ready to approve")
+        rows.append(f"| [{x['title']}]({x['path']}) | {seen} |")
+    return "\n".join(rows)
 
 
 def render(r: dict, ev: dict, path: Path) -> None:
@@ -99,6 +117,11 @@ def render(r: dict, ev: dict, path: Path) -> None:
     sa, wt, sent = (lp["reward_simulation"]["stage_aware"], lp["reward_simulation"]["per_activation_weighted"],
                     lp["reward_simulation"]["per_share_sent"])
     sc = {x["loop"]: x for x in lp["scorecard"]}
+    g = r["reward_guidelines"]
+    blitz, draft, q4 = g["launch_blitz"], g["partner_draft"], g["growth_team_q4"]
+    blitz_warn = "\n".join(f"> - {i['text']}" for i in blitz["issues"] if i["severity"] == "warning")
+    draft_q = "\n".join(f"> {n}. {q}" for n, q in enumerate(draft["open_questions"], 1))
+    q4_card = q4["card"].replace("## ", "#### ", 1)
     evals_text, passed, total = _evals_block(ev)
     n_contracts = int(round(rule["contracts_captured"] / rule["recall"])) if rule["recall"] else 0
 
@@ -114,6 +137,7 @@ def render(r: dict, ev: dict, path: Path) -> None:
 - **Start an enterprise sales motion at {rule['min_activated']}+ activated independent users at a company**, not at a sign-up count: those companies convert at {_pct(rule['precision'])} versus a {_pct(trig['baseline_conversion'])} baseline. At {rule['min_activated'] - 1} users, run champion enablement instead.
 - **Shared agents are the strongest viral loop; shared assets are the landing loop** that seeds new companies. Embeds and digests barely convert.
 - **Pay sharing rewards when the recipient completes a first agent action, and tie them to the account's stage**: same-company shares before a contract, external shares after it. In simulation that keeps the same pipeline gains as uniform rewards while paying {sa['rewards_paid']:,} rewards instead of {wt['rewards_paid']:,}.
+- **Reward policy is written in plain language.** Teams submit prose guidelines and approve a plain-English card; the framework flags pay-per-share and uncapped schemes, and asks rather than guesses when wording is ambiguous.
 - **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is {_pct(con['naive']['precision'])} accurate and invents sales-ready accounts from school clubs and side projects.
 - **Everything is graded**: {passed} of {total} checks pass against planted ground truth, including tests of the grader itself.
 
@@ -213,6 +237,35 @@ The **stage-aware** policy pays on the recipient's first agent action, weights a
 
 {lp['caveat']}
 
+### 11. Reward guidelines in plain language
+
+The people who set reward policy (growth, finance, partner teams) write guidelines as ordinary prose and approve a plain-English policy card. They never see a schema. A policy agent compiles the prose; the framework renders it back as a card, flags problems in plain language, and simulates the outcome against the status quo. The compiler never guesses: anything ambiguous becomes a question for the owner, and a policy with open questions can't be simulated or approved.
+
+{_guidelines(g)}
+
+The launch-blitz memo ("$10 for every link they share, to anyone ... no limits") comes back with:
+
+{blitz_warn}
+
+The partner draft ("reward users when their teammates start using the product in a meaningful way") comes back with questions instead of guesses:
+
+{draft_q}
+
+<details><summary>The full policy card for the Q4 guidelines</summary>
+
+{q4_card}
+
+{q4['outcome']}
+
+</details>
+
+```bash
+python -m sangam.policy policies/examples/growth_team_q4.md            # card, warnings, expected outcome
+python -m sangam.policy policies/examples/growth_team_q4.md --approve  # record approval of the card
+```
+
+New guidelines compile live with AWS credentials; the examples also ship with reviewed compilations, so the evals grade the live compiler against them. How people respond to incentives is kept apart from policy: it is the growth team's stated assumption, tested by A/B test, not something a policy author sets.
+
 ## How it works
 
 ```
@@ -224,14 +277,18 @@ sangam/
   pqa.py         product-qualified account scoring, reasons, plays, noise suppression
   motions.py     sales trigger, channel and sign-in provider rankings, work-email what-if
   connectors.py  naive vs guarded identity from connected Slack, Teams and Jira workspaces
-  loops.py       viral loop scorecard, expand vs land, reward policy simulation
+  loops.py       viral loop scorecard, expand vs land
+  policy.py      reward policy: plain-English card, warnings, simulation, approval
+  policy_compiler.py  agent that compiles prose guidelines; asks instead of guessing
   experiment.py  outreach holdout simulation: account vs user randomization
   tools.py       the functions the agent may call (testable without a model)
   agent.py       Strands agent on Amazon Bedrock
   report.py      charts and findings memo;  readme.py renders this README from the results
 evals/
   golden.json    golden questions with required facts, caveats and forbidden claims
-  run_evals.py   grades the analysis, the rubric itself, and (optionally) the agent
+  run_evals.py   grades the analysis, the reward-guidelines pipeline, the rubric itself,
+                 and (optionally) the live agent and policy compiler
+policies/examples/  sample guidelines: sound, sloppy and ambiguous
 ```
 
 **Dhruva, the metric layer.** Named for the pole star you navigate by. Every number, in a chart or in an agent's answer, comes from one set of definitions.
@@ -249,7 +306,7 @@ evals/
 - Planted effects are deliberately clear; real data is noisier. Thresholds are starting points to tune against real outcomes.
 - The sales trigger is fit on {n_contracts} contracts, so several rules tie; refit it as contracts accumulate and by segment.
 - Activation and channel findings are observational. Only experiments settle cause.
-- The reward simulation rests on stated behavioral assumptions (`ASSUMPTIONS` in `sangam/loops.py`); its value is the measurement design. Viral coefficients are single-generation.
+- The reward simulation rests on stated behavioral assumptions (`BEHAVIOR` in `sangam/policy.py`); its value is the measurement design. Viral coefficients are single-generation.
 - Using a personal sign-up's activity or workspace metadata to prompt outreach must respect the permissions users granted and regional law. Individuals get in-product nudges, not sales calls.
 
 ## License

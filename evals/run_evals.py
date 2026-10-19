@@ -4,6 +4,9 @@ Two layers, both graded against the planted ground truth:
 
   analytics  Does the deterministic analysis recover what we planted? Runs anywhere,
              no model or credentials needed.
+  policy     Do plain-language reward guidelines compile, render and get flagged
+             correctly? Uses the reviewed compilations offline; with --agent the
+             policy compiler runs live and is graded against them.
   agent      Does the agent's answer to each golden question state the right facts,
              carry the required caveats and avoid forbidden claims? Needs Bedrock.
 
@@ -151,6 +154,71 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
     return out
 
 
+# ---------- reward guidelines layer ----------
+
+EXAMPLES = Path(__file__).resolve().parent.parent / "policies" / "examples"
+PLUMBING = re.compile(r"reward_event|pre_contract|post_contract|same_company|other_company|recipient_|"
+                      r"\bTrue\b|\bFalse\b|\bnull\b|[{}]|yaml|json", re.I)
+
+
+def policy_checks(live: bool = False) -> list[dict]:
+    from sangam.policy import NotReady, Policy, approve, lint, render_card, simulate
+    from sangam.policy_compiler import compile_live, grade_compile
+    from sangam.tools import _outcomes, _ready_accounts
+    out = []
+
+    def check(name, ok, detail):
+        out.append({"check": name, "passed": bool(ok), "detail": detail})
+
+    docs = {p.stem.replace(".reviewed", ""): Policy.model_validate_json(p.read_text())
+            for p in sorted(EXAMPLES.glob("*.reviewed.json"))}
+    good, sloppy, amb = docs["growth_team_q4"], docs["launch_blitz"], docs["partner_draft"]
+    ds, rule, oc = dataset(), _ready_accounts()[1], _outcomes()
+
+    warn = [i for i in lint(good) if i["severity"] == "warning"]
+    sim = simulate(good, ds, rule, oc)["policy"]
+    check("Sound guidelines: no warnings, and activation gains at a low reward cost",
+          not warn and sim["incremental_activated"] > 0 and sim["rewards_per_incremental_activated"] <= 10,
+          f"{len(warn)} warnings; +{sim['incremental_activated']} activated users at "
+          f"{sim['rewards_per_incremental_activated']} rewards each")
+    ids = {i["id"] for i in lint(sloppy)}
+    need = {"pays_on_share", "pays_licensed", "personal_email", "no_cap", "external_no_admin"}
+    check("Sloppy guidelines: every planted problem is flagged in plain language",
+          need <= ids, f"flagged {len(ids & need)}/{len(need)}; missing {sorted(need - ids) or 'none'}")
+    blocked = 0
+    for fn in (lambda: simulate(amb, ds, rule, oc), lambda: approve(amb, "/tmp/_never_written.md")):
+        try:
+            fn()
+        except NotReady:
+            blocked += 1
+    check("Ambiguous guidelines: questions raised, simulation and approval blocked",
+          len(amb.open_questions) >= 2 and blocked == 2,
+          f"{len(amb.open_questions)} open questions; blocked {blocked}/2")
+    texts = [render_card(p) for p in docs.values()] + [i["text"] for p in docs.values() for i in lint(p)]
+    leaks = sorted({m.group(0) for t in texts for m in PLUMBING.finditer(t)})
+    check("Cards and warnings contain no field names or code", not leaks, f"leaks: {leaks or 'none'}")
+    card = render_card(good).lower()
+    say = ["first agent action", "already have a license", "admin", "10 rewards per person", "customers"]
+    check("Card states what the guidelines said", all(s in card for s in say),
+          f"{sum(s in card for s in say)}/{len(say)} required statements")
+    mutations = [("pays on shares", {"reward_event": "share_sent"}),
+                 ("pays licensed colleagues", {"pay_for_licensed_recipients": True}),
+                 ("guessed instead of asking", {"open_questions": []}),
+                 ("widened who counts", {"pre_contract": ["same_company", "other_company"]})]
+    caught = sum(bool(grade_compile(p.model_copy(update=m), p)) for _, m in mutations for p in docs.values()
+                 if p.model_copy(update=m) != p)
+    possible = sum(1 for _, m in mutations for p in docs.values() if p.model_copy(update=m) != p)
+    exact = all(not grade_compile(p, p) for p in docs.values())
+    check("Compile grader passes reviewed compilations and catches planted mistakes",
+          exact and caught == possible, f"self-match {exact}; caught {caught}/{possible}")
+    if live:
+        for name, want in docs.items():
+            got = compile_live((EXAMPLES / f"{name}.md").read_text())
+            diffs = grade_compile(got, want)
+            check(f"Live compile matches reviewed policy: {name}", not diffs, "; ".join(diffs) or "match")
+    return out
+
+
 # ---------- rubric for agent answers ----------
 
 def _numbers(text: str) -> list[float]:
@@ -216,7 +284,7 @@ def rubric_self_test(facts: dict) -> list[dict]:
 
 
 def collect(agent: bool = False) -> dict:
-    results = {"analytics": analytics_checks()}
+    results = {"analytics": analytics_checks(), "policy": policy_checks(live=agent)}
     facts = fact_sheet()
     results["rubric_self_test"] = rubric_self_test(facts)
     if agent:
@@ -241,7 +309,7 @@ def main() -> int:
 
     print("\nSangam evals\n" + "=" * 60)
     total = passed = 0
-    for layer in ("analytics", "rubric_self_test"):
+    for layer in ("analytics", "policy", "rubric_self_test"):
         print(f"\n[{layer}]")
         for r in results[layer]:
             total += 1

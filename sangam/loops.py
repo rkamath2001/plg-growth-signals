@@ -27,7 +27,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from scipy.stats import poisson
 
 from .dhruva import Dataset
 from .generate import PERSONAL_DOMAINS, RELAY_DOMAIN
@@ -111,106 +110,13 @@ def expand_vs_land(ds: Dataset, ready_rule: dict, outcomes: pd.DataFrame,
 
 
 # ---------- reward policy simulation ----------
-
-ASSUMPTIONS = {
-    # extra sharing each incentive causes, and the quality of the extra shares
-    "per_share_sent":          {"uplift": 0.80, "quality": 0.25, "fatigue": 0.90,
-                                "note": "people blast links for credit; recipients learn to ignore them"},
-    "per_signup":              {"uplift": 0.40, "quality": 0.45, "fatigue": 1.00,
-                                "note": "sharers recruit people who sign up as a favor"},
-    "per_activation":          {"uplift": 0.25, "quality": 0.90, "fatigue": 1.00,
-                                "note": "sharers pick people who will actually use it"},
-    "per_activation_weighted": {"uplift": 0.25, "quality": 0.90, "fatigue": 1.00,
-                                "weights": {"agent": 1.6, "space": 1.4, "asset": 1.0, "digest": 0.6,
-                                            "embed": 0.6, "referral": 1.0},
-                                "note": "agent and space shares, which show the product working, earn more"},
-}
-ASSUMPTIONS["stage_aware"] = dict(ASSUMPTIONS["per_activation_weighted"],
-                                  note="pre-contract: reward same-company shares; post-contract: reward "
-                                       "external shares to non-customers; never pay for licensed colleagues")
-LICENSED_FIRST_ACTION = 0.5     # chance a licensed colleague's first agent action follows a share
-
+# The arms are built-in policies; the simulation and the behavioral assumptions live in
+# sangam/policy.py, which also compiles reward guidelines written in plain language.
 
 def reward_simulation(ds: Dataset, ready_rule: dict, outcomes: pd.DataFrame,
                       data_dir: str | Path = "data") -> dict:
-    sh = _ledger(ds, data_dir)
-    prospects = set(outcomes.account_id)
-    u = ds.users[ds.users.channel == "self_serve"]
-    act = u[u.activated_agent & u.account_id.isin(prospects)]
-    base_act = act.groupby("account_id").size()
-    k = ready_rule["min_activated"]
-
-    seg_cols = ["loop", "relation", "stage", "recipient_licensed"]
-    g = sh.groupby(seg_cols)
-    seg = pd.DataFrame({"n": g.size(), "signup": g.signed_up.mean(), "act": g.activated.mean(),
-                        "view": g.viewed.mean()}).reset_index()
-    land = expand_vs_land(ds, ready_rule, outcomes, data_dir)
-    ext = sh[(sh.relation == "other_company") & sh.activated]
-    seed_rate = (land.companies_seeded.sum() / max(len(ext), 1))
-
-    # per prospect account: baseline same-company activated recipients by loop, pre-contract
-    sc = sh[(sh.relation == "same_company") & (sh.stage == "pre_contract") & sh.sender_account.isin(prospects)]
-    per_acct = sc.groupby(["sender_account", "loop"]).size().rename("n").reset_index()
-
-    results = {}
-    for arm in ["no_reward"] + list(ASSUMPTIONS):
-        a = ASSUMPTIONS.get(arm, {"uplift": 0.0, "quality": 1.0, "fatigue": 1.0})
-        w = a.get("weights", {})
-
-        def eligible(r):
-            if arm == "no_reward":
-                return False
-            if arm != "stage_aware":
-                return True
-            if r.stage == "pre_contract":
-                return r.relation == "same_company"
-            return r.relation == "other_company" and not r.recipient_licensed
-
-        seg["elig"] = seg.apply(eligible, axis=1)
-        up = np.where(seg.elig, a["uplift"] * seg.loop.map(lambda l: w.get(l, 1.0)), 0.0)
-        fat = a["fatigue"]
-        new_users = (~seg.recipient_licensed) * seg.n * (fat + up * a["quality"])
-        signups = (new_users * seg.signup).sum()
-        activated = (new_users * seg.act).sum()
-        lic_actions = seg.recipient_licensed * seg.n * (1 + up) * seg.view * LICENSED_FIRST_ACTION
-        shares = (seg.n * (1 + up)).sum()
-        # rewards paid at the arm's reward event, only for eligible shares
-        if arm == "no_reward":
-            paid = 0.0
-        elif arm == "per_share_sent":
-            paid = (seg.n * (1 + up) * seg.elig).sum()
-        elif arm == "per_signup":
-            paid = (new_users * seg.signup * seg.elig).sum()
-        else:
-            paid = ((new_users * seg.act + lic_actions) * seg.elig).sum()
-            if arm == "stage_aware":
-                paid = (new_users * seg.act * seg.elig).sum()    # licensed colleagues never paid
-        # expansion: extra same-company activated recipients at pre-contract prospects
-        rate = seg[(seg.relation == "same_company") & (seg.stage == "pre_contract")].set_index("loop")
-        upl = {l: (a["uplift"] * w.get(l, 1.0) if arm != "no_reward" else 0.0) for l in rate.index}
-        extra = per_acct.assign(d=lambda d: d.n * d.loop.map(lambda l: (fat - 1) + upl.get(l, 0) * a["quality"])
-                                * d.loop.map(rate.signup) * d.loop.map(rate.act))
-        delta = extra.groupby("sender_account").d.sum().clip(lower=0)
-        a0 = base_act.reindex(delta.index).fillna(0)
-        need = (k - a0).clip(lower=0)
-        # expected number of accounts the extra activated users push over the trigger
-        crossed = round(float(poisson.sf(need[need > 0] - 1, delta[need > 0]).sum()), 1)
-        # landing: extra activated external recipients from post-contract senders
-        post_ext = seg[(seg.stage == "post_contract") & (seg.relation == "other_company") & ~seg.recipient_licensed]
-        idx = post_ext.index
-        seeded = float(((post_ext.n * (fat - 1 + up[idx] * a["quality"])) * post_ext.signup * post_ext.act).sum()
-                       * seed_rate)
-        results[arm] = {"shares": round(float(shares)), "signups": round(float(signups)),
-                        "activated_new_users": round(float(activated)), "rewards_paid": round(float(paid)),
-                        "extra_prospects_over_trigger": crossed,
-                        "extra_companies_seeded_by_customers": round(seeded, 1),
-                        "assumption": a.get("note", "status quo")}
-    base = results["no_reward"]["activated_new_users"]
-    for arm, r in results.items():
-        inc = r["activated_new_users"] - base
-        r["incremental_activated"] = round(inc)
-        r["rewards_per_incremental_activated"] = round(r["rewards_paid"] / inc, 2) if inc > 0 else None
-    return results
+    from .policy import simulate_builtins
+    return simulate_builtins(ds, ready_rule, outcomes, data_dir)
 
 
 def summarize(ds: Dataset, ready_rule: dict, outcomes: pd.DataFrame, data_dir: str | Path = "data") -> dict:
@@ -248,6 +154,6 @@ def summarize(ds: Dataset, ready_rule: dict, outcomes: pd.DataFrame, data_dir: s
         "cheapest_arm": cheapest,
         "finding": finding,
         "caveat": ("Viral coefficients are single-generation. The reward simulation rests on stated behavioral "
-                   "assumptions (see ASSUMPTIONS in sangam/loops.py); test the policy with an A/B test, "
+                   "assumptions (see BEHAVIOR in sangam/policy.py); test the policy with an A/B test, "
                    "randomized by workspace, before rolling it out."),
     }

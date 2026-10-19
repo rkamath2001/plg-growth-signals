@@ -729,6 +729,154 @@
     },
     "cheapest_arm": "stage_aware",
     "finding": "'Shared agent' grows the product most (3.26 activated recipients per 100 users; 56% of its sign-ups activate) and turns fastest. 'Shared asset (URL)' is the landing loop: it seeds the most new companies (51). 'Shared space / knowledge base' recipients retain best. Embeds and digests create many impressions but convert under 3% per share, and referral credits paid on sign-up bring sign-ups of which only 24% activate. In the reward simulation, paying per share sent nearly doubles shares but adds only +262 activated users. The stage-aware policy delivers the same pipeline as uniform weighted rewards (5.4 vs 5.4 extra prospects over the trigger; 3.7 vs 3.7 companies seeded by customers) while paying 1,335 rewards instead of 12,509. Uniform rewards buy more total sign-ups, mostly prosumer activity and colleagues who were already licensed.",
-    "caveat": "Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see ASSUMPTIONS in sangam/loops.py); test the policy with an A/B test, randomized by workspace, before rolling it out."
+    "caveat": "Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see BEHAVIOR in sangam/policy.py); test the policy with an A/B test, randomized by workspace, before rolling it out."
+  },
+  "reward_guidelines": {
+    "growth_team_q4": {
+      "path": "policies/examples/growth_team_q4.md",
+      "title": "Sharing rewards, Q4",
+      "card": "## Sharing rewards, Q4\n\n**What earns a reward.** A person earns a reward when the person they shared with completes their first agent action (not when the share is sent, and not at sign-up).\n\n**The reward.** $20 in usage credits.\n\n**Which shares count.** Before their company has a contract, shares to colleagues at their own company count. After their company has a contract, shares to people at other companies (customers, partners, study participants) count.\n\n**Kinds of share.** Every kind of share counts; shared agents and shared spaces and knowledge bases earn more; links embedded in Slack or email and recurring digests earn less.\n\n**Never rewarded.** Shares to people who already have a license.\n\n**Outside the company.** Shares outside the company earn only after a workspace admin approves external sharing.\n\n**Limits.** At most 10 rewards per person per month and a budget of $40,000 a month.\n\n**Filled in where the guidelines were silent** (confirm or correct):\n- The guidelines didn't mention shares to personal email addresses; we assumed they don't count.",
+      "issues": [],
+      "open_questions": [],
+      "simulation": {
+        "policy": {
+          "shares": 73213,
+          "signups": 5649,
+          "activated_new_users": 2913,
+          "rewards_paid": 1335,
+          "extra_prospects_over_trigger": 5.4,
+          "extra_companies_seeded_by_customers": 3.7,
+          "assumption": "sharers pick people who will actually use it",
+          "incremental_activated": 292,
+          "rewards_per_incremental_activated": 4.57
+        },
+        "reference": {
+          "shares": 73213,
+          "signups": 5649,
+          "activated_new_users": 2913,
+          "rewards_paid": 1335,
+          "extra_prospects_over_trigger": 5.4,
+          "extra_companies_seeded_by_customers": 3.7,
+          "assumption": "sharers pick people who will actually use it",
+          "incremental_activated": 292,
+          "rewards_per_incremental_activated": 4.57
+        },
+        "status_quo": {
+          "shares": 69485,
+          "signups": 5106,
+          "activated_new_users": 2621,
+          "rewards_paid": 0,
+          "extra_prospects_over_trigger": 0.0,
+          "extra_companies_seeded_by_customers": 0.0,
+          "assumption": "status quo",
+          "incremental_activated": 0,
+          "rewards_per_incremental_activated": null
+        }
+      },
+      "outcome": "Compared with offering no reward, this policy would add about 292 activated users, push about 5.4 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 3.7 new companies. It would pay about 1,335 rewards, or 4.57 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
+    },
+    "launch_blitz": {
+      "path": "policies/examples/launch_blitz.md",
+      "title": "Launch blitz",
+      "card": "## Launch blitz\n\n**What earns a reward.** A person earns a reward when a share is sent, whether or not anyone opens it.\n\n**The reward.** $10 in credits.\n\n**Which shares count.** Whether or not their company has a contract, shares to colleagues at their own company, people at other companies (customers, partners, study participants) and personal email addresses count.\n\n**Kinds of share.** Every kind of share counts.\n\n**Outside the company.** Shares outside the company earn without an admin's approval.\n\n**Limits.** No limit per person and no stated budget.",
+      "issues": [
+        {
+          "id": "pays_on_share",
+          "severity": "warning",
+          "text": "This pays for sending links, whether or not anyone uses them. People will send links to everyone they know, and recipients will learn to ignore them. Pay when the recipient completes their first agent action instead."
+        },
+        {
+          "id": "pays_licensed",
+          "severity": "warning",
+          "text": "This pays when colleagues who already have a license use something shared with them. That usage is already paid for and would mostly happen anyway."
+        },
+        {
+          "id": "personal_email",
+          "severity": "warning",
+          "text": "This rewards shares to personal email addresses, which anyone can collect by sharing with a second account of their own."
+        },
+        {
+          "id": "no_cap",
+          "severity": "warning",
+          "text": "There is no limit on how many rewards one person can earn in a month, so a few people can drain the budget."
+        },
+        {
+          "id": "external_no_admin",
+          "severity": "warning",
+          "text": "Shares outside the company earn rewards without an admin's approval. Encouraging people to send company work outside the company needs the company's consent."
+        },
+        {
+          "id": "post_contract_colleagues",
+          "severity": "caution",
+          "text": "After a contract, this rewards shares to unlicensed colleagues at the customer. Adding seats there is the account team's job; rewarding it may pay twice for the same expansion."
+        },
+        {
+          "id": "pre_contract_external",
+          "severity": "caution",
+          "text": "Before a contract, this rewards shares to other companies. That spreads early users thin instead of building one company toward the point where a sales conversation makes sense."
+        },
+        {
+          "id": "no_budget",
+          "severity": "caution",
+          "text": "No budget is stated, so finance cannot see the most this could cost."
+        }
+      ],
+      "open_questions": [],
+      "simulation": {
+        "policy": {
+          "shares": 125073,
+          "signups": 5617,
+          "activated_new_users": 2883,
+          "rewards_paid": 125073,
+          "extra_prospects_over_trigger": 1.6,
+          "extra_companies_seeded_by_customers": 1.3,
+          "assumption": "people blast links for credit; recipients learn to ignore them",
+          "incremental_activated": 262,
+          "rewards_per_incremental_activated": 477.38
+        },
+        "reference": {
+          "shares": 73213,
+          "signups": 5649,
+          "activated_new_users": 2913,
+          "rewards_paid": 1335,
+          "extra_prospects_over_trigger": 5.4,
+          "extra_companies_seeded_by_customers": 3.7,
+          "assumption": "sharers pick people who will actually use it",
+          "incremental_activated": 292,
+          "rewards_per_incremental_activated": 4.57
+        },
+        "status_quo": {
+          "shares": 69485,
+          "signups": 5106,
+          "activated_new_users": 2621,
+          "rewards_paid": 0,
+          "extra_prospects_over_trigger": 0.0,
+          "extra_companies_seeded_by_customers": 0.0,
+          "assumption": "status quo",
+          "incremental_activated": 0,
+          "rewards_per_incremental_activated": null
+        }
+      },
+      "outcome": "Compared with offering no reward, this policy would add about 262 activated users, push about 1.6 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 1.3 new companies. It would pay about 125,073 rewards, or 477.38 per added activated user. For comparison, the stage-aware reference policy adds about 292 activated users and 5.4 prospect companies for about 1,335 rewards (4.57 per added activated user). These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
+    },
+    "partner_draft": {
+      "path": "policies/examples/partner_draft.md",
+      "title": "Partner rewards (draft)",
+      "card": "## Partner rewards (draft)\n\n**What earns a reward.** A person earns a reward when the person they shared with completes their first agent action (not when the share is sent, and not at sign-up).\n\n**The reward.** Usage credits.\n\n**Which shares count.** Before their company has a contract, shares to colleagues at their own company count. After their company has a contract, no shares earn a reward.\n\n**Kinds of share.** Every kind of share counts.\n\n**Never rewarded.** Shares to people who already have a license.\n\n**Limits.** At most 5 rewards per person per month and no stated budget.\n\n**Filled in where the guidelines were silent** (confirm or correct):\n- The guidelines didn't say whether colleagues who already have a license count; we assumed they don't.\n- The guidelines didn't say whether shares outside the company need an admin's OK; we assumed they do.\n\n**Questions to answer before this can be simulated or approved:**\n1. By \"teammates\", do you mean colleagues on the same company email domain, or anyone in a shared space, including contractors and guests from other companies?\n2. What counts as using the product \"in a meaningful way\": signing up, completing a first agent action, or staying active for several weeks?\n3. Should shares with partners earn the bonus only once the sharer's company has an enterprise agreement, or at any time? How much larger is the bonus?",
+      "issues": [
+        {
+          "id": "no_budget",
+          "severity": "caution",
+          "text": "No budget is stated, so finance cannot see the most this could cost."
+        }
+      ],
+      "open_questions": [
+        "By \"teammates\", do you mean colleagues on the same company email domain, or anyone in a shared space, including contractors and guests from other companies?",
+        "What counts as using the product \"in a meaningful way\": signing up, completing a first agent action, or staying active for several weeks?",
+        "Should shares with partners earn the bonus only once the sharer's company has an enterprise agreement, or at any time? How much larger is the bonus?"
+      ],
+      "simulation": null,
+      "outcome": null
+    }
   }
 }

@@ -1,0 +1,35 @@
+{
+  "name": "Sharing rewards, Q4",
+  "reward_event": "recipient_first_agent_action",
+  "loops": [
+    "agent",
+    "asset",
+    "space",
+    "embed",
+    "digest",
+    "referral"
+  ],
+  "loop_weights": {
+    "agent": 1.6,
+    "space": 1.4,
+    "asset": 1.0,
+    "digest": 0.6,
+    "embed": 0.6,
+    "referral": 1.0
+  },
+  "pre_contract": [
+    "same_company"
+  ],
+  "post_contract": [
+    "other_company"
+  ],
+  "pay_for_licensed_recipients": false,
+  "require_admin_ok_external": true,
+  "reward": "$20 in usage credits",
+  "cap_per_user_per_month": 10,
+  "monthly_budget": "$40,000 a month",
+  "defaults_applied": [
+    "The guidelines didn't mention shares to personal email addresses; we assumed they don't count."
+  ],
+  "open_questions": []
+}

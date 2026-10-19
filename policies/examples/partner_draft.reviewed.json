@@ -1,0 +1,31 @@
+{
+  "name": "Partner rewards (draft)",
+  "reward_event": "recipient_first_agent_action",
+  "loops": [
+    "agent",
+    "asset",
+    "space",
+    "embed",
+    "digest",
+    "referral"
+  ],
+  "loop_weights": {},
+  "pre_contract": [
+    "same_company"
+  ],
+  "post_contract": [],
+  "pay_for_licensed_recipients": false,
+  "require_admin_ok_external": true,
+  "reward": "usage credits",
+  "cap_per_user_per_month": 5,
+  "monthly_budget": "",
+  "defaults_applied": [
+    "The guidelines didn't say whether colleagues who already have a license count; we assumed they don't.",
+    "The guidelines didn't say whether shares outside the company need an admin's OK; we assumed they do."
+  ],
+  "open_questions": [
+    "By \"teammates\", do you mean colleagues on the same company email domain, or anyone in a shared space, including contractors and guests from other companies?",
+    "What counts as using the product \"in a meaningful way\": signing up, completing a first agent action, or staying active for several weeks?",
+    "Should shares with partners earn the bonus only once the sharer's company has an enterprise agreement, or at any time? How much larger is the bonus?"
+  ]
+}

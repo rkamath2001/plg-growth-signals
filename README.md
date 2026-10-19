@@ -10,8 +10,9 @@
 - **Start an enterprise sales motion at 5+ activated independent users at a company**, not at a sign-up count: those companies convert at 60% versus a 16% baseline. At 4 users, run champion enablement instead.
 - **Shared agents are the strongest viral loop; shared assets are the landing loop** that seeds new companies. Embeds and digests barely convert.
 - **Pay sharing rewards when the recipient completes a first agent action, and tie them to the account's stage**: same-company shares before a contract, external shares after it. In simulation that keeps the same pipeline gains as uniform rewards while paying 1,335 rewards instead of 12,509.
+- **Reward policy is written in plain language.** Teams submit prose guidelines and approve a plain-English card; the framework flags pay-per-share and uncapped schemes, and asks rather than guesses when wording is ambiguous.
 - **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is 67% accurate and invents sales-ready accounts from school clubs and side projects.
-- **Everything is graded**: 32 of 32 checks pass against planted ground truth, including tests of the grader itself.
+- **Everything is graded**: 38 of 38 checks pass against planted ground truth, including tests of the grader itself.
 
 ## Quick start
 
@@ -140,7 +141,63 @@ The guarded matcher trusts verified domains; treats a matching name as a clue th
 
 The **stage-aware** policy pays on the recipient's first agent action, weights agent and space shares higher, rewards *same-company* shares before a company has a contract (each activated colleague moves it toward the sales trigger), rewards *external* shares to customers and partners after a contract (customers become a distribution channel), and never pays for colleagues who are already licensed. Paying per share sent nearly doubles shares (125,073) for the smallest gain in activated users.
 
-Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see ASSUMPTIONS in sangam/loops.py); test the policy with an A/B test, randomized by workspace, before rolling it out.
+Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see BEHAVIOR in sangam/policy.py); test the policy with an A/B test, randomized by workspace, before rolling it out.
+
+### 11. Reward guidelines in plain language
+
+The people who set reward policy (growth, finance, partner teams) write guidelines as ordinary prose and approve a plain-English policy card. They never see a schema. A policy agent compiles the prose; the framework renders it back as a card, flags problems in plain language, and simulates the outcome against the status quo. The compiler never guesses: anything ambiguous becomes a question for the owner, and a policy with open questions can't be simulated or approved.
+
+| Guidelines (prose) | What the policy owner sees |
+|---|---|
+| [Sharing rewards, Q4](policies/examples/growth_team_q4.md) | No warnings; 1,335 rewards for +292 activated users (4.57 each); ready to approve |
+| [Launch blitz](policies/examples/launch_blitz.md) | 5 warnings; 125,073 rewards for +262 activated users (477.38 each) |
+| [Partner rewards (draft)](policies/examples/partner_draft.md) | 3 questions to answer; simulation and approval blocked until they are |
+
+The launch-blitz memo ("$10 for every link they share, to anyone ... no limits") comes back with:
+
+> - This pays for sending links, whether or not anyone uses them. People will send links to everyone they know, and recipients will learn to ignore them. Pay when the recipient completes their first agent action instead.
+> - This pays when colleagues who already have a license use something shared with them. That usage is already paid for and would mostly happen anyway.
+> - This rewards shares to personal email addresses, which anyone can collect by sharing with a second account of their own.
+> - There is no limit on how many rewards one person can earn in a month, so a few people can drain the budget.
+> - Shares outside the company earn rewards without an admin's approval. Encouraging people to send company work outside the company needs the company's consent.
+
+The partner draft ("reward users when their teammates start using the product in a meaningful way") comes back with questions instead of guesses:
+
+> 1. By "teammates", do you mean colleagues on the same company email domain, or anyone in a shared space, including contractors and guests from other companies?
+> 2. What counts as using the product "in a meaningful way": signing up, completing a first agent action, or staying active for several weeks?
+> 3. Should shares with partners earn the bonus only once the sharer's company has an enterprise agreement, or at any time? How much larger is the bonus?
+
+<details><summary>The full policy card for the Q4 guidelines</summary>
+
+#### Sharing rewards, Q4
+
+**What earns a reward.** A person earns a reward when the person they shared with completes their first agent action (not when the share is sent, and not at sign-up).
+
+**The reward.** $20 in usage credits.
+
+**Which shares count.** Before their company has a contract, shares to colleagues at their own company count. After their company has a contract, shares to people at other companies (customers, partners, study participants) count.
+
+**Kinds of share.** Every kind of share counts; shared agents and shared spaces and knowledge bases earn more; links embedded in Slack or email and recurring digests earn less.
+
+**Never rewarded.** Shares to people who already have a license.
+
+**Outside the company.** Shares outside the company earn only after a workspace admin approves external sharing.
+
+**Limits.** At most 10 rewards per person per month and a budget of $40,000 a month.
+
+**Filled in where the guidelines were silent** (confirm or correct):
+- The guidelines didn't mention shares to personal email addresses; we assumed they don't count.
+
+Compared with offering no reward, this policy would add about 292 activated users, push about 5.4 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 3.7 new companies. It would pay about 1,335 rewards, or 4.57 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out.
+
+</details>
+
+```bash
+python -m sangam.policy policies/examples/growth_team_q4.md            # card, warnings, expected outcome
+python -m sangam.policy policies/examples/growth_team_q4.md --approve  # record approval of the card
+```
+
+New guidelines compile live with AWS credentials; the examples also ship with reviewed compilations, so the evals grade the live compiler against them. How people respond to incentives is kept apart from policy: it is the growth team's stated assumption, tested by A/B test, not something a policy author sets.
 
 ## How it works
 
@@ -153,14 +210,18 @@ sangam/
   pqa.py         product-qualified account scoring, reasons, plays, noise suppression
   motions.py     sales trigger, channel and sign-in provider rankings, work-email what-if
   connectors.py  naive vs guarded identity from connected Slack, Teams and Jira workspaces
-  loops.py       viral loop scorecard, expand vs land, reward policy simulation
+  loops.py       viral loop scorecard, expand vs land
+  policy.py      reward policy: plain-English card, warnings, simulation, approval
+  policy_compiler.py  agent that compiles prose guidelines; asks instead of guessing
   experiment.py  outreach holdout simulation: account vs user randomization
   tools.py       the functions the agent may call (testable without a model)
   agent.py       Strands agent on Amazon Bedrock
   report.py      charts and findings memo;  readme.py renders this README from the results
 evals/
   golden.json    golden questions with required facts, caveats and forbidden claims
-  run_evals.py   grades the analysis, the rubric itself, and (optionally) the agent
+  run_evals.py   grades the analysis, the reward-guidelines pipeline, the rubric itself,
+                 and (optionally) the live agent and policy compiler
+policies/examples/  sample guidelines: sound, sloppy and ambiguous
 ```
 
 **Dhruva, the metric layer.** Named for the pole star you navigate by. Every number, in a chart or in an agent's answer, comes from one set of definitions.
@@ -196,6 +257,13 @@ evals/
   PASS  Referral sign-ups activate least
   PASS  Rewarding shares sent maximizes shares but not activated users
   PASS  Stage-aware rewards keep the pipeline gains at a fraction of the cost
+[policy]
+  PASS  Sound guidelines: no warnings, and activation gains at a low reward cost
+  PASS  Sloppy guidelines: every planted problem is flagged in plain language
+  PASS  Ambiguous guidelines: questions raised, simulation and approval blocked
+  PASS  Cards and warnings contain no field names or code
+  PASS  Card states what the guidelines said
+  PASS  Compile grader passes reviewed compilations and catches planted mistakes
 [rubric_self_test]
   PASS  Rubric separates good from bad answer: activation-definition
   PASS  Rubric separates good from bad answer: headline-retention
@@ -204,7 +272,7 @@ evals/
   PASS  Rubric separates good from bad answer: sales-trigger
   PASS  Rubric separates good from bad answer: connector-identity
   PASS  Rubric separates good from bad answer: reward-policy
-32/32 checks passed
+38/38 checks passed
 ```
 
 ## Limits
@@ -212,7 +280,7 @@ evals/
 - Planted effects are deliberately clear; real data is noisier. Thresholds are starting points to tune against real outcomes.
 - The sales trigger is fit on 139 contracts, so several rules tie; refit it as contracts accumulate and by segment.
 - Activation and channel findings are observational. Only experiments settle cause.
-- The reward simulation rests on stated behavioral assumptions (`ASSUMPTIONS` in `sangam/loops.py`); its value is the measurement design. Viral coefficients are single-generation.
+- The reward simulation rests on stated behavioral assumptions (`BEHAVIOR` in `sangam/policy.py`); its value is the measurement design. Viral coefficients are single-generation.
 - Using a personal sign-up's activity or workspace metadata to prompt outreach must respect the permissions users granted and regional law. Individuals get in-product nudges, not sales calls.
 
 ## License
