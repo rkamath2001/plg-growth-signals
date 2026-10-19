@@ -389,7 +389,7 @@ def examples(folder: str | Path = "policies/examples") -> dict:
     from .tools import _outcomes, _ready_accounts, dataset
     out = {}
     for doc in sorted(Path(folder).glob("*.md")):
-        p = Policy.model_validate_json(doc.with_suffix(".reviewed.json").read_text())
+        p = Policy.model_validate_json(doc.with_suffix(".reviewed.json").read_text(encoding="utf-8"))
         sim = None if p.open_questions else simulate(p, dataset(), _ready_accounts()[1], _outcomes())
         out[doc.stem] = {"path": str(doc), "title": p.name, "card": render_card(p), "issues": lint(p),
                          "open_questions": p.open_questions, "simulation": sim,
@@ -403,8 +403,8 @@ def approve(p: Policy, path: str | Path) -> Path:
         raise NotReady("A policy with open questions cannot be approved.")
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(render_card(p) + f"\n\n_Approved card {fingerprint(p)}._\n")
-    path.with_suffix(".policy.json").write_text(p.model_dump_json(indent=2))
+    path.write_text(render_card(p) + f"\n\n_Approved card {fingerprint(p)}._\n", encoding="utf-8")
+    path.with_suffix(".policy.json").write_text(p.model_dump_json(indent=2), encoding="utf-8")
     return path
 
 
@@ -415,7 +415,7 @@ def _main(argv: list[str]) -> int:
         print(__doc__)
         return 1
     doc = Path(argv[0])
-    p, how = compile_guidelines(doc.read_text(), reviewed=doc.with_suffix(".reviewed.json"))
+    p, how = compile_guidelines(doc.read_text(encoding="utf-8"), reviewed=doc.with_suffix(".reviewed.json"))
     print(f"_{how}_\n")
     print(review(p, dataset(), _ready_accounts()[1], _outcomes()))
     if "--approve" in argv:

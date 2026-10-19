@@ -36,7 +36,7 @@ from sangam.tools import (acquisition_channel_ranking, dataset, sales_trigger_th
                           viral_loops)
 
 ROOT = Path(__file__).resolve().parent
-GOLDEN = json.loads((ROOT / "golden.json").read_text())
+GOLDEN = json.loads((ROOT / "golden.json").read_text(encoding="utf-8"))
 
 
 # ---------- analytics layer ----------
@@ -170,7 +170,7 @@ def policy_checks(live: bool = False) -> list[dict]:
     def check(name, ok, detail):
         out.append({"check": name, "passed": bool(ok), "detail": detail})
 
-    docs = {p.stem.replace(".reviewed", ""): Policy.model_validate_json(p.read_text())
+    docs = {p.stem.replace(".reviewed", ""): Policy.model_validate_json(p.read_text(encoding="utf-8"))
             for p in sorted(EXAMPLES.glob("*.reviewed.json"))}
     good, sloppy, amb = docs["growth_team_q4"], docs["launch_blitz"], docs["partner_draft"]
     ds, rule, oc = dataset(), _ready_accounts()[1], _outcomes()
@@ -213,7 +213,7 @@ def policy_checks(live: bool = False) -> list[dict]:
           exact and caught == possible, f"self-match {exact}; caught {caught}/{possible}")
     if live:
         for name, want in docs.items():
-            got = compile_live((EXAMPLES / f"{name}.md").read_text())
+            got = compile_live((EXAMPLES / f"{name}.md").read_text(encoding="utf-8"))
             diffs = grade_compile(got, want)
             check(f"Live compile matches reviewed policy: {name}", not diffs, "; ".join(diffs) or "match")
     return out
@@ -323,7 +323,7 @@ def main() -> int:
             print(f"  {'PASS' if r['passed'] else 'FAIL'}  {r['id']}  score={r['score']}")
     print(f"\n{passed}/{total} checks passed")
     Path(args.out).parent.mkdir(exist_ok=True)
-    Path(args.out).write_text(json.dumps(results, indent=2, default=str))
+    Path(args.out).write_text(json.dumps(results, indent=2, default=str), encoding="utf-8")
     return 0 if passed == total else 1
 
 

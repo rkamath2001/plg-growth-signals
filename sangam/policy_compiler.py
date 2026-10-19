@@ -64,7 +64,7 @@ def compile_guidelines(text: str, reviewed: str | Path | None = None) -> tuple[P
     if _have_aws():
         return compile_live(text), "Compiled live by the policy agent."
     if reviewed and Path(reviewed).exists():
-        return (Policy.model_validate_json(Path(reviewed).read_text()),
+        return (Policy.model_validate_json(Path(reviewed).read_text(encoding="utf-8")),
                 "Offline: showing the reviewed compilation of this document. Set AWS credentials with Bedrock "
                 "access to compile it live.")
     raise RuntimeError("Compiling new guidelines needs AWS credentials with Amazon Bedrock access.")

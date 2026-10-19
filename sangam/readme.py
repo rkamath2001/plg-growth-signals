@@ -314,4 +314,4 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
 
 MIT. Built by Rahul Kamath.
 """
-    path.write_text(md)
+    path.write_text(md, encoding="utf-8")

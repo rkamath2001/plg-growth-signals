@@ -574,8 +574,8 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
         "# Synthetic data\n\nEvery row in this folder is synthetic, produced by "
         "`sangam/generate.py` with a fixed seed. Company names and `.example` "
         "domains are invented. `ground_truth/` holds the planted answers used "
-        "only for grading; the analysis never reads it.\n")
-    (out / "config.json").write_text(json.dumps(cfg.__dict__, indent=2))
+        "only for grading; the analysis never reads it.\n", encoding="utf-8")
+    (out / "config.json").write_text(json.dumps(cfg.__dict__, indent=2), encoding="utf-8")
     return paths
 
 

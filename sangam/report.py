@@ -250,12 +250,12 @@ Independent adopters at non-customers, scored with reasons. Signup spikes with l
 - The sales trigger is fit on a few dozen historical contracts; several rules tie, so refit it as outcomes accumulate, and expect it to move by segment and company size.
 - Thresholds (3+ functions, 60-point score, noise filter) are starting points to tune against real conversion outcomes.
 """
-    path.write_text(md)
+    path.write_text(md, encoding="utf-8")
 
 
 def write_json(results: dict, path: Path):
     slim = {k: {kk: vv for kk, vv in v.items() if kk != "estimates"} for k, v in results.items()}
-    path.write_text(json.dumps(slim, indent=2, default=str))
+    path.write_text(json.dumps(slim, indent=2, default=str), encoding="utf-8")
 
 
 def loops_chart(loops: dict, path: Path):
