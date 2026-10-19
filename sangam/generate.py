@@ -28,7 +28,11 @@ agent can be graded against answers we know in advance:
   8. Sign-in providers: Google Workspace and work email carry company identity;
      employees signing in with Amazon or GitHub often use a personal address,
      and Apple's private relay hides it, so their companies are invisible.
-  9. Sales trigger: a prospect's chance of signing a contract jumps once it
+  9. Connector identity: employees connect their employer's Slack, Teams or
+     Jira, but also school and side-project workspaces (a robotics team Slack),
+     big open communities, workspaces whose names collide with a company, and
+     clients' workspaces as guests. Each is a false-positive trap.
+ 10. Sales trigger: a prospect's chance of signing a contract jumps once it
      has 5+ activated independent users, and again at 3+ functions.
 """
 
@@ -333,6 +337,95 @@ def _conversions(rng, users, truth, accounts) -> pd.DataFrame:
                          "converted_to_contract": rng.random(len(p)) < p.to_numpy()})
 
 
+_TOWNS = ["Maple Grove", "Cedar Falls", "Riverside", "Oak Hollow", "Pine Ridge", "Lakeview",
+          "Fairmont", "Brookside", "Highland", "Westbrook", "Sunnydale", "Kingsport"]
+_CLUBS = ["FTC Robotics", "Elementary PTA", "Youth Soccer", "Science Olympiad", "Chess Club",
+          "Neighborhood Watch", "Running Club"]
+_COMMUNITIES = ["k8s-community", "mlops-community", "data-talks", "open-source-ai", "devrel-collective"]
+
+
+def _slug(text: str) -> str:
+    return "".join(ch for ch in text.lower() if ch.isalnum())
+
+
+def _connections(rng, users, accounts) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Workspaces that self-serve users connect (Slack, Teams, Jira), with traps.
+
+    Real signal: an employee connects their employer's Slack or Teams (which may
+    carry a verified company email domain) or Jira site.
+    Traps: side-project and school workspaces (an engineer's FTC robotics Slack);
+    big open communities; community names that collide with a company name
+    ("Ulnex Robotics Boosters" is not Ulnex Holdings); and contractors who are
+    guests in a client's workspace."""
+    acc = accounts[accounts.segment != "internal"].set_index("account_id")
+    ws_rows, link_rows = [], []
+
+    def add_ws(wid, app, name, slug, verified, members, kind, owner=None):
+        ws_rows.append({"workspace_id": wid, "app": app, "workspace_name": name, "workspace_slug": slug,
+                        "verified_domain": verified, "reported_members": members,
+                        "kind_truth": kind, "owner_account_truth": owner})
+
+    # Employer workspaces: each company uses Slack or Teams, and maybe Jira.
+    for aid, a in acc.iterrows():
+        full = _slug(a.company)
+        if rng.random() < 0.7:
+            verified = a.domain if rng.random() < 0.7 else None
+            add_ws(f"S-{aid}", "slack", a.company, full, verified, int(rng.integers(50, 5000)), "employer", aid)
+        else:
+            add_ws(f"T-{aid}", "teams", a.company, full, a.domain, int(rng.integers(50, 5000)), "employer", aid)
+        if rng.random() < 0.5:
+            jira_slug = a.company.lower().replace(" ", "-")
+            add_ws(f"J-{aid}", "jira", a.company, jira_slug, None, int(rng.integers(20, 2000)), "employer", aid)
+    ws = pd.DataFrame(ws_rows)
+    collab = ws[ws.app.isin(["slack", "teams"])].set_index("owner_account_truth").workspace_id
+    jira = ws[ws.app == "jira"].set_index("owner_account_truth").workspace_id
+
+    ss = users[users.channel == "self_serve"]
+    employed = ss[ss.account_id_truth.notna() & ss.account_id_truth.isin(acc.index)]
+    pick = employed[rng.random(len(employed)) < 0.40]
+    for uid, aid in zip(pick.user_id, pick.account_id_truth):
+        link_rows.append((uid, collab[aid], False))
+    pick = employed[(rng.random(len(employed)) < 0.20) & employed.account_id_truth.isin(jira.index)]
+    for uid, aid in zip(pick.user_id, pick.account_id_truth):
+        link_rows.append((uid, jira[aid], False))
+    # Contractors: guests in a client's workspace.
+    guests = employed[rng.random(len(employed)) < 0.03]
+    others = collab.index.to_numpy()
+    for uid, aid in zip(guests.user_id, guests.account_id_truth):
+        client = rng.choice(others[others != aid])
+        link_rows.append((uid, collab[client], True))
+
+    # Side-project and school workspaces: members from anywhere.
+    extra = []
+    n = 0
+    for town in _TOWNS:
+        for club in rng.choice(_CLUBS, 3, replace=False):
+            n += 1
+            name = f"{town} {club}"
+            extra.append((f"C-{n:03d}", name, _slug(name), int(rng.integers(20, 120)), "side_project",
+                          int(rng.integers(12, 45))))
+    # Name collisions: community workspaces that share a prospect company's stem.
+    prospects = accounts[accounts.segment.str.startswith("prospect")]
+    for _, a in prospects.sample(15, random_state=rng).iterrows():
+        n += 1
+        stem = a.company.split()[0]
+        name = f"{stem} {rng.choice(['Robotics Boosters', 'Hiking Club', 'Makers', 'Book Club'])}"
+        extra.append((f"C-{n:03d}", name, _slug(name), int(rng.integers(20, 150)), "collision",
+                      int(rng.integers(12, 35))))
+    for name in _COMMUNITIES:
+        n += 1
+        extra.append((f"C-{n:03d}", name, _slug(name), int(rng.integers(20_000, 90_000)), "community",
+                      int(rng.integers(60, 160))))
+    for wid, name, slug, members, kind, k in extra:
+        add_ws(wid, "slack", name, slug, None, members, kind)
+        for uid in ss.user_id.sample(k, random_state=rng):
+            link_rows.append((uid, wid, False))
+
+    links = pd.DataFrame(link_rows, columns=["user_id", "workspace_id", "is_guest"]).drop_duplicates(
+        ["user_id", "workspace_id"])
+    return pd.DataFrame(ws_rows), links
+
+
 def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[str, Path]:
     cfg = cfg or Config()
     rng = np.random.default_rng(cfg.seed)
@@ -344,6 +437,7 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
     events, truth = _behavior(rng, users, accounts)
 
     outcomes = _conversions(rng, users, truth, accounts)
+    workspaces, links = _connections(rng, users, accounts)
 
     # The analyst never sees the true account; it must be resolved from email.
     public_users = users.drop(columns=["account_id_truth"])
@@ -354,6 +448,8 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
         "users": out / "users.csv",
         "events": out / "events.csv.gz",
         "account_outcomes": out / "account_outcomes.csv",
+        "workspaces": out / "workspaces.csv",
+        "connections": out / "connections.csv",
         "ground_truth_users": out / "ground_truth" / "users_truth.csv",
         "ground_truth_accounts": out / "ground_truth" / "accounts_truth.csv",
     }
@@ -362,6 +458,10 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
     public_users.to_csv(paths["users"], index=False)
     events.to_csv(paths["events"], index=False)
     outcomes.to_csv(paths["account_outcomes"], index=False)
+    workspaces.drop(columns=["kind_truth", "owner_account_truth"]).to_csv(paths["workspaces"], index=False)
+    workspaces[["workspace_id", "kind_truth", "owner_account_truth"]].to_csv(
+        out / "ground_truth" / "workspaces_truth.csv", index=False)
+    links.to_csv(paths["connections"], index=False)
     truth.to_csv(paths["ground_truth_users"], index=False)
     accounts[["account_id", "segment"]].to_csv(paths["ground_truth_accounts"], index=False)
     (out / "README.md").write_text(

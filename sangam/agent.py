@@ -96,6 +96,12 @@ def signin_provider_ranking() -> str:
     return json.dumps(T.signin_provider_ranking(), default=str)
 
 
+@tool
+def connector_identity() -> str:
+    """Compares naive and guarded use of connected Slack, Teams and Jira workspaces to place hidden adopters at their employer: precision, recall, phantom sales-ready accounts, and which guards block which errors."""
+    return json.dumps(T.connector_identity(), default=str)
+
+
 def build_agent() -> Agent:
     model_id = os.environ.get("SANGAM_MODEL_ID")
     region = os.environ.get("AWS_REGION", "us-west-2")
@@ -105,7 +111,7 @@ def build_agent() -> Agent:
                         activation_test, connector_breadth, check_feature_lift,
                         identity_resolution, product_qualified_accounts,
                         sales_trigger_threshold, acquisition_channel_ranking,
-                        signin_provider_ranking])
+                        signin_provider_ranking, connector_identity])
 
 
 def ask(question: str) -> str:

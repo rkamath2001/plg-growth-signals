@@ -9,6 +9,7 @@ It is an agentic growth-analytics prototype that:
 - ranks **acquisition channels** by volume, retention and pipeline, which give different answers,
 - learns **how many independent freemium adopters a company needs** before an enterprise sales motion pays off,
 - shows how **sign-in providers** (Google, email, GitHub, Apple, Amazon) decide whether you can see the company at all,
+- uses **connected workspaces** (Slack, Teams, Jira) as identity evidence while guarding against false positives such as school clubs, side projects and contractors,
 - scores **product-qualified accounts** with plain-language reasons and a recommended sales or champion play,
 - simulates how to test sales outreach so it can prove its own lift,
 - lets a **Strands agent on Amazon Bedrock** answer growth questions only through governed metrics,
@@ -34,7 +35,7 @@ python -m evals.run_evals --agent      # grade the agent's answers to the golden
 
 ## What it finds
 
-Eight findings, each verified against a known planted answer ([full memo](reports/findings.md)).
+Nine findings, each verified against a known planted answer ([full memo](reports/findings.md)).
 
 **1. Activation is the first agent action, not the first question.** External users who complete an agent action in week 0 retain at about three times the rate of question-only users at week 8. The gap holds in every segment. It is observational, so the recommended next step is an onboarding experiment.
 
@@ -85,6 +86,25 @@ Pipeline ranks below the top two rest on fewer than 5 accounts each (webinar's t
 
 A what-if on the synthetic ground truth: 417 adopters at prospect companies are invisible today, mostly through Apple and GitHub sign-ins. Full visibility would put 11 more companies over the sales trigger (on top of 35); a work-email prompt with 30% uptake would add about 3. That makes "connect your work email to share with your team" a pipeline lever, and its real uptake is an A/B test away.
 
+**9. Connected workspaces can reveal employers, but only with guards against false positives.** When a hidden adopter connects their employer's Slack, Teams or Jira, the workspace says where they work. But people also connect their kid's robotics team Slack, neighborhood and hobby groups, big open communities, and clients' workspaces as contractors, and some of those share a name with a company.
+
+| Matcher | Users attributed | Precision | Hidden employees recovered | Sales-ready accounts (correct / phantom) |
+|---|---|---|---|---|
+| Work email only | - | - | - | 35 / 0 |
+| Naive connector match | 441 | 52% | 46% | 41 / 6 |
+| Guarded connector match | 176 | 100% | 35% | 41 / 0 |
+
+Naive matching was right only about half the time and invented 6 sales-ready accounts that don't exist; the worst case put 21 members of a "Fenton Hiking Club" Slack into Fenton Group. Of its 211 errors, 191 came from community and side-project workspaces, 10 from guests in client workspaces and 10 from name-only matches. The guarded matcher:
+
+- trusts a workspace's **verified email domain**, and a Teams tenant's verified domain;
+- treats a matching **name** as a clue, used only when a colleague already resolved by work email corroborates it;
+- drops **guest** memberships;
+- drops **community workspaces**: very large with no verified domain, or whose connected users already resolve to 3 or more different companies, which is exactly the signature of a school club;
+- skips users whose evidence points to two companies;
+- never overrides a work email.
+
+It recovered 35% of hidden employees with no wrong attributions in this data and added 6 genuinely sales-ready accounts, more than a work-email prompt at 30% uptake would. Synthetic data flatters the guards; in production, audit a sample of attributions by hand. And workspace metadata is personal context: use it only in aggregate at the account level, within the permissions users granted, and never to contact anyone about a side project.
+
 ## How it works
 
 ```
@@ -95,6 +115,7 @@ sangam/
   cohorts.py     retention, activation, breadth, Simpson's-paradox check
   pqa.py         product-qualified account scoring, reasons, plays, noise suppression
   motions.py     sales-trigger threshold, channel and sign-in provider rankings, work-email what-if
+  connectors.py  naive vs guarded identity from connected Slack, Teams and Jira workspaces
   experiment.py  outreach holdout simulation: account vs user randomization
   tools.py       the functions the agent may call (testable without a model)
   agent.py       Strands agent on Amazon Bedrock
@@ -133,9 +154,12 @@ evals/
   PASS  Low-intent social channels rank in the bottom half on retention
   PASS  Google and email are the most visible providers; Apple and Amazon the least
   PASS  Making hidden adopters visible adds sales-ready accounts
+  PASS  Naive connector matching produces false positives
+  PASS  Guarded connector matching is precise and adds real sales-ready accounts
+  PASS  Community and side-project workspaces are the main false-positive source
 [rubric_self_test]
-  PASS  x5 golden questions: good answer passes, bad answer fails
-20/20 checks passed
+  PASS  x6 golden questions: good answer passes, bad answer fails
+24/24 checks passed
 ```
 
 The rubric self-test earns its place: while adding the sales-trigger question, it caught the grader reading "5 activated users" as "5%" and failing a correct answer.

@@ -473,5 +473,58 @@
     "extra_ready_that_converted": 3,
     "finding": "417 self-serve users at prospect companies are invisible today, mostly via apple, github sign-ins. If 30% added a work email, about 3 more companies would cross the sales trigger, on top of 35 visible today; with full visibility, 11 more would. A 'connect your work email to share with your team' prompt is a pipeline lever, not just an identity feature.",
     "method": "Simulation on synthetic ground truth; real uptake must be measured with an A/B test of the prompt."
+  },
+  "connector_identity": {
+    "hidden_employed_users": 500,
+    "truth_ready_accounts": 46,
+    "email_only": {
+      "ready_accounts": 35,
+      "correct_ready": 35,
+      "phantom_ready": 0
+    },
+    "naive": {
+      "users_attributed": 441,
+      "correct": 230,
+      "wrong": 211,
+      "precision": 0.522,
+      "recall_of_hidden": 0.46,
+      "ready_accounts": 47,
+      "correct_ready": 41,
+      "phantom_ready": 6,
+      "new_correct_ready": 6
+    },
+    "guarded": {
+      "users_attributed": 176,
+      "correct": 176,
+      "wrong": 0,
+      "precision": 1.0,
+      "recall_of_hidden": 0.352,
+      "ready_accounts": 41,
+      "correct_ready": 41,
+      "phantom_ready": 0,
+      "new_correct_ready": 6
+    },
+    "naive_false_positive_examples": {
+      "Fenton Hiking Club": {
+        "users_misattributed": 21,
+        "attributed_to": "Fenton Group"
+      },
+      "Fenmont Hiking Club": {
+        "users_misattributed": 20,
+        "attributed_to": "Fenmont Holdings"
+      },
+      "Belholm Hiking Club": {
+        "users_misattributed": 19,
+        "attributed_to": "Belholm Health"
+      }
+    },
+    "naive_errors_by_guard": {
+      "community or side-project workspace": 191,
+      "guest in another company's workspace": 10,
+      "name-stem match without a corroborating colleague": 10
+    },
+    "question": "Can connected workspaces (Slack, Teams, Jira) reveal where hidden adopters work, without false positives?",
+    "finding": "Naive matching attributes 441 hidden users at 52% precision and creates 6 phantom sales-ready accounts. The worst naive error: 'Fenton Hiking Club' put 21 unrelated users into Fenton Group. Guarded matching attributes 176 at 100% precision, recovers 35% of hidden employees, and adds 6 genuinely sales-ready accounts with 0 phantoms. Trust a workspace's verified domain; treat names as clues that need a colleague to corroborate them; drop guests and any workspace whose members already resolve to several companies. Synthetic data makes the guards look perfect; in production, audit a sample of attributions by hand each quarter.",
+    "caveat": "Workspace metadata is personal context: use it only in aggregate at the account level, within the permissions users granted, and never to contact an individual about a side project."
   }
 }

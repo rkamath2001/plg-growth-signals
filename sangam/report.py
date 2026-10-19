@@ -152,6 +152,8 @@ def findings_memo(r: dict, top, path: Path):
     c = {row["connectors_w0"]: row["w8_retention"] for row in conn["table"]}
     trig, chan = r["sales_trigger"], r["channel_ranking"]
     prov, wif = r["provider_ranking"], r["work_email_whatif"]
+    con = r["connector_identity"]
+    guards = "; ".join(f"{k}: {v}" for k, v in con["naive_errors_by_guard"].items())
     prov_rows = "\n".join(
         f"| {x['provider']} | {x['signups']:,} | {x['activation_rate']:.0%} | {x['w8_retention']:.0%} | "
         f"{x['company_resolved']:.0%} | {x['private_relay']:.0%} | {x['ready_users_per_1k']} | "
@@ -170,7 +172,7 @@ def findings_memo(r: dict, top, path: Path):
 
 ## Summary
 
-Eight findings, each checked against planted ground truth (see `evals/`):
+Nine findings, each checked against planted ground truth (see `evals/`):
 
 1. **Report external users separately.** Customer zero raises week-8 retention from {inf['w8_retention_external_only']:.0%} to {inf['w8_retention_all_users']:.0%}. Internal use is mandated, so it flatters every headline it touches.
 2. **Activation is the first agent action.** External users who complete one in week 0 retain at {act['cohorts']['agent_action']['w8_retention']:.0%} at week 8, versus {act['cohorts']['question_only']['w8_retention']:.0%} for question-only users (95% CI {act['ci95'][0]:+.0%} to {act['ci95'][1]:+.0%}), and the gap holds in every segment. This is observational; the next step is an onboarding experiment that nudges a first agent action.
@@ -180,6 +182,7 @@ Eight findings, each checked against planted ground truth (see `evals/`):
 6. **Trigger sales on activated adopters, not sign-ups.** Companies with {trig['recommended_rule']['min_activated']}+ activated independent users convert at {trig['recommended_rule']['precision']:.0%}, {trig['lift_over_baseline']}x the {trig['baseline_conversion']:.0%} baseline.
 7. **Rank channels by pipeline, not volume.** The top channel by sign-ups is not the top channel by sales-ready accounts; teammate invites lead on retention and pipeline.
 8. **Sign-in provider decides visibility.** Google and work-email sign-ups reveal the company about half the time; Apple and Amazon almost never. A work-email prompt at the moment of sharing would put more companies over the sales trigger.
+9. **Connected workspaces reveal employers, if guarded.** Matching Slack, Teams and Jira workspaces naively invents adopters from school clubs, side projects and client workspaces; trusting verified domains and requiring corroboration for names recovers real sales-ready accounts with no phantoms.
 
 ## When to start an enterprise sales motion
 
@@ -210,6 +213,18 @@ Eight findings, each checked against planted ground truth (see `evals/`):
 {prov['caveat']}
 
 **What if hidden adopters added a work email?** {wif['finding']} *({wif['method']})*
+
+## Connected workspaces as identity evidence
+
+{con['finding']}
+
+| Matcher | Users attributed | Precision | Hidden employees recovered | Sales-ready accounts (correct / phantom) |
+|---|---|---|---|---|
+| Work email only | - | - | - | {con['email_only']['correct_ready']} / {con['email_only']['phantom_ready']} |
+| Naive connector match | {con['naive']['users_attributed']} | {con['naive']['precision']:.0%} | {con['naive']['recall_of_hidden']:.0%} | {con['naive']['correct_ready']} / {con['naive']['phantom_ready']} |
+| Guarded connector match | {con['guarded']['users_attributed']} | {con['guarded']['precision']:.0%} | {con['guarded']['recall_of_hidden']:.0%} | {con['guarded']['correct_ready']} / {con['guarded']['phantom_ready']} |
+
+Naive errors by the guard that blocks them: {guards}. {con['caveat']}
 
 ## Product-qualified accounts this week
 

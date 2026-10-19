@@ -4,7 +4,7 @@
 
 ## Summary
 
-Eight findings, each checked against planted ground truth (see `evals/`):
+Nine findings, each checked against planted ground truth (see `evals/`):
 
 1. **Report external users separately.** Customer zero raises week-8 retention from 27% to 33%. Internal use is mandated, so it flatters every headline it touches.
 2. **Activation is the first agent action.** External users who complete one in week 0 retain at 45% at week 8, versus 15% for question-only users (95% CI +29% to +31%), and the gap holds in every segment. This is observational; the next step is an onboarding experiment that nudges a first agent action.
@@ -14,6 +14,7 @@ Eight findings, each checked against planted ground truth (see `evals/`):
 6. **Trigger sales on activated adopters, not sign-ups.** Companies with 5+ activated independent users convert at 63%, 11.2x the 6% baseline.
 7. **Rank channels by pipeline, not volume.** The top channel by sign-ups is not the top channel by sales-ready accounts; teammate invites lead on retention and pipeline.
 8. **Sign-in provider decides visibility.** Google and work-email sign-ups reveal the company about half the time; Apple and Amazon almost never. A work-email prompt at the moment of sharing would put more companies over the sales trigger.
+9. **Connected workspaces reveal employers, if guarded.** Matching Slack, Teams and Jira workspaces naively invents adopters from school clubs, side projects and client workspaces; trusting verified domains and requiring corroboration for names recovers real sales-ready accounts with no phantoms.
 
 ## When to start an enterprise sales motion
 
@@ -55,6 +56,18 @@ Provider decides visibility more than quality. 50% of Google and 58% of email si
 Provider retention differences are small and partly persona mix; do not steer users between sign-in options on retention alone.
 
 **What if hidden adopters added a work email?** 417 self-serve users at prospect companies are invisible today, mostly via apple, github sign-ins. If 30% added a work email, about 3 more companies would cross the sales trigger, on top of 35 visible today; with full visibility, 11 more would. A 'connect your work email to share with your team' prompt is a pipeline lever, not just an identity feature. *(Simulation on synthetic ground truth; real uptake must be measured with an A/B test of the prompt.)*
+
+## Connected workspaces as identity evidence
+
+Naive matching attributes 441 hidden users at 52% precision and creates 6 phantom sales-ready accounts. The worst naive error: 'Fenton Hiking Club' put 21 unrelated users into Fenton Group. Guarded matching attributes 176 at 100% precision, recovers 35% of hidden employees, and adds 6 genuinely sales-ready accounts with 0 phantoms. Trust a workspace's verified domain; treat names as clues that need a colleague to corroborate them; drop guests and any workspace whose members already resolve to several companies. Synthetic data makes the guards look perfect; in production, audit a sample of attributions by hand each quarter.
+
+| Matcher | Users attributed | Precision | Hidden employees recovered | Sales-ready accounts (correct / phantom) |
+|---|---|---|---|---|
+| Work email only | - | - | - | 35 / 0 |
+| Naive connector match | 441 | 52% | 46% | 41 / 6 |
+| Guarded connector match | 176 | 100% | 35% | 41 / 0 |
+
+Naive errors by the guard that blocks them: community or side-project workspace: 191; guest in another company's workspace: 10; name-stem match without a corroborating colleague: 10. Workspace metadata is personal context: use it only in aggregate at the account level, within the permissions users granted, and never to contact an individual about a side project.
 
 ## Product-qualified accounts this week
 

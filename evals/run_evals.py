@@ -29,7 +29,7 @@ from sangam import cohorts
 from sangam.experiment import simulate
 from sangam.pqa import account_rollup, score
 from sangam.tools import (acquisition_channel_ranking, dataset, sales_trigger_threshold,
-                          signin_provider_ranking, work_email_prompt_whatif)
+                          signin_provider_ranking, work_email_prompt_whatif, connector_identity)
 
 ROOT = Path(__file__).resolve().parent
 GOLDEN = json.loads((ROOT / "golden.json").read_text())
@@ -108,6 +108,16 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
           and wif["extra_ready_accounts_at_uptake"] > 0,
           f"{wif['ready_accounts_visible_today']} -> {wif['ready_accounts_if_all_visible']} with full visibility; "
           f"+{wif['extra_ready_accounts_at_uptake']} at {wif['uptake_assumed']:.0%} uptake")
+    con = connector_identity()
+    n, g = con["naive"], con["guarded"]
+    check("Naive connector matching produces false positives", n["precision"] < 0.8 and n["phantom_ready"] > 0,
+          f"naive precision {n['precision']}, {n['phantom_ready']} phantom sales-ready accounts")
+    check("Guarded connector matching is precise and adds real sales-ready accounts",
+          g["precision"] >= 0.95 and g["phantom_ready"] == 0 and g["new_correct_ready"] > 0,
+          f"precision {g['precision']}, +{g['new_correct_ready']} real ready, {g['phantom_ready']} phantom")
+    top_guard = max(con["naive_errors_by_guard"], key=con["naive_errors_by_guard"].get)
+    check("Community and side-project workspaces are the main false-positive source",
+          top_guard.startswith("community"), f"{con['naive_errors_by_guard']}")
     return out
 
 

@@ -8,6 +8,7 @@ from functools import lru_cache
 
 from . import cohorts
 from .dhruva import METRIC_DEFINITIONS, MIN_COHORT, Dataset, load, retention_by
+from .connectors import evaluate as _connector_eval
 from .identity import resolution_summary
 from .motions import (channel_ranking, conversion_by_activated, find_threshold, prospect_rollup,
                       provider_ranking, work_email_whatif)
@@ -107,6 +108,12 @@ def work_email_prompt_whatif(uptake: float = 0.3) -> dict:
     return work_email_whatif(dataset(), truth, _outcomes(), _ready_accounts()[1], uptake)
 
 
+def connector_identity() -> dict:
+    truth = pd.read_csv("data/ground_truth/users_truth.csv")
+    return _connector_eval(dataset(), truth, _outcomes(), _ready_accounts()[1])
+
+
 ALL_TOOLS = [metric_definitions, retention_by_dimension, headline_inflation, activation_test,
              connector_breadth, check_feature_lift, identity_resolution, product_qualified_accounts,
-             sales_trigger_threshold, acquisition_channel_ranking, signin_provider_ranking]
+             sales_trigger_threshold, acquisition_channel_ranking, signin_provider_ranking,
+             connector_identity]

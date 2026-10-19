@@ -3,15 +3,38 @@
     "id": "activation-definition",
     "question": "What should we treat as activation for new users, and how confident are you?",
     "facts": [
-      {"key": "act_agent", "tol": 0.02},
-      {"key": "act_question", "tol": 0.02}
+      {
+        "key": "act_agent",
+        "tol": 0.02
+      },
+      {
+        "key": "act_question",
+        "tol": 0.02
+      }
     ],
     "must_mention": [
-      {"why": "names the first agent action as activation", "any_of": ["agent action"]},
-      {"why": "flags that the result is observational", "any_of": ["observational", "correlat", "experiment", "a/b", "causal"]}
+      {
+        "why": "names the first agent action as activation",
+        "any_of": [
+          "agent action"
+        ]
+      },
+      {
+        "why": "flags that the result is observational",
+        "any_of": [
+          "observational",
+          "correlat",
+          "experiment",
+          "a/b",
+          "causal"
+        ]
+      }
     ],
     "must_not_claim": [
-      {"why": "does not crown question-asking as activation", "pattern": "activation (is|should be) (the )?first question"}
+      {
+        "why": "does not crown question-asking as activation",
+        "pattern": "activation (is|should be) (the )?first question"
+      }
     ],
     "reference_good": "Treat the first completed agent action as activation. External users who complete one in week 0 retain at {act_agent} at week 8 (n=9,568), versus {act_question} for question-only users. Confidence is medium: this is observational, so confirm with an onboarding experiment that nudges a first agent action.",
     "reference_bad": "Activation should be the first question. Most users ask one, so it is easy to hit and retention looks great."
@@ -20,10 +43,20 @@
     "id": "headline-retention",
     "question": "What is our week-8 retention?",
     "facts": [
-      {"key": "ret_external", "tol": 0.02}
+      {
+        "key": "ret_external",
+        "tol": 0.02
+      }
     ],
     "must_mention": [
-      {"why": "separates the internal customer-zero deployment", "any_of": ["internal", "customer zero", "customer-zero"]}
+      {
+        "why": "separates the internal customer-zero deployment",
+        "any_of": [
+          "internal",
+          "customer zero",
+          "customer-zero"
+        ]
+      }
     ],
     "must_not_claim": [],
     "reference_good": "For external users, week-8 retention is {ret_external}. Including the internal customer-zero deployment raises it to {ret_all}, but internal use is mandated, so report external users separately.",
@@ -33,13 +66,29 @@
     "id": "desktop-app",
     "question": "Should we push the desktop app because it drives retention?",
     "facts": [
-      {"key": "desktop_agg", "tol": 0.03}
+      {
+        "key": "desktop_agg",
+        "tol": 0.03
+      }
     ],
     "must_mention": [
-      {"why": "explains the lift disappears within segments", "any_of": ["within segment", "within each segment", "inside each segment", "confound", "simpson", "mix"]}
+      {
+        "why": "explains the lift disappears within segments",
+        "any_of": [
+          "within segment",
+          "within each segment",
+          "inside each segment",
+          "confound",
+          "simpson",
+          "mix"
+        ]
+      }
     ],
     "must_not_claim": [
-      {"why": "does not claim desktop causes retention", "pattern": "desktop (app )?(drives|causes|increases|improves) retention"}
+      {
+        "why": "does not claim desktop causes retention",
+        "pattern": "desktop (app )?(drives|causes|increases|improves) retention"
+      }
     ],
     "reference_good": "No. Desktop users retain {desktop_agg} better in aggregate, but within each segment the difference is about zero. It is confounded by mix: the internal rollout installed it by default.",
     "reference_bad": "Yes. The desktop app drives retention by 20 points, so we should push it to everyone."
@@ -49,9 +98,31 @@
     "question": "Which prospect accounts should business development contact this week, and which signups should they ignore?",
     "facts": [],
     "must_mention": [
-      {"why": "gives reasons, not just names", "any_of": ["functions", "agent action", "shared"]},
-      {"why": "calls out the noise accounts", "any_of": ["noise", "webinar", "spike", "one week"]},
-      {"why": "recommends testing outreach with a holdout", "any_of": ["holdout", "hold out", "control"]}
+      {
+        "why": "gives reasons, not just names",
+        "any_of": [
+          "functions",
+          "agent action",
+          "shared"
+        ]
+      },
+      {
+        "why": "calls out the noise accounts",
+        "any_of": [
+          "noise",
+          "webinar",
+          "spike",
+          "one week"
+        ]
+      },
+      {
+        "why": "recommends testing outreach with a holdout",
+        "any_of": [
+          "holdout",
+          "hold out",
+          "control"
+        ]
+      }
     ],
     "must_not_claim": [],
     "reference_good": "Start with Ulnex Holdings and Gargate Group: each has around 20 independent users across 6 functions, about two-thirds completed an agent action in week 0, and several shared agents. Ignore the accounts flagged as noise: their signups came in one week from a webinar spike with low activation. Keep a holdout of qualified accounts so outreach can prove its lift.",
@@ -61,16 +132,79 @@
     "id": "sales-trigger",
     "question": "How many independent freemium users does a company need before we start an enterprise sales motion?",
     "facts": [
-      {"key": "trigger_k", "tol": 0}
+      {
+        "key": "trigger_k",
+        "tol": 0
+      }
     ],
     "must_mention": [
-      {"why": "counts activated users, not sign-ups", "any_of": ["activated", "agent action"]},
-      {"why": "notes the rule is learned from limited outcomes or must be refit", "any_of": ["refit", "re-fit", "limited", "small sample", "few contracts", "revisit", "recalibrat"]}
+      {
+        "why": "counts activated users, not sign-ups",
+        "any_of": [
+          "activated",
+          "agent action"
+        ]
+      },
+      {
+        "why": "notes the rule is learned from limited outcomes or must be refit",
+        "any_of": [
+          "refit",
+          "re-fit",
+          "limited",
+          "small sample",
+          "few contracts",
+          "revisit",
+          "recalibrat"
+        ]
+      }
     ],
     "must_not_claim": [
-      {"why": "does not recommend a raw sign-up count", "pattern": "once (a company|an account) (has|reaches) \\d+ sign-?ups"}
+      {
+        "why": "does not recommend a raw sign-up count",
+        "pattern": "once (a company|an account) (has|reaches) \\d+ sign-?ups"
+      }
     ],
     "reference_good": "Start the motion once a company has {trigger_k} or more activated independent users; those companies convert at about 63% versus a 6% baseline, and at 4 users run champion enablement instead. Count activated users, not sign-ups, because webinar spikes inflate sign-ups. The rule is learned from 47 contracts, so refit it each quarter.",
     "reference_bad": "Once a company reaches 10 sign-ups, hand it to sales."
+  },
+  {
+    "id": "connector-identity",
+    "question": "Can we use the Slack, Teams or Jira workspaces people connect to figure out where they work?",
+    "facts": [],
+    "must_mention": [
+      {
+        "why": "trusts verified domains over names",
+        "any_of": [
+          "verified domain",
+          "verified email domain"
+        ]
+      },
+      {
+        "why": "names the side-project or community false positive",
+        "any_of": [
+          "side project",
+          "side-project",
+          "community",
+          "school",
+          "club",
+          "robotics"
+        ]
+      },
+      {
+        "why": "excludes guests or contractors",
+        "any_of": [
+          "guest",
+          "contractor"
+        ]
+      }
+    ],
+    "must_not_claim": [
+      {
+        "why": "does not treat any matching workspace name as proof",
+        "pattern": "(any|every) workspace (whose name|named)"
+      }
+    ],
+    "reference_good": "Yes, with guards. Trust a workspace's verified domain; treat a matching name as a clue that needs a colleague resolved by work email to corroborate it; drop guest memberships, since contractors sit in client workspaces; and drop community or side-project workspaces, like a school robotics Slack whose members already resolve to several companies. Naive matching was right only about half the time and invented phantom sales-ready accounts.",
+    "reference_bad": "Yes. Map every workspace named after a company to that company and count its members as adopters."
   }
 ]
