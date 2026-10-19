@@ -25,7 +25,7 @@ agent can be graded against answers we know in advance:
      addresses cannot be tied to a company.
   7. Channels: invited users carry the most intent, then LinkedIn and search;
      X and Reddit bring volume with low intent and mostly personal addresses.
-  8. Sign-in providers: Google Workspace and work email carry company identity;
+  8. Sign-in providers: Google Workspace, Microsoft work accounts and work email carry company identity;
      employees signing in with Amazon or GitHub often use a personal address,
      and Apple's private relay hides it, so their companies are invisible.
   9. Connector identity: employees connect their employer's Slack, Teams or
@@ -83,17 +83,17 @@ LOOPS = {
 # Licensed enterprise users share more externally (clients, partners).
 ENTERPRISE_REL = {"asset": [.25, .65, .10], "digest": [.40, .50, .10]}
 SOURCE_INTENT.update({f"shared_{k}": v["intent"] for k, v in LOOPS.items()})
-# Sign-in provider: work identities arrive mostly via Google Workspace or work
-# email; consumer identities skew to Apple and Amazon.
-PROVIDERS = ["google", "email", "apple", "github", "amazon"]
+# Sign-in provider: work identities arrive mostly via Google Workspace, Microsoft
+# work accounts or work email; consumer identities skew to Apple and Amazon.
+PROVIDERS = ["google", "email", "apple", "github", "amazon", "microsoft"]
 PROVIDER_MIX = {
-    "personal":  [0.40, 0.15, 0.22, 0.10, 0.13],
-    "corporate": [0.52, 0.26, 0.08, 0.12, 0.02],
+    "personal":  [0.38, 0.14, 0.21, 0.10, 0.12, 0.05],
+    "corporate": [0.44, 0.22, 0.07, 0.11, 0.02, 0.14],
 }
-PROVIDER_INTENT = {"github": 0.15, "google": 0.05, "email": 0.0, "apple": -0.10, "amazon": -0.20}
+PROVIDER_INTENT = {"microsoft": 0.0, "github": 0.15, "google": 0.05, "email": 0.0, "apple": -0.10, "amazon": -0.20}
 # Employees who sign in with a consumer account often use a personal address,
 # so their company is invisible even though they work there.
-PERSONAL_ADDRESS_P = {"amazon": 0.7, "github": 0.4, "google": 0.0, "email": 0.0, "apple": 0.0}
+PERSONAL_ADDRESS_P = {"microsoft": 0.15, "amazon": 0.7, "github": 0.4, "google": 0.0, "email": 0.0, "apple": 0.0}
 PERSONAL_DOMAINS = ["gmail.com", "outlook.com", "yahoo.com", "icloud.com", "proton.me"]
 RELAY_DOMAIN = "privaterelay.appleid.com"
 

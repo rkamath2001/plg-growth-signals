@@ -105,8 +105,8 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
     prov = {r["provider"]: r for r in signin_provider_ranking()["table"]}
     top2 = {k for k, v in prov.items() if v["by_visibility"] <= 2}
     bottom2 = {k for k, v in prov.items() if v["by_visibility"] >= len(prov) - 1}
-    check("Google and email are the most visible providers; Apple and Amazon the least",
-          top2 == {"google", "email"} and bottom2 == {"apple", "amazon"},
+    check("Work identities (Google, Microsoft, email) are the most visible providers; Apple and Amazon the least",
+          top2 <= {"google", "microsoft", "email"} and bottom2 == {"apple", "amazon"},
           f"top {sorted(top2)}, bottom {sorted(bottom2)}")
     wif = work_email_prompt_whatif()
     check("Making hidden adopters visible adds sales-ready accounts",
