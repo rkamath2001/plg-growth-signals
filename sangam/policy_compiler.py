@@ -50,6 +50,8 @@ def compile_live(text: str) -> Policy:
 def _have_aws() -> bool:
     if os.environ.get("SANGAM_OFFLINE"):
         return False
+    if os.environ.get("AWS_BEARER_TOKEN_BEDROCK"):      # Bedrock API key
+        return True
     try:
         import boto3
         return boto3.Session().get_credentials() is not None

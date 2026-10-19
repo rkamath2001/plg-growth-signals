@@ -153,6 +153,7 @@ The agent is optional and needs AWS credentials with Amazon Bedrock model access
 
 ```bash
 export AWS_REGION=us-west-2            # optional: SANGAM_MODEL_ID=<bedrock model id>
+export AWS_BEARER_TOKEN_BEDROCK=<key>  # or a Bedrock API key instead of an AWS CLI profile
 python -m sangam.agent "Which accounts should business development contact this week, and why?"
 python -m evals.run_evals --agent      # grade the agent's answers to the golden questions
 ```
