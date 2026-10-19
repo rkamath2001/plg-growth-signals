@@ -47,7 +47,7 @@ def _ledger(ds: Dataset, data_dir: str | Path = "data") -> pd.DataFrame:
                                        "other_company"))
     sh["stage"] = np.where(sh.sender_licensed, "post_contract", "pre_contract")
     rec = u.reindex(sh.recipient_user_id)
-    sh["activated"] = rec.activated_agent.fillna(False).to_numpy().astype(bool)
+    sh["activated"] = rec.activated_agent.eq(True).to_numpy()
     sh["recipient_account"] = rec.account_id.to_numpy()
     sh["w8"] = ds.activity.reindex(sh.recipient_user_id)[W].to_numpy()
     return sh
