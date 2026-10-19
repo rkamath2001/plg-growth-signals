@@ -127,7 +127,7 @@ def threshold_chart(res: dict, path: Path):
         ax.text(b.get_x() + b.get_width() / 2, -0.07, f"n={n}", ha="center", fontsize=7.5, color=INK2)
     base = res["baseline_conversion"]
     ax.axhline(base, color=GRAY, lw=1.2, ls="--")
-    ax.text(len(labels) - 0.55, base, f" baseline {base:.0%}", ha="left", va="center", fontsize=8.5, color=INK2)
+    ax.text(len(labels) - 0.55, base + 0.015, f"baseline {base:.0%}", ha="left", va="bottom", fontsize=8.5, color=INK2)
     cut = next(i for i, v in enumerate(lo) if v >= k)
     ax.axvline(cut - 0.5, color=INK, lw=1.2, ls=":")
     ax.text(cut - 0.55, 0.97, f"trigger: {k}+ activated users  ", fontsize=8.5,
