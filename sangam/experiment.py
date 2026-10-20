@@ -11,7 +11,7 @@ the same company (they get pulled into the team pilot). User-level
 randomization lets the treatment leak into the control group, so it
 underestimates the true effect. Account-level randomization recovers it.
 
-Outcomes are simulated from the planted ground truth; they are illustrative.
+Outcomes are simulated from the generator's settings; they are illustrative.
 """
 
 from __future__ import annotations

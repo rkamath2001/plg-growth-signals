@@ -1,10 +1,10 @@
 # Findings memo: growth signals for an AI workspace product
 
-*All data is synthetic, generated with a fixed seed. Effects were planted so every finding can be checked against a known answer.*
+*All data is synthetic, generated with a fixed seed. The data was generated to enable the cohort analysis and prove the methodology; every finding is checked against the expected result.*
 
 ## Summary
 
-Ten findings, each checked against planted ground truth (see `evals/`):
+Ten findings, each checked against the expected result (see `evals/`):
 
 1. **Report external users separately.** Customer zero raises week-8 retention from 26% to 34%. Internal use is mandated, so it flatters every headline it touches.
 2. **Activation is the first agent action.** External users who complete one in week 0 retain at 43% at week 8, versus 14% for question-only users (95% CI +28% to +31%), and the gap holds in every segment. This is observational; the next step is an onboarding experiment that nudges a first agent action.

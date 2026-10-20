@@ -1,8 +1,8 @@
 """Sangam eval harness.
 
-Two layers, both graded against the planted ground truth:
+Two layers, both graded against the expected results:
 
-  analytics  Does the deterministic analysis recover what we planted? Runs anywhere,
+  analytics  Does the deterministic analysis reach the expected results? Runs anywhere,
              no model or credentials needed.
   policy     Do plain-language reward guidelines compile, render and get flagged
              correctly? Uses the reviewed compilations offline; with --agent the
@@ -87,7 +87,7 @@ def analytics_checks(data_dir: str = "data") -> list[dict]:
           f"user-level {u:+.3f} vs true {exp['true_effect']:+.3f}")
     trig = sales_trigger_threshold()
     rule, naive = trig["recommended_rule"], trig["signup_count_rule"]
-    check("Sales trigger recovers the planted tipping point (5 activated users)",
+    check("Sales trigger recovers the configured tipping point (5 activated users)",
           4 <= rule["min_activated"] <= 6,
           f"learned {rule['min_activated']}+ activated users across {rule['min_functions']}+ functions")
     check("Activated-user trigger beats a sign-up-count trigger (higher F1 and precision)",
@@ -192,7 +192,7 @@ def policy_checks(live: bool = False) -> list[dict]:
           f"{sim['rewards_per_incremental_activated']} rewards each")
     ids = {i["id"] for i in lint(sloppy)}
     need = {"pays_on_share", "pays_licensed", "personal_email", "no_cap", "external_no_admin"}
-    check("Sloppy guidelines: every planted problem is flagged in plain language",
+    check("Sloppy guidelines: every seeded problem is flagged in plain language",
           need <= ids, f"flagged {len(ids & need)}/{len(need)}; missing {sorted(need - ids) or 'none'}")
     blocked = 0
     for fn in (lambda: simulate(amb, ds, rule, oc), lambda: approve(amb, "/tmp/_never_written.md")):
@@ -218,7 +218,7 @@ def policy_checks(live: bool = False) -> list[dict]:
                  if p.model_copy(update=m) != p)
     possible = sum(1 for _, m in mutations for p in docs.values() if p.model_copy(update=m) != p)
     exact = all(not grade_compile(p, p) for p in docs.values())
-    check("Compile grader passes reviewed compilations and catches planted mistakes",
+    check("Compile grader passes reviewed compilations and catches seeded mistakes",
           exact and caught == possible, f"self-match {exact}; caught {caught}/{possible}")
     if live:
         for name, want in docs.items():

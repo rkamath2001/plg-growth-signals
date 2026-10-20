@@ -1,5 +1,5 @@
 """Run the whole Sangam pipeline: generate synthetic data, analyze it, write charts
-and the findings memo, then grade everything against the planted ground truth.
+and the findings memo, then grade everything against the expected results.
 
     python run.py
 """
@@ -66,7 +66,7 @@ def main():
     report.loops_chart(results["viral_loops"], out / "viral_loops.png")
     report.write_json(results, out / "results.json")
 
-    print("Grading against planted ground truth and rendering README ...")
+    print("Grading against expected results and rendering README ...")
     from evals.run_evals import collect
     ev = collect()
     readme.render(results, ev, Path("README.md"))

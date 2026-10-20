@@ -6,7 +6,7 @@ events are invented. The product modeled here is a generic "AI workspace"
 described from public information only. Nothing here reflects any company's
 internal data.
 
-The generator plants known effects ("ground truth") so the analysis and the
+The generator builds in known effects, recorded as expected results, so the analysis and the
 agent can be graded against answers we know in advance:
 
   1. Activation: completing a first *agent action* in week 1 drives retention;
@@ -69,7 +69,7 @@ SOURCE_INTENT = {"teammate_invite": 0.6, "linkedin": 0.25, "search": 0.15, "dire
                  "youtube": 0.0, "x": -0.25, "reddit": -0.35, "webinar": 0.0}
 
 # Viral loops. Each existing user may share; recipients who sign up become users
-# whose source is the loop. Parameters are the planted ground truth.
+# whose source is the loop. Parameters are the generator's expected results.
 #   rate      shares per sender over the window (scaled by activation and intent)
 #   rel       recipient relation mix: same company / another company / personal
 #   view, signup   per-share probabilities; delay = days from share to sign-up
@@ -287,7 +287,7 @@ def _behavior(rng: np.random.Generator, users: pd.DataFrame,
     # Desktop app: installed by default for customer zero; NO causal effect below.
     desktop = rng.random(n) < np.where(internal, 0.90, np.where(enterprise, 0.30, 0.15))
 
-    # Weekly survival probability. Planted causal effects only.
+    # Weekly survival probability. Configured causal effects only.
     logit_s = (0.6 + 1.1 * agent_action + 0.25 * (asked_q & ~agent_action)
                + 0.7 * (connectors >= 3) + 0.4 * shared + 0.25 * intent
                + 0.4 * enterprise + 2.2 * internal - 1.0 * webinar)
@@ -344,7 +344,7 @@ def _behavior(rng: np.random.Generator, users: pd.DataFrame,
     return events, truth
 
 
-# Planted sales-trigger threshold: conversion jumps once an account has this many
+# Configured sales-trigger threshold: conversion jumps once an account has this many
 # activated independent users, and again once they span 3+ functions.
 THRESHOLD_ACTIVATED = 5
 THRESHOLD_FUNCTIONS = 3
@@ -581,7 +581,7 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
     (out / "README.md").write_text(
         "# Synthetic data\n\nEvery row in this folder is synthetic, produced by "
         "`sangam/generate.py` with a fixed seed. Company names and `.example` "
-        "domains are invented. `ground_truth/` holds the planted answers used "
+        "domains are invented. `ground_truth/` holds the expected results used "
         "only for grading; the analysis never reads it.\n", encoding="utf-8")
     (out / "config.json").write_text(json.dumps(cfg.__dict__, indent=2), encoding="utf-8")
     return paths

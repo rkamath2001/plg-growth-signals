@@ -12,14 +12,14 @@
 - **Pay sharing rewards when the recipient completes a first agent action, and tie them to the account's stage**: same-company shares before a contract, external shares after it. In simulation that keeps the same pipeline gains as uniform rewards while paying 1,039 rewards instead of 12,276.
 - **Reward policy is written in plain language.** Teams submit prose guidelines and approve a plain-English card; the framework flags pay-per-share and uncapped schemes, and asks rather than guesses when wording is ambiguous.
 - **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is 72% accurate and invents sales-ready accounts from school clubs and side projects.
-- **Everything is graded**: 40 of 40 checks pass against planted ground truth, including tests of the grader itself.
+- **Everything is graded**: 40 of 40 checks pass against the expected results, including tests of the grader itself.
 
 ## Quick start
 
 ```bash
 pip install -r requirements.txt
 python run.py                 # generate data, analyze, grade, write reports/ and this README
-python -m evals.run_evals     # grade the analysis against the planted ground truth
+python -m evals.run_evals     # grade the analysis against the expected results
 ```
 
 The agent is optional and needs AWS credentials with Amazon Bedrock model access:
@@ -33,7 +33,7 @@ python -m evals.run_evals --agent      # grade the agent's answers to the golden
 
 ## Findings
 
-Each finding is checked against a planted answer. The [findings memo](reports/findings.md) has the detail.
+Each finding is checked against the expected result. The [findings memo](reports/findings.md) has the detail.
 
 ### 1. Activation is the first agent action, not the first question
 
@@ -207,7 +207,7 @@ New guidelines compile live with AWS credentials; the examples also ship with re
 
 ```
 sangam/
-  generate.py    synthetic users, accounts, events, shares, workspaces; planted effects and noise
+  generate.py    synthetic users, accounts, events, shares, workspaces; configurable effects and noise
   identity.py    resolve self-serve users to companies by email domain
   dhruva.py      the governed metric layer: one definition of "active", "retained", "activated"
   cohorts.py     retention, activation, breadth, Simpson's-paradox check
@@ -245,7 +245,7 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
   PASS  All webinar spikes flagged, no false flags
   PASS  Account-level design recovers true lift (within 1.5 pts)
   PASS  User-level design underestimates (interference)
-  PASS  Sales trigger recovers the planted tipping point (5 activated users)
+  PASS  Sales trigger recovers the configured tipping point (5 activated users)
   PASS  Activated-user trigger beats a sign-up-count trigger (higher F1 and precision)
   PASS  Teammate invites retain best; invites and LinkedIn lead on pipeline
   PASS  Low-intent social channels rank in the bottom half on retention
@@ -265,11 +265,11 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
   PASS  Stage-aware rewards keep the pipeline gains at a fraction of the cost
 [policy]
   PASS  Sound guidelines: no warnings, and activation gains at a low reward cost
-  PASS  Sloppy guidelines: every planted problem is flagged in plain language
+  PASS  Sloppy guidelines: every seeded problem is flagged in plain language
   PASS  Ambiguous guidelines: questions raised, simulation and approval blocked
   PASS  Cards and warnings contain no field names or code
   PASS  Card states what the guidelines said
-  PASS  Compile grader passes reviewed compilations and catches planted mistakes
+  PASS  Compile grader passes reviewed compilations and catches seeded mistakes
 [rubric_self_test]
   PASS  Rubric separates good from bad answer: activation-definition
   PASS  Rubric separates good from bad answer: headline-retention
@@ -283,7 +283,7 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
 
 ## Limits
 
-- Planted effects are deliberately clear; real data is noisier. Thresholds are starting points to tune against real outcomes.
+- Synthetic effects are cleaner than real ones; real data is noisier. Thresholds are starting points to tune against real outcomes.
 - The sales trigger is fit on 170 contracts, so several rules tie; refit it as contracts accumulate and by segment.
 - Activation and channel findings are observational. Only experiments settle cause.
 - The reward simulation rests on stated behavioral assumptions (`BEHAVIOR` in `sangam/policy.py`); its value is the measurement design. Viral coefficients are single-generation.

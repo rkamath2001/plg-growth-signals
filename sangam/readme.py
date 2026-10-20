@@ -143,14 +143,14 @@ def render(r: dict, ev: dict, path: Path) -> None:
 - **Pay sharing rewards when the recipient completes a first agent action, and tie them to the account's stage**: same-company shares before a contract, external shares after it. In simulation that keeps the same pipeline gains as uniform rewards while paying {sa['rewards_paid']:,} rewards instead of {wt['rewards_paid']:,}.
 - **Reward policy is written in plain language.** Teams submit prose guidelines and approve a plain-English card; the framework flags pay-per-share and uncapped schemes, and asks rather than guesses when wording is ambiguous.
 - **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is {_pct(con['naive']['precision'])} accurate and invents sales-ready accounts from school clubs and side projects.
-- **Everything is graded**: {passed} of {total} checks pass against planted ground truth, including tests of the grader itself.
+- **Everything is graded**: {passed} of {total} checks pass against the expected results, including tests of the grader itself.
 
 ## Quick start
 
 ```bash
 pip install -r requirements.txt
 python run.py                 # generate data, analyze, grade, write reports/ and this README
-python -m evals.run_evals     # grade the analysis against the planted ground truth
+python -m evals.run_evals     # grade the analysis against the expected results
 ```
 
 The agent is optional and needs AWS credentials with Amazon Bedrock model access:
@@ -164,7 +164,7 @@ python -m evals.run_evals --agent      # grade the agent's answers to the golden
 
 ## Findings
 
-Each finding is checked against a planted answer. The [findings memo](reports/findings.md) has the detail.
+Each finding is checked against the expected result. The [findings memo](reports/findings.md) has the detail.
 
 ### 1. Activation is the first agent action, not the first question
 
@@ -275,7 +275,7 @@ New guidelines compile live with AWS credentials; the examples also ship with re
 
 ```
 sangam/
-  generate.py    synthetic users, accounts, events, shares, workspaces; planted effects and noise
+  generate.py    synthetic users, accounts, events, shares, workspaces; configurable effects and noise
   identity.py    resolve self-serve users to companies by email domain
   dhruva.py      the governed metric layer: one definition of "active", "retained", "activated"
   cohorts.py     retention, activation, breadth, Simpson's-paradox check
@@ -308,7 +308,7 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
 
 ## Limits
 
-- Planted effects are deliberately clear; real data is noisier. Thresholds are starting points to tune against real outcomes.
+- Synthetic effects are cleaner than real ones; real data is noisier. Thresholds are starting points to tune against real outcomes.
 - The sales trigger is fit on {n_contracts} contracts, so several rules tie; refit it as contracts accumulate and by segment.
 - Activation and channel findings are observational. Only experiments settle cause.
 - The reward simulation rests on stated behavioral assumptions (`BEHAVIOR` in `sangam/policy.py`); its value is the measurement design. Viral coefficients are single-generation.
