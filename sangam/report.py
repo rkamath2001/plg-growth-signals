@@ -263,7 +263,7 @@ def loops_chart(loops: dict, path: Path):
     from .loops import LOOP_LABEL
     sc = loops["scorecard"]
     fig, ax = _fig()
-    offsets = {"embed": (-12, 40), "digest": (12, -2), "agent": (12, 14), "asset": (12, -10)}
+    offsets = {"embed": (-12, 40), "digest": (12, -2), "agent": (12, 14), "asset": (12, 16)}
     for r in sc:
         x, y = r["median_cycle_days"], r["k_activated_per_100"]
         size = 40 + r["shares"] / 120

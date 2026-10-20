@@ -4,6 +4,6 @@
   "n_contract_accounts": 60,
   "n_hot_pqa": 30,
   "n_webinar_noise": 12,
-  "n_selfserve_background": 9000,
+  "n_selfserve_background": 13000,
   "internal_seats": 3500
 }

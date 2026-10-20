@@ -50,7 +50,9 @@ import numpy as np
 import pandas as pd
 
 START_DATE = pd.Timestamp("2026-03-02")  # a Monday; week 0
-SIGNUP_WEEKS = 12                         # users sign up in weeks 0..11
+SIGNUP_WEEKS = 19                         # self-serve users sign up in weeks 0..18
+ROLLOUT_WEEKS = 19                        # enterprise pilots start through week 14 and expand by week 18
+WEEKLY_GROWTH = 1.04                      # self-serve sign-ups grow about 4% a week
 OBSERVE_WEEKS = 20                        # activity observed through week 19
 
 INDUSTRIES = ["financial services", "retail", "healthcare", "manufacturing",
@@ -113,7 +115,7 @@ class Config:
     n_contract_accounts: int = 60
     n_hot_pqa: int = 30          # true product-qualified accounts (signal)
     n_webinar_noise: int = 12    # signup spikes with no activation (noise)
-    n_selfserve_background: int = 9000
+    n_selfserve_background: int = 13000
     internal_seats: int = 3500
 
 
@@ -173,11 +175,11 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
     # Enterprise rollouts: contract accounts, pilot wave then expansion wave.
     for _, acc in accounts[accounts.segment == "contract"].iterrows():
         seats = int(rng.integers(40, 400))
-        pilot_week = int(rng.integers(0, 6))
+        pilot_week = int(rng.integers(0, 15))
         pilot_n = max(10, seats // 4)
         wave = np.where(np.arange(seats) < pilot_n, 1, 2)
         week = np.where(wave == 1, pilot_week,
-                        np.minimum(pilot_week + rng.integers(4, 8), SIGNUP_WEEKS - 1))
+                        np.minimum(pilot_week + rng.integers(4, 8), ROLLOUT_WEEKS - 1))
         parts.append(_user_rows(
             rng, seats, channel="enterprise", provider="sso",
             account_id=acc.account_id, domain=acc.domain,
@@ -191,6 +193,12 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
         domain="customerzero.example", function=rng.choice(FUNCTIONS, n),
         signup_week=rng.integers(0, 4, n), plan="enterprise",
         wave=np.where(rng.random(n) < 0.3, 1, 2), source="internal_rollout"))
+
+    w = WEEKLY_GROWTH ** np.arange(SIGNUP_WEEKS)
+    week_p = w / w.sum()
+
+    def weeks(n):
+        return rng.choice(SIGNUP_WEEKS, n, p=week_p)
 
     def mix(kind, n):
         return rng.choice(SOURCES, n, p=SOURCE_MIX[kind])
@@ -228,7 +236,7 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
         doms[idx] = pick.domain.to_numpy()
     src = np.where(kind == "personal", mix("personal", n), mix("corporate", n))
     parts.append(selfserve(n, acct_ids, doms, rng.choice(FUNCTIONS, n),
-                           rng.integers(0, SIGNUP_WEEKS, n), src,
+                           weeks(n), src,
                            np.where(kind == "personal", "personal", "corporate")))
 
     # Hot PQAs: clusters of independent adopters across 3+ functions.
@@ -237,7 +245,7 @@ def _users(rng: np.random.Generator, cfg: Config, accounts: pd.DataFrame) -> pd.
         fns = rng.choice(FUNCTIONS, k)
         fns[:3] = rng.choice(FUNCTIONS, 3, replace=False)  # guarantee breadth
         parts.append(selfserve(k, [acc.account_id] * k, [acc.domain] * k, fns,
-                               rng.integers(0, SIGNUP_WEEKS, k), mix("hot", k)))
+                               weeks(k), mix("hot", k)))
 
     # Webinar noise: a burst of signups in a single week, one function.
     for _, acc in accounts[accounts.segment == "prospect_webinar"].iterrows():

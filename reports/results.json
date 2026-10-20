@@ -1,49 +1,49 @@
 {
   "north_star": {
     "definition": "Weekly agent-active users: users completing at least one agent action in the week, external users only.",
-    "peak_weekly_agent_active_users": 7825,
-    "peak_week": 11,
-    "agent_active_rate_activated": 0.5016,
-    "agent_active_rate_question_only": 0.1114,
+    "peak_weekly_agent_active_users": 7433,
+    "peak_week": 18,
+    "agent_active_rate_activated": 0.496,
+    "agent_active_rate_question_only": 0.1087,
     "internal_excluded_users": 3500
   },
   "headline_inflation": {
     "question": "Does the internal deployment distort headline retention?",
-    "w8_retention_all_users": 0.327,
-    "n_all": 29421,
-    "w8_retention_external_only": 0.268,
-    "n_external": 25921,
-    "w8_retention_internal_only": 0.766,
+    "w8_retention_all_users": 0.341,
+    "n_all": 20973,
+    "w8_retention_external_only": 0.258,
+    "n_external": 17473,
+    "w8_retention_internal_only": 0.756,
     "n_internal": 3500,
-    "inflation_points": 5.9,
-    "finding": "Including customer zero raises W8 retention from 27% to 33%. Report external users separately; internal use is mandated."
+    "inflation_points": 8.3,
+    "finding": "Including customer zero raises W8 retention from 26% to 34%. Report external users separately; internal use is mandated."
   },
   "activation_test": {
     "question": "Is activation the first agent action or the first question?",
     "cohorts": {
       "agent_action": {
-        "w8_retention": 0.447472,
-        "n": 11413
+        "w8_retention": 0.434852,
+        "n": 7483
       },
       "question_only": {
-        "w8_retention": 0.145198,
-        "n": 11350
+        "w8_retention": 0.142693,
+        "n": 7835
       },
       "neither": {
-        "w8_retention": 0.059215,
-        "n": 3158
+        "w8_retention": 0.062181,
+        "n": 2155
       }
     },
-    "lift_agent_vs_question": 0.302,
+    "lift_agent_vs_question": 0.292,
     "ci95": [
-      0.292,
-      0.314
+      0.279,
+      0.307
     ],
     "lift_within_segment": {
-      "enterprise_external": 0.314,
-      "self_serve": 0.286
+      "enterprise_external": 0.294,
+      "self_serve": 0.289
     },
-    "finding": "Users who complete an agent action in week 0 retain at 45% at W8, vs 15% for question-only users (+30%, 95% CI +29% to +31%). The gap holds in every segment. Define activation as the first completed agent action.",
+    "finding": "Users who complete an agent action in week 0 retain at 43% at W8, vs 14% for question-only users (+29%, 95% CI +28% to +31%). The gap holds in every segment. Define activation as the first completed agent action.",
     "caveat": "Observational: high-intent users do both. Confirm with an onboarding experiment that nudges a first agent action."
   },
   "connector_breadth": {
@@ -51,20 +51,20 @@
     "table": [
       {
         "connectors_w0": "3+",
-        "w8_retention": 0.489,
-        "n": 7784,
+        "w8_retention": 0.477,
+        "n": 4953,
         "too_small": false
       },
       {
         "connectors_w0": "1-2",
-        "w8_retention": 0.193,
-        "n": 12589,
+        "w8_retention": 0.192,
+        "n": 8582,
         "too_small": false
       },
       {
         "connectors_w0": "0",
-        "w8_retention": 0.127,
-        "n": 5548,
+        "w8_retention": 0.126,
+        "n": 3938,
         "too_small": false
       }
     ],
@@ -72,84 +72,84 @@
   },
   "simpson_check": {
     "question": "Does 'desktop' really lift retention?",
-    "aggregate_lift": 0.184,
+    "aggregate_lift": 0.231,
     "within_segment_lift": {
-      "enterprise_external": 0.007,
-      "internal": -0.005,
-      "self_serve": -0.017
+      "enterprise_external": 0.009,
+      "internal": 0.002,
+      "self_serve": 0.0
     },
-    "weighted_within_lift": -0.006,
+    "weighted_within_lift": 0.004,
     "adoption_by_segment": {
       "enterprise_external": 0.3,
       "internal": 0.9,
       "self_serve": 0.15
     },
     "confounded": true,
-    "finding": "In aggregate, 'desktop' users retain +18% better, but inside each segment the difference is about -1%. The aggregate lift comes from mix: the internal rollout installed it by default. Do not claim it as a retention driver."
+    "finding": "In aggregate, 'desktop' users retain +23% better, but inside each segment the difference is about +0%. The aggregate lift comes from mix: the internal rollout installed it by default. Do not claim it as a retention driver."
   },
   "channel_view": {
     "question": "How do channels and sign-in providers compare?",
     "by_segment": [
       {
         "segment": "internal",
-        "w8_retention": 0.766,
+        "w8_retention": 0.756,
         "n": 3500,
         "too_small": false
       },
       {
         "segment": "enterprise_external",
-        "w8_retention": 0.328,
-        "n": 13183,
+        "w8_retention": 0.323,
+        "n": 8007,
         "too_small": false
       },
       {
         "segment": "self_serve",
-        "w8_retention": 0.206,
-        "n": 12738,
+        "w8_retention": 0.203,
+        "n": 9466,
         "too_small": false
       }
     ],
     "by_provider": [
       {
         "provider": "sso",
-        "w8_retention": 0.328,
-        "n": 13183,
-        "too_small": false
-      },
-      {
-        "provider": "microsoft",
-        "w8_retention": 0.232,
-        "n": 1135,
+        "w8_retention": 0.323,
+        "n": 8007,
         "too_small": false
       },
       {
         "provider": "github",
-        "w8_retention": 0.224,
-        "n": 1343,
+        "w8_retention": 0.243,
+        "n": 1014,
         "too_small": false
       },
       {
         "provider": "google",
-        "w8_retention": 0.214,
-        "n": 5199,
+        "w8_retention": 0.21,
+        "n": 3816,
+        "too_small": false
+      },
+      {
+        "provider": "email",
+        "w8_retention": 0.204,
+        "n": 1643,
         "too_small": false
       },
       {
         "provider": "apple",
         "w8_retention": 0.188,
-        "n": 1850,
+        "n": 1418,
         "too_small": false
       },
       {
-        "provider": "email",
-        "w8_retention": 0.187,
-        "n": 2293,
+        "provider": "microsoft",
+        "w8_retention": 0.184,
+        "n": 860,
         "too_small": false
       },
       {
         "provider": "amazon",
-        "w8_retention": 0.184,
-        "n": 918,
+        "w8_retention": 0.159,
+        "n": 715,
         "too_small": false
       }
     ],
@@ -161,26 +161,26 @@
     "hot_accounts_in_test": 30,
     "true_effect": 0.04,
     "account_level_estimate": {
-      "mean": 0.039,
-      "p05": -0.031,
-      "p95": 0.101
+      "mean": 0.04,
+      "p05": -0.024,
+      "p95": 0.099
     },
     "user_level_estimate": {
-      "mean": 0.018,
-      "p05": -0.009,
-      "p95": 0.044
+      "mean": 0.017,
+      "p05": -0.008,
+      "p95": 0.042
     },
     "finding": "Randomizing by account recovers the true lift (~+4% vs a true +4%). Randomizing users inside the same company shows ~+2%, because colleagues share the outcome. Test sales plays at the account level, and keep a standing holdout so outreach can prove its own lift."
   },
   "sales_trigger": {
     "question": "How many independent adopters should a company have before we start an enterprise sales motion?",
-    "baseline_conversion": 0.146,
+    "baseline_conversion": 0.202,
     "recommended_rule": {
-      "accounts_flagged": 145,
-      "contracts_captured": 73,
-      "precision": 0.503,
-      "recall": 0.593,
-      "f1": 0.545,
+      "accounts_flagged": 180,
+      "contracts_captured": 103,
+      "precision": 0.572,
+      "recall": 0.606,
+      "f1": 0.589,
       "min_activated": 5,
       "min_functions": 1
     },
@@ -193,75 +193,75 @@
       "5+ users across 3+ functions"
     ],
     "signup_count_rule": {
-      "accounts_flagged": 236,
-      "contracts_captured": 76,
-      "precision": 0.322,
-      "recall": 0.618,
-      "f1": 0.423,
+      "accounts_flagged": 321,
+      "contracts_captured": 122,
+      "precision": 0.38,
+      "recall": 0.718,
+      "f1": 0.497,
       "min_signups": 8
     },
-    "lift_over_baseline": 3.4,
+    "lift_over_baseline": 2.8,
     "tiers": {
       "sales_motion": {
         "rule": "5+ activated users",
-        "accounts": 145,
-        "conversion": 0.503
+        "accounts": 180,
+        "conversion": 0.572
       },
       "warm_champion": {
         "rule": "4 activated users",
-        "accounts": 99,
-        "conversion": 0.242
+        "accounts": 143,
+        "conversion": 0.273
       },
       "self_serve": {
         "rule": "fewer than 4",
-        "accounts": 596,
-        "conversion": 0.044
+        "accounts": 517,
+        "conversion": 0.054
       }
     },
-    "finding": "Start an enterprise sales motion at 5+ activated independent users. Those companies convert at 50% versus a 15% baseline (3.4x); the rule captures 59% of contracts while flagging 145 accounts. At 4 activated users conversion is 24%: run champion enablement there, not sales. Requiring a minimum number of functions did not beat the simple count within noise. The best sign-up-count rule scores F1 0.42 against 0.55, because sign-ups include event spikes that never activate.",
-    "caveat": "Fit on 123 contracts: 6 rules are statistically tied, so the simplest was chosen. Counts only users resolvable to a company by email domain, so the true number of adopters is higher. Refit each quarter and by segment as outcomes accumulate.",
+    "finding": "Start an enterprise sales motion at 5+ activated independent users. Those companies convert at 57% versus a 20% baseline (2.8x); the rule captures 61% of contracts while flagging 180 accounts. At 4 activated users conversion is 27%: run champion enablement there, not sales. Requiring a minimum number of functions did not beat the simple count within noise. The best sign-up-count rule scores F1 0.50 against 0.59, because sign-ups include event spikes that never activate.",
+    "caveat": "Fit on 170 contracts: 6 rules are statistically tied, so the simplest was chosen. Counts only users resolvable to a company by email domain, so the true number of adopters is higher. Refit each quarter and by segment as outcomes accumulate.",
     "conversion_by_activated_users": [
       {
         "activated_users": "0",
-        "conversion_rate": 0.041,
-        "accounts": 73,
-        "contracts": 3
+        "conversion_rate": 0.036,
+        "accounts": 55,
+        "contracts": 2
       },
       {
         "activated_users": "1",
-        "conversion_rate": 0.019,
-        "accounts": 155,
-        "contracts": 3
+        "conversion_rate": 0.007,
+        "accounts": 136,
+        "contracts": 1
       },
       {
         "activated_users": "2",
-        "conversion_rate": 0.049,
-        "accounts": 203,
-        "contracts": 10
+        "conversion_rate": 0.041,
+        "accounts": 169,
+        "contracts": 7
       },
       {
         "activated_users": "3",
-        "conversion_rate": 0.061,
-        "accounts": 165,
-        "contracts": 10
+        "conversion_rate": 0.115,
+        "accounts": 157,
+        "contracts": 18
       },
       {
         "activated_users": "4",
-        "conversion_rate": 0.242,
-        "accounts": 99,
-        "contracts": 24
+        "conversion_rate": 0.273,
+        "accounts": 143,
+        "contracts": 39
       },
       {
         "activated_users": "5-7",
-        "conversion_rate": 0.438,
-        "accounts": 112,
-        "contracts": 49
+        "conversion_rate": 0.496,
+        "accounts": 133,
+        "contracts": 66
       },
       {
         "activated_users": "8+",
-        "conversion_rate": 0.727,
-        "accounts": 33,
-        "contracts": 24
+        "conversion_rate": 0.787,
+        "accounts": 47,
+        "contracts": 37
       }
     ]
   },
@@ -270,131 +270,131 @@
     "table": [
       {
         "source": "teammate_invite",
-        "signups": 1147,
-        "activation_rate": 0.542,
-        "w8_retention": 0.276,
-        "company_resolved": 0.628,
-        "sales_ready_accounts": 33,
-        "contracts_sourced": 28,
-        "retained_per_100": 27.6,
-        "ready_per_1k": 28.8,
+        "signups": 1630,
+        "activation_rate": 0.547,
+        "w8_retention": 0.252,
+        "company_resolved": 0.618,
+        "sales_ready_accounts": 41,
+        "contracts_sourced": 32,
+        "retained_per_100": 25.2,
+        "ready_per_1k": 25.2,
         "too_small": false,
-        "by_volume": 7,
+        "by_volume": 6,
         "by_retention": 1,
         "by_pipeline": 1
       },
       {
         "source": "linkedin",
-        "signups": 1386,
-        "activation_rate": 0.455,
-        "w8_retention": 0.229,
-        "company_resolved": 0.606,
-        "sales_ready_accounts": 37,
-        "contracts_sourced": 23,
-        "retained_per_100": 22.9,
-        "ready_per_1k": 26.7,
+        "signups": 1949,
+        "activation_rate": 0.466,
+        "w8_retention": 0.223,
+        "company_resolved": 0.594,
+        "sales_ready_accounts": 30,
+        "contracts_sourced": 34,
+        "retained_per_100": 22.3,
+        "ready_per_1k": 15.4,
         "too_small": false,
         "by_volume": 2,
         "by_retention": 2,
         "by_pipeline": 2
       },
       {
-        "source": "direct",
-        "signups": 1149,
-        "activation_rate": 0.417,
-        "w8_retention": 0.198,
-        "company_resolved": 0.366,
-        "sales_ready_accounts": 18,
-        "contracts_sourced": 14,
-        "retained_per_100": 19.8,
-        "ready_per_1k": 15.7,
+        "source": "search",
+        "signups": 2807,
+        "activation_rate": 0.413,
+        "w8_retention": 0.204,
+        "company_resolved": 0.354,
+        "sales_ready_accounts": 42,
+        "contracts_sourced": 33,
+        "retained_per_100": 20.4,
+        "ready_per_1k": 15.0,
         "too_small": false,
-        "by_volume": 6,
+        "by_volume": 1,
         "by_retention": 3,
         "by_pipeline": 3
       },
       {
-        "source": "search",
-        "signups": 1970,
-        "activation_rate": 0.417,
-        "w8_retention": 0.188,
-        "company_resolved": 0.363,
-        "sales_ready_accounts": 20,
-        "contracts_sourced": 24,
-        "retained_per_100": 18.8,
-        "ready_per_1k": 10.2,
+        "source": "direct",
+        "signups": 1630,
+        "activation_rate": 0.389,
+        "w8_retention": 0.183,
+        "company_resolved": 0.338,
+        "sales_ready_accounts": 17,
+        "contracts_sourced": 17,
+        "retained_per_100": 18.3,
+        "ready_per_1k": 10.4,
         "too_small": false,
-        "by_volume": 1,
+        "by_volume": 6,
         "by_retention": 4,
         "by_pipeline": 4
       },
       {
-        "source": "reddit",
-        "signups": 1288,
-        "activation_rate": 0.323,
-        "w8_retention": 0.141,
-        "company_resolved": 0.147,
-        "sales_ready_accounts": 11,
-        "contracts_sourced": 10,
-        "retained_per_100": 14.1,
-        "ready_per_1k": 8.5,
+        "source": "webinar",
+        "signups": 304,
+        "activation_rate": 0.102,
+        "w8_retention": 0.008,
+        "company_resolved": 0.878,
+        "sales_ready_accounts": 3,
+        "contracts_sourced": 1,
+        "retained_per_100": 0.8,
+        "ready_per_1k": 9.9,
         "too_small": false,
-        "by_volume": 4,
-        "by_retention": 7,
+        "by_volume": 8,
+        "by_retention": 8,
         "by_pipeline": 5
       },
       {
         "source": "x",
-        "signups": 1311,
-        "activation_rate": 0.341,
-        "w8_retention": 0.159,
-        "company_resolved": 0.192,
-        "sales_ready_accounts": 10,
-        "contracts_sourced": 7,
-        "retained_per_100": 15.9,
-        "ready_per_1k": 7.6,
+        "signups": 1840,
+        "activation_rate": 0.323,
+        "w8_retention": 0.153,
+        "company_resolved": 0.198,
+        "sales_ready_accounts": 15,
+        "contracts_sourced": 18,
+        "retained_per_100": 15.3,
+        "ready_per_1k": 8.2,
         "too_small": false,
         "by_volume": 3,
         "by_retention": 6,
         "by_pipeline": 6
       },
       {
-        "source": "webinar",
-        "signups": 277,
-        "activation_rate": 0.119,
-        "w8_retention": 0.004,
-        "company_resolved": 0.874,
-        "sales_ready_accounts": 2,
-        "contracts_sourced": 2,
-        "retained_per_100": 0.4,
-        "ready_per_1k": 7.2,
+        "source": "youtube",
+        "signups": 1829,
+        "activation_rate": 0.363,
+        "w8_retention": 0.173,
+        "company_resolved": 0.262,
+        "sales_ready_accounts": 14,
+        "contracts_sourced": 14,
+        "retained_per_100": 17.3,
+        "ready_per_1k": 7.7,
         "too_small": false,
-        "by_volume": 8,
-        "by_retention": 8,
+        "by_volume": 4,
+        "by_retention": 5,
         "by_pipeline": 7
       },
       {
-        "source": "youtube",
-        "signups": 1227,
-        "activation_rate": 0.4,
-        "w8_retention": 0.166,
-        "company_resolved": 0.242,
-        "sales_ready_accounts": 6,
+        "source": "reddit",
+        "signups": 1813,
+        "activation_rate": 0.311,
+        "w8_retention": 0.134,
+        "company_resolved": 0.135,
+        "sales_ready_accounts": 4,
         "contracts_sourced": 4,
-        "retained_per_100": 16.6,
-        "ready_per_1k": 4.9,
+        "retained_per_100": 13.4,
+        "ready_per_1k": 2.2,
         "too_small": false,
         "by_volume": 5,
-        "by_retention": 5,
+        "by_retention": 7,
         "by_pipeline": 8
       }
     ],
     "attribution": "first-touch at the account level; last-touch at the user level",
-    "loop_users": 5242,
-    "loop_share_of_activated_users_at_ready_accounts": 0.496,
-    "loop_share_of_first_touch_credit": 0.055,
-    "attribution_note": "Viral-loop recipients are 50% of the activated users at sales-ready accounts but get first-touch credit for only 6% of those accounts. First-touch attribution undervalues expansion loops by design, so loops are measured separately, on the prospects they push over the sales trigger.",
-    "finding": "Rankings disagree. 'search' brings the most sign-ups, but 'teammate_invite' produces the most sales-ready accounts per 1,000 sign-ups (28.8) and retains 28% at week 8. 'webinar' and 'reddit' retain worst. Invest in invite loops and work-identity channels for pipeline; judge broad social channels on retained users, not sign-ups. Pipeline ranks for 'webinar' rest on fewer than 5 accounts; treat that rank as noise.",
+    "loop_users": 4532,
+    "loop_share_of_activated_users_at_ready_accounts": 0.363,
+    "loop_share_of_first_touch_credit": 0.078,
+    "attribution_note": "Viral-loop recipients are 36% of the activated users at sales-ready accounts but get first-touch credit for only 8% of those accounts. First-touch attribution undervalues expansion loops by design, so loops are measured separately, on the prospects they push over the sales trigger.",
+    "finding": "Rankings disagree. 'search' brings the most sign-ups, but 'teammate_invite' produces the most sales-ready accounts per 1,000 sign-ups (25.2) and retains 25% at week 8. 'webinar' and 'reddit' retain worst. Invest in invite loops and work-identity channels for pipeline; judge broad social channels on retained users, not sign-ups. Pipeline ranks for 'webinar', 'reddit' rest on fewer than 5 accounts each; treat their order as noise.",
     "caveat": "Channels and intent are entangled: invited users arrive with a colleague's context. Test channel spend with geo or time holdouts before reallocating budget."
   },
   "provider_ranking": {
@@ -402,69 +402,69 @@
     "table": [
       {
         "provider": "microsoft",
-        "signups": 1392,
-        "activation_rate": 0.46,
-        "w8_retention": 0.232,
-        "company_resolved": 0.613,
+        "signups": 1630,
+        "activation_rate": 0.403,
+        "w8_retention": 0.184,
+        "company_resolved": 0.58,
         "private_relay": 0.0,
-        "users_at_ready_accounts": 247,
-        "ready_users_per_1k": 177.4,
+        "users_at_ready_accounts": 309,
+        "ready_users_per_1k": 189.6,
         "by_volume": 5,
-        "by_retention": 1,
+        "by_retention": 5,
         "by_visibility": 1,
         "by_pipeline": 1
       },
       {
         "provider": "email",
-        "signups": 2674,
-        "activation_rate": 0.432,
-        "w8_retention": 0.187,
-        "company_resolved": 0.582,
+        "signups": 3165,
+        "activation_rate": 0.43,
+        "w8_retention": 0.204,
+        "company_resolved": 0.545,
         "private_relay": 0.0,
-        "users_at_ready_accounts": 436,
-        "ready_users_per_1k": 163.1,
+        "users_at_ready_accounts": 509,
+        "ready_users_per_1k": 160.8,
         "by_volume": 2,
-        "by_retention": 5,
+        "by_retention": 3,
         "by_visibility": 2,
         "by_pipeline": 2
       },
       {
         "provider": "google",
-        "signups": 6149,
-        "activation_rate": 0.457,
-        "w8_retention": 0.214,
-        "company_resolved": 0.503,
+        "signups": 7468,
+        "activation_rate": 0.439,
+        "w8_retention": 0.21,
+        "company_resolved": 0.492,
         "private_relay": 0.0,
-        "users_at_ready_accounts": 890,
-        "ready_users_per_1k": 144.7,
+        "users_at_ready_accounts": 1157,
+        "ready_users_per_1k": 154.9,
         "by_volume": 1,
-        "by_retention": 3,
+        "by_retention": 2,
         "by_visibility": 3,
         "by_pipeline": 3
       },
       {
         "provider": "github",
-        "signups": 1581,
-        "activation_rate": 0.479,
-        "w8_retention": 0.224,
-        "company_resolved": 0.295,
+        "signups": 1925,
+        "activation_rate": 0.456,
+        "w8_retention": 0.243,
+        "company_resolved": 0.274,
         "private_relay": 0.0,
-        "users_at_ready_accounts": 142,
-        "ready_users_per_1k": 89.8,
+        "users_at_ready_accounts": 154,
+        "ready_users_per_1k": 80.0,
         "by_volume": 4,
-        "by_retention": 2,
+        "by_retention": 1,
         "by_visibility": 4,
         "by_pipeline": 4
       },
       {
         "provider": "apple",
-        "signups": 2156,
-        "activation_rate": 0.406,
+        "signups": 2734,
+        "activation_rate": 0.396,
         "w8_retention": 0.188,
-        "company_resolved": 0.086,
-        "private_relay": 0.594,
-        "users_at_ready_accounts": 55,
-        "ready_users_per_1k": 25.5,
+        "company_resolved": 0.074,
+        "private_relay": 0.608,
+        "users_at_ready_accounts": 54,
+        "ready_users_per_1k": 19.8,
         "by_volume": 3,
         "by_retention": 4,
         "by_visibility": 5,
@@ -472,91 +472,91 @@
       },
       {
         "provider": "amazon",
-        "signups": 1045,
-        "activation_rate": 0.37,
-        "w8_retention": 0.184,
-        "company_resolved": 0.036,
+        "signups": 1412,
+        "activation_rate": 0.368,
+        "w8_retention": 0.159,
+        "company_resolved": 0.037,
         "private_relay": 0.0,
-        "users_at_ready_accounts": 10,
-        "ready_users_per_1k": 9.6,
+        "users_at_ready_accounts": 13,
+        "ready_users_per_1k": 9.2,
         "by_volume": 6,
         "by_retention": 6,
         "by_visibility": 6,
         "by_pipeline": 6
       }
     ],
-    "finding": "Provider decides visibility more than quality. 50% of Google and 58% of email sign-ups can be tied to a company, versus 4% for 'amazon' and 9% for 'apple'. 'microsoft' users retain best (23%), consistent with a builder persona. The pipeline ranking mostly mirrors visibility: an account you cannot see never reaches the sales trigger.",
+    "finding": "Provider decides visibility more than quality. 49% of Google and 55% of email sign-ups can be tied to a company, versus 4% for 'amazon' and 7% for 'apple'. 'github' users retain best (24%), consistent with a builder persona. The pipeline ranking mostly mirrors visibility: an account you cannot see never reaches the sales trigger.",
     "caveat": "Provider retention differences are small and partly persona mix; do not steer users between sign-in options on retention alone."
   },
   "work_email_whatif": {
     "question": "What if hidden adopters added a work email?",
-    "hidden_adopters_at_prospects": 1015,
+    "hidden_adopters_at_prospects": 1034,
     "hidden_by_provider": {
-      "apple": 319,
-      "github": 317,
-      "microsoft": 144,
-      "amazon": 120,
-      "google": 82,
-      "email": 33
+      "github": 357,
+      "apple": 320,
+      "microsoft": 172,
+      "amazon": 104,
+      "google": 66,
+      "email": 15
     },
-    "ready_accounts_visible_today": 145,
-    "ready_accounts_if_all_visible": 207,
+    "ready_accounts_visible_today": 180,
+    "ready_accounts_if_all_visible": 266,
     "uptake_assumed": 0.3,
-    "extra_ready_accounts_at_uptake": 18.2,
-    "extra_ready_that_converted": 22,
-    "finding": "1015 self-serve users at prospect companies are invisible today, mostly via apple, github sign-ins. If 30% added a work email, about 18 more companies would cross the sales trigger, on top of 145 visible today; with full visibility, 62 more would. A 'connect your work email to share with your team' prompt is a pipeline lever, not just an identity feature.",
+    "extra_ready_accounts_at_uptake": 24.8,
+    "extra_ready_that_converted": 42,
+    "finding": "1034 self-serve users at prospect companies are invisible today, mostly via github, apple sign-ins. If 30% added a work email, about 25 more companies would cross the sales trigger, on top of 180 visible today; with full visibility, 86 more would. A 'connect your work email to share with your team' prompt is a pipeline lever, not just an identity feature.",
     "method": "Simulation on synthetic ground truth; real uptake must be measured with an A/B test of the prompt."
   },
   "connector_identity": {
-    "hidden_employed_users": 1092,
-    "truth_ready_accounts": 207,
+    "hidden_employed_users": 1192,
+    "truth_ready_accounts": 266,
     "email_only": {
-      "ready_accounts": 145,
-      "correct_ready": 145,
+      "ready_accounts": 180,
+      "correct_ready": 180,
       "phantom_ready": 0
     },
     "naive": {
-      "users_attributed": 701,
-      "correct": 490,
-      "wrong": 211,
-      "precision": 0.699,
-      "recall_of_hidden": 0.449,
-      "ready_accounts": 177,
-      "correct_ready": 168,
+      "users_attributed": 790,
+      "correct": 566,
+      "wrong": 224,
+      "precision": 0.716,
+      "recall_of_hidden": 0.475,
+      "ready_accounts": 232,
+      "correct_ready": 223,
       "phantom_ready": 9,
-      "new_correct_ready": 23
+      "new_correct_ready": 43
     },
     "guarded": {
-      "users_attributed": 374,
-      "correct": 374,
+      "users_attributed": 454,
+      "correct": 454,
       "wrong": 0,
       "precision": 1.0,
-      "recall_of_hidden": 0.342,
-      "ready_accounts": 163,
-      "correct_ready": 163,
+      "recall_of_hidden": 0.381,
+      "ready_accounts": 217,
+      "correct_ready": 217,
       "phantom_ready": 0,
-      "new_correct_ready": 18
+      "new_correct_ready": 37
     },
     "naive_false_positive_examples": {
-      "Lumora Makers": {
-        "users_misattributed": 16,
+      "Lumora Book Club": {
+        "users_misattributed": 19,
         "attributed_to": "Lumora Retail"
       },
-      "Quinmont Robotics Boosters": {
-        "users_misattributed": 16,
-        "attributed_to": "Quinmont Co"
+      "Lummont Hiking Club": {
+        "users_misattributed": 18,
+        "attributed_to": "Lummont Industries"
       },
-      "Rosport Makers": {
-        "users_misattributed": 16,
-        "attributed_to": "Rosport Systems"
+      "Lumton Makers": {
+        "users_misattributed": 17,
+        "attributed_to": "Lumton Partners"
       }
     },
     "naive_errors_by_guard": {
-      "community or side-project workspace": 193,
-      "guest in another company's workspace": 18
+      "community or side-project workspace": 199,
+      "guest in another company's workspace": 25
     },
     "question": "Can connected workspaces (Slack, Teams, Jira) reveal where hidden adopters work, without false positives?",
-    "finding": "Naive matching attributes 701 hidden users at 70% precision and creates 9 phantom sales-ready accounts. The worst naive error: 'Lumora Makers' put 16 unrelated users into Lumora Retail. Guarded matching attributes 374 at 100% precision, recovers 34% of hidden employees, and adds 18 genuinely sales-ready accounts with 0 phantoms. Trust a workspace's verified domain; treat names as clues that need a colleague to corroborate them; drop guests and any workspace whose members already resolve to several companies. Synthetic data makes the guards look perfect; in production, audit a sample of attributions by hand each quarter.",
+    "finding": "Naive matching attributes 790 hidden users at 72% precision and creates 9 phantom sales-ready accounts. The worst naive error: 'Lumora Book Club' put 19 unrelated users into Lumora Retail. Guarded matching attributes 454 at 100% precision, recovers 38% of hidden employees, and adds 37 genuinely sales-ready accounts with 0 phantoms. Trust a workspace's verified domain; treat names as clues that need a colleague to corroborate them; drop guests and any workspace whose members already resolve to several companies. Synthetic data makes the guards look perfect; in production, audit a sample of attributions by hand each quarter.",
     "caveat": "Workspace metadata is personal context: use it only in aggregate at the account level, within the permissions users granted, and never to contact an individual about a side project."
   },
   "viral_loops": {
@@ -564,138 +564,138 @@
     "scorecard": [
       {
         "loop": "agent",
-        "shares": 9624,
-        "view_rate": 0.792,
-        "signup_per_share": 0.342,
-        "activation_of_signups": 0.564,
-        "signups": 1625,
-        "activated_recipients": 917,
+        "shares": 10941,
+        "view_rate": 0.801,
+        "signup_per_share": 0.251,
+        "activation_of_signups": 0.562,
+        "signups": 1517,
+        "activated_recipients": 852,
         "median_cycle_days": 2.0,
-        "recipient_w8_retention": 0.307,
-        "same_company_share": 0.214,
-        "k_signups_per_100": 5.77,
-        "k_activated_per_100": 3.25,
-        "activated_per_1k_shares": 95.3
+        "recipient_w8_retention": 0.273,
+        "same_company_share": 0.24,
+        "k_signups_per_100": 4.81,
+        "k_activated_per_100": 2.7,
+        "activated_per_1k_shares": 77.9
       },
       {
         "loop": "asset",
-        "shares": 13402,
-        "view_rate": 0.71,
-        "signup_per_share": 0.172,
-        "activation_of_signups": 0.46,
-        "signups": 1844,
-        "activated_recipients": 849,
+        "shares": 15515,
+        "view_rate": 0.698,
+        "signup_per_share": 0.12,
+        "activation_of_signups": 0.455,
+        "signups": 1519,
+        "activated_recipients": 691,
         "median_cycle_days": 4.0,
-        "recipient_w8_retention": 0.239,
-        "same_company_share": 0.06,
-        "k_signups_per_100": 6.54,
-        "k_activated_per_100": 3.01,
-        "activated_per_1k_shares": 63.3
+        "recipient_w8_retention": 0.235,
+        "same_company_share": 0.07,
+        "k_signups_per_100": 4.82,
+        "k_activated_per_100": 2.19,
+        "activated_per_1k_shares": 44.5
       },
       {
         "loop": "space",
-        "shares": 5443,
-        "view_rate": 0.858,
-        "signup_per_share": 0.41,
-        "activation_of_signups": 0.648,
-        "signups": 1025,
-        "activated_recipients": 664,
-        "median_cycle_days": 6.0,
-        "recipient_w8_retention": 0.339,
+        "shares": 6185,
+        "view_rate": 0.847,
+        "signup_per_share": 0.279,
+        "activation_of_signups": 0.64,
+        "signups": 898,
+        "activated_recipients": 575,
+        "median_cycle_days": 7.0,
+        "recipient_w8_retention": 0.418,
         "same_company_share": 0.26,
-        "k_signups_per_100": 3.64,
-        "k_activated_per_100": 2.36,
-        "activated_per_1k_shares": 122.0
-      },
-      {
-        "loop": "digest",
-        "shares": 13727,
-        "view_rate": 0.505,
-        "signup_per_share": 0.027,
-        "activation_of_signups": 0.383,
-        "signups": 266,
-        "activated_recipients": 102,
-        "median_cycle_days": 17.0,
-        "recipient_w8_retention": 0.113,
-        "same_company_share": 0.092,
-        "k_signups_per_100": 0.94,
-        "k_activated_per_100": 0.36,
-        "activated_per_1k_shares": 7.4
+        "k_signups_per_100": 2.85,
+        "k_activated_per_100": 1.82,
+        "activated_per_1k_shares": 93.0
       },
       {
         "loop": "referral",
-        "shares": 1218,
-        "view_rate": 0.65,
-        "signup_per_share": 0.239,
-        "activation_of_signups": 0.307,
-        "signups": 280,
-        "activated_recipients": 86,
+        "shares": 1669,
+        "view_rate": 0.651,
+        "signup_per_share": 0.165,
+        "activation_of_signups": 0.31,
+        "signups": 268,
+        "activated_recipients": 83,
         "median_cycle_days": 3.0,
-        "recipient_w8_retention": 0.12,
-        "same_company_share": 0.075,
-        "k_signups_per_100": 0.99,
-        "k_activated_per_100": 0.31,
-        "activated_per_1k_shares": 70.6
+        "recipient_w8_retention": 0.116,
+        "same_company_share": 0.06,
+        "k_signups_per_100": 0.85,
+        "k_activated_per_100": 0.26,
+        "activated_per_1k_shares": 49.7
+      },
+      {
+        "loop": "digest",
+        "shares": 16074,
+        "view_rate": 0.499,
+        "signup_per_share": 0.016,
+        "activation_of_signups": 0.337,
+        "signups": 187,
+        "activated_recipients": 63,
+        "median_cycle_days": 16.0,
+        "recipient_w8_retention": 0.245,
+        "same_company_share": 0.111,
+        "k_signups_per_100": 0.59,
+        "k_activated_per_100": 0.2,
+        "activated_per_1k_shares": 3.9
       },
       {
         "loop": "embed",
-        "shares": 26169,
-        "view_rate": 0.306,
-        "signup_per_share": 0.016,
-        "activation_of_signups": 0.347,
-        "signups": 202,
-        "activated_recipients": 70,
-        "median_cycle_days": 12.0,
-        "recipient_w8_retention": 0.147,
-        "same_company_share": 0.22,
-        "k_signups_per_100": 0.72,
-        "k_activated_per_100": 0.25,
-        "activated_per_1k_shares": 2.7
+        "shares": 30161,
+        "view_rate": 0.307,
+        "signup_per_share": 0.009,
+        "activation_of_signups": 0.427,
+        "signups": 143,
+        "activated_recipients": 61,
+        "median_cycle_days": 13.0,
+        "recipient_w8_retention": 0.275,
+        "same_company_share": 0.229,
+        "k_signups_per_100": 0.45,
+        "k_activated_per_100": 0.19,
+        "activated_per_1k_shares": 2.0
       }
     ],
     "expand_vs_land": [
       {
         "loop": "agent",
-        "prospects_pushed_over_trigger": 46,
-        "companies_seeded": 27,
-        "seeded_that_grew_to_3_users": 21
+        "prospects_pushed_over_trigger": 39,
+        "companies_seeded": 23,
+        "seeded_that_grew_to_3_users": 19
       },
       {
         "loop": "asset",
-        "prospects_pushed_over_trigger": 63,
-        "companies_seeded": 49,
-        "seeded_that_grew_to_3_users": 35
+        "prospects_pushed_over_trigger": 50,
+        "companies_seeded": 60,
+        "seeded_that_grew_to_3_users": 51
       },
       {
         "loop": "space",
         "prospects_pushed_over_trigger": 33,
-        "companies_seeded": 7,
-        "seeded_that_grew_to_3_users": 6
+        "companies_seeded": 17,
+        "seeded_that_grew_to_3_users": 16
       },
       {
         "loop": "embed",
-        "prospects_pushed_over_trigger": 3,
-        "companies_seeded": 2,
-        "seeded_that_grew_to_3_users": 2
+        "prospects_pushed_over_trigger": 4,
+        "companies_seeded": 0,
+        "seeded_that_grew_to_3_users": 0
       },
       {
         "loop": "digest",
-        "prospects_pushed_over_trigger": 7,
-        "companies_seeded": 5,
-        "seeded_that_grew_to_3_users": 4
+        "prospects_pushed_over_trigger": 1,
+        "companies_seeded": 4,
+        "seeded_that_grew_to_3_users": 3
       },
       {
         "loop": "referral",
-        "prospects_pushed_over_trigger": 4,
-        "companies_seeded": 2,
-        "seeded_that_grew_to_3_users": 2
+        "prospects_pushed_over_trigger": 0,
+        "companies_seeded": 1,
+        "seeded_that_grew_to_3_users": 1
       }
     ],
     "reward_simulation": {
       "no_reward": {
-        "shares": 69583,
-        "signups": 5242,
-        "activated_new_users": 2688,
+        "shares": 80545,
+        "signups": 4532,
+        "activated_new_users": 2325,
         "rewards_paid": 0,
         "extra_prospects_over_trigger": 0.0,
         "extra_companies_seeded_by_customers": 0.0,
@@ -705,93 +705,457 @@
         "rewards_per_incremental_activated": null
       },
       "per_share_sent": {
-        "shares": 125249,
-        "signups": 5766,
-        "activated_new_users": 2957,
-        "rewards_paid": 125249,
-        "extra_prospects_over_trigger": 2.2,
-        "extra_companies_seeded_by_customers": 1.2,
+        "shares": 144981,
+        "signups": 4985,
+        "activated_new_users": 2558,
+        "rewards_paid": 144981,
+        "extra_prospects_over_trigger": 1.7,
+        "extra_companies_seeded_by_customers": 0.8,
         "assumption": "people blast links for credit; recipients learn to ignore them",
-        "incremental_activated": 269,
-        "north_star_lift": 135,
-        "rewards_per_incremental_activated": 465.61
+        "incremental_activated": 233,
+        "north_star_lift": 116,
+        "rewards_per_incremental_activated": 622.24
       },
       "per_signup": {
-        "shares": 97416,
-        "signups": 6186,
-        "activated_new_users": 3172,
-        "rewards_paid": 6186,
-        "extra_prospects_over_trigger": 4.0,
-        "extra_companies_seeded_by_customers": 2.2,
+        "shares": 112763,
+        "signups": 5348,
+        "activated_new_users": 2743,
+        "rewards_paid": 5348,
+        "extra_prospects_over_trigger": 3.0,
+        "extra_companies_seeded_by_customers": 1.5,
         "assumption": "sharers recruit people who sign up as a favor",
-        "incremental_activated": 484,
-        "north_star_lift": 243,
-        "rewards_per_incremental_activated": 12.78
+        "incremental_activated": 418,
+        "north_star_lift": 207,
+        "rewards_per_incremental_activated": 12.79
       },
       "per_activation": {
-        "shares": 86979,
-        "signups": 6421,
-        "activated_new_users": 3293,
-        "rewards_paid": 12198,
-        "extra_prospects_over_trigger": 5.0,
-        "extra_companies_seeded_by_customers": 2.7,
+        "shares": 100681,
+        "signups": 5552,
+        "activated_new_users": 2848,
+        "rewards_paid": 12005,
+        "extra_prospects_over_trigger": 3.7,
+        "extra_companies_seeded_by_customers": 1.9,
         "assumption": "sharers pick people who will actually use it",
-        "incremental_activated": 605,
-        "north_star_lift": 303,
-        "rewards_per_incremental_activated": 20.16
+        "incremental_activated": 523,
+        "north_star_lift": 259,
+        "rewards_per_incremental_activated": 22.95
       },
       "per_activation_weighted": {
-        "shares": 84977,
-        "signups": 6691,
-        "activated_new_users": 3461,
-        "rewards_paid": 12488,
-        "extra_prospects_over_trigger": 7.3,
-        "extra_companies_seeded_by_customers": 3.4,
+        "shares": 98317,
+        "signups": 5808,
+        "activated_new_users": 3004,
+        "rewards_paid": 12276,
+        "extra_prospects_over_trigger": 5.5,
+        "extra_companies_seeded_by_customers": 2.4,
         "assumption": "agent and space shares, which show the product working, earn more",
-        "incremental_activated": 773,
-        "north_star_lift": 388,
-        "rewards_per_incremental_activated": 16.16
+        "incremental_activated": 679,
+        "north_star_lift": 337,
+        "rewards_per_incremental_activated": 18.08
       },
       "stage_aware": {
-        "shares": 73311,
-        "signups": 5793,
-        "activated_new_users": 2982,
-        "rewards_paid": 1340,
-        "extra_prospects_over_trigger": 7.3,
-        "extra_companies_seeded_by_customers": 3.4,
+        "shares": 84741,
+        "signups": 4970,
+        "activated_new_users": 2554,
+        "rewards_paid": 1039,
+        "extra_prospects_over_trigger": 5.5,
+        "extra_companies_seeded_by_customers": 2.4,
         "assumption": "pre-contract: reward same-company shares; post-contract: reward external shares to non-customers; never pay for licensed colleagues",
-        "incremental_activated": 294,
-        "north_star_lift": 147,
-        "rewards_per_incremental_activated": 4.56
+        "incremental_activated": 229,
+        "north_star_lift": 114,
+        "rewards_per_incremental_activated": 4.54
       },
       "stage_aware_recipient": {
-        "shares": 71074,
-        "signups": 5831,
-        "activated_new_users": 3266,
-        "rewards_paid": 1624,
-        "extra_prospects_over_trigger": 13.1,
-        "extra_companies_seeded_by_customers": 6.7,
+        "shares": 82223,
+        "signups": 4996,
+        "activated_new_users": 2774,
+        "rewards_paid": 1259,
+        "extra_prospects_over_trigger": 9.6,
+        "extra_companies_seeded_by_customers": 4.6,
         "assumption": "a welcome credit nudges recipients to sign up and try an agent",
-        "incremental_activated": 578,
-        "north_star_lift": 290,
-        "rewards_per_incremental_activated": 2.81
+        "incremental_activated": 449,
+        "north_star_lift": 223,
+        "rewards_per_incremental_activated": 2.8
       },
       "stage_aware_both": {
-        "shares": 73311,
-        "signups": 6183,
-        "activated_new_users": 3491,
-        "rewards_paid": 3698,
-        "extra_prospects_over_trigger": 18.8,
-        "extra_companies_seeded_by_customers": 9.3,
+        "shares": 84741,
+        "signups": 5276,
+        "activated_new_users": 2949,
+        "rewards_paid": 2869,
+        "extra_prospects_over_trigger": 13.7,
+        "extra_companies_seeded_by_customers": 6.4,
         "assumption": "sharers pick people who will actually use it",
-        "incremental_activated": 803,
-        "north_star_lift": 403,
-        "rewards_per_incremental_activated": 4.61
+        "incremental_activated": 624,
+        "north_star_lift": 310,
+        "rewards_per_incremental_activated": 4.6
       }
     },
     "cheapest_arm": "stage_aware_recipient",
-    "finding": "'Shared agent' grows the product most (3.25 activated recipients per 100 users; 56% of its sign-ups activate) and turns fastest. 'Shared asset (URL)' is the landing loop: it seeds the most new companies (49). 'Shared space / knowledge base' recipients retain best. Embeds and digests create many impressions but convert under 3% per share, and referral credits paid on sign-up bring sign-ups of which only 31% activate. In the reward simulation, paying per share sent nearly doubles shares but adds only +269 activated users. The stage-aware policy delivers the same pipeline as uniform weighted rewards (7.3 vs 7.3 extra prospects over the trigger; 3.4 vs 3.4 companies seeded by customers) while paying 1,340 rewards instead of 12,488. Uniform rewards buy more total sign-ups, mostly prosumer activity and colleagues who were already licensed.",
+    "finding": "'Shared agent' grows the product most (2.7 activated recipients per 100 users; 56% of its sign-ups activate) and turns fastest. 'Shared asset (URL)' is the landing loop: it seeds the most new companies (60). 'Shared space / knowledge base' recipients retain best. Embeds and digests create many impressions but convert under 3% per share, and referral credits paid on sign-up bring sign-ups of which only 31% activate. In the reward simulation, paying per share sent nearly doubles shares but adds only +233 activated users. The stage-aware policy delivers the same pipeline as uniform weighted rewards (5.5 vs 5.5 extra prospects over the trigger; 2.4 vs 2.4 companies seeded by customers) while paying 1,039 rewards instead of 12,276. Uniform rewards buy more total sign-ups, mostly prosumer activity and colleagues who were already licensed.",
     "caveat": "Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see BEHAVIOR in sangam/policy.py); test the policy with an A/B test, randomized by workspace, before rolling it out."
+  },
+  "funnel": {
+    "funnel": {
+      "users": {
+        "signed_up": 18334,
+        "activated_week0": 0.424,
+        "active_week1": 0.673,
+        "active_week4": 0.365,
+        "active_week8": 0.203,
+        "tied_to_company": 0.389,
+        "upgraded_to_paid": 0.069
+      },
+      "companies": {
+        "prospects": 840,
+        "with_a_user": 836,
+        "with_an_activated_user": 785,
+        "at_4_activated": 323,
+        "at_trigger_5": 180,
+        "contracts": 170,
+        "contracts_from_trigger_companies": 103
+      }
+    },
+    "cohorts": [
+      {
+        "signup_week": 0,
+        "signups": 489,
+        "activated": 0.417,
+        "week1": 0.708,
+        "week4": 0.36,
+        "week8": 0.2,
+        "via_share_or_invite": 0.141
+      },
+      {
+        "signup_week": 1,
+        "signups": 534,
+        "activated": 0.388,
+        "week1": 0.654,
+        "week4": 0.358,
+        "week8": 0.189,
+        "via_share_or_invite": 0.21
+      },
+      {
+        "signup_week": 2,
+        "signups": 610,
+        "activated": 0.39,
+        "week1": 0.656,
+        "week4": 0.338,
+        "week8": 0.193,
+        "via_share_or_invite": 0.18
+      },
+      {
+        "signup_week": 3,
+        "signups": 691,
+        "activated": 0.428,
+        "week1": 0.685,
+        "week4": 0.407,
+        "week8": 0.21,
+        "via_share_or_invite": 0.229
+      },
+      {
+        "signup_week": 4,
+        "signups": 693,
+        "activated": 0.427,
+        "week1": 0.652,
+        "week4": 0.371,
+        "week8": 0.186,
+        "via_share_or_invite": 0.241
+      },
+      {
+        "signup_week": 5,
+        "signups": 731,
+        "activated": 0.412,
+        "week1": 0.681,
+        "week4": 0.378,
+        "week8": 0.219,
+        "via_share_or_invite": 0.297
+      },
+      {
+        "signup_week": 6,
+        "signups": 725,
+        "activated": 0.417,
+        "week1": 0.669,
+        "week4": 0.36,
+        "week8": 0.193,
+        "via_share_or_invite": 0.303
+      },
+      {
+        "signup_week": 7,
+        "signups": 818,
+        "activated": 0.445,
+        "week1": 0.665,
+        "week4": 0.359,
+        "week8": 0.199,
+        "via_share_or_invite": 0.313
+      },
+      {
+        "signup_week": 8,
+        "signups": 893,
+        "activated": 0.421,
+        "week1": 0.656,
+        "week4": 0.363,
+        "week8": 0.199,
+        "via_share_or_invite": 0.337
+      },
+      {
+        "signup_week": 9,
+        "signups": 1027,
+        "activated": 0.425,
+        "week1": 0.644,
+        "week4": 0.354,
+        "week8": 0.206,
+        "via_share_or_invite": 0.364
+      },
+      {
+        "signup_week": 10,
+        "signups": 1078,
+        "activated": 0.445,
+        "week1": 0.672,
+        "week4": 0.362,
+        "week8": 0.198,
+        "via_share_or_invite": 0.341
+      },
+      {
+        "signup_week": 11,
+        "signups": 1177,
+        "activated": 0.41,
+        "week1": 0.681,
+        "week4": 0.355,
+        "week8": 0.225,
+        "via_share_or_invite": 0.352
+      },
+      {
+        "signup_week": 12,
+        "signups": 1129,
+        "activated": 0.405,
+        "week1": 0.678,
+        "week4": 0.371,
+        "week8": NaN,
+        "via_share_or_invite": 0.367
+      },
+      {
+        "signup_week": 13,
+        "signups": 1178,
+        "activated": 0.436,
+        "week1": 0.683,
+        "week4": 0.363,
+        "week8": NaN,
+        "via_share_or_invite": 0.376
+      },
+      {
+        "signup_week": 14,
+        "signups": 1197,
+        "activated": 0.424,
+        "week1": 0.683,
+        "week4": 0.378,
+        "week8": NaN,
+        "via_share_or_invite": 0.395
+      },
+      {
+        "signup_week": 15,
+        "signups": 1272,
+        "activated": 0.435,
+        "week1": 0.677,
+        "week4": 0.365,
+        "week8": NaN,
+        "via_share_or_invite": 0.388
+      },
+      {
+        "signup_week": 16,
+        "signups": 1378,
+        "activated": 0.417,
+        "week1": 0.699,
+        "week4": NaN,
+        "week8": NaN,
+        "via_share_or_invite": 0.39
+      },
+      {
+        "signup_week": 17,
+        "signups": 1318,
+        "activated": 0.435,
+        "week1": 0.656,
+        "week4": NaN,
+        "week8": NaN,
+        "via_share_or_invite": 0.379
+      },
+      {
+        "signup_week": 18,
+        "signups": 1396,
+        "activated": 0.438,
+        "week1": 0.68,
+        "week4": NaN,
+        "week8": NaN,
+        "via_share_or_invite": 0.384
+      }
+    ],
+    "engagement": [
+      {
+        "week": 0,
+        "weekly_active": 633,
+        "agent_active": 306,
+        "agent_share_of_active": 0.483,
+        "agent_actions_per_agent_active_user": 1.93
+      },
+      {
+        "week": 1,
+        "weekly_active": 1139,
+        "agent_active": 623,
+        "agent_share_of_active": 0.547,
+        "agent_actions_per_agent_active_user": 2.09
+      },
+      {
+        "week": 2,
+        "weekly_active": 1810,
+        "agent_active": 1014,
+        "agent_share_of_active": 0.56,
+        "agent_actions_per_agent_active_user": 2.03
+      },
+      {
+        "week": 3,
+        "weekly_active": 2185,
+        "agent_active": 1313,
+        "agent_share_of_active": 0.601,
+        "agent_actions_per_agent_active_user": 2.15
+      },
+      {
+        "week": 4,
+        "weekly_active": 2704,
+        "agent_active": 1654,
+        "agent_share_of_active": 0.612,
+        "agent_actions_per_agent_active_user": 2.11
+      },
+      {
+        "week": 5,
+        "weekly_active": 3642,
+        "agent_active": 2147,
+        "agent_share_of_active": 0.59,
+        "agent_actions_per_agent_active_user": 2.15
+      },
+      {
+        "week": 6,
+        "weekly_active": 4161,
+        "agent_active": 2605,
+        "agent_share_of_active": 0.626,
+        "agent_actions_per_agent_active_user": 2.16
+      },
+      {
+        "week": 7,
+        "weekly_active": 4978,
+        "agent_active": 3116,
+        "agent_share_of_active": 0.626,
+        "agent_actions_per_agent_active_user": 2.19
+      },
+      {
+        "week": 8,
+        "weekly_active": 5561,
+        "agent_active": 3563,
+        "agent_share_of_active": 0.641,
+        "agent_actions_per_agent_active_user": 2.18
+      },
+      {
+        "week": 9,
+        "weekly_active": 7414,
+        "agent_active": 4542,
+        "agent_share_of_active": 0.613,
+        "agent_actions_per_agent_active_user": 2.16
+      },
+      {
+        "week": 10,
+        "weekly_active": 8255,
+        "agent_active": 5236,
+        "agent_share_of_active": 0.634,
+        "agent_actions_per_agent_active_user": 2.21
+      },
+      {
+        "week": 11,
+        "weekly_active": 8373,
+        "agent_active": 5448,
+        "agent_share_of_active": 0.651,
+        "agent_actions_per_agent_active_user": 2.22
+      },
+      {
+        "week": 12,
+        "weekly_active": 8483,
+        "agent_active": 5684,
+        "agent_share_of_active": 0.67,
+        "agent_actions_per_agent_active_user": 2.23
+      },
+      {
+        "week": 13,
+        "weekly_active": 9509,
+        "agent_active": 6185,
+        "agent_share_of_active": 0.65,
+        "agent_actions_per_agent_active_user": 2.22
+      },
+      {
+        "week": 14,
+        "weekly_active": 9837,
+        "agent_active": 6546,
+        "agent_share_of_active": 0.665,
+        "agent_actions_per_agent_active_user": 2.25
+      },
+      {
+        "week": 15,
+        "weekly_active": 10153,
+        "agent_active": 6850,
+        "agent_share_of_active": 0.675,
+        "agent_actions_per_agent_active_user": 2.24
+      },
+      {
+        "week": 16,
+        "weekly_active": 10556,
+        "agent_active": 7244,
+        "agent_share_of_active": 0.686,
+        "agent_actions_per_agent_active_user": 2.25
+      },
+      {
+        "week": 17,
+        "weekly_active": 10181,
+        "agent_active": 7067,
+        "agent_share_of_active": 0.694,
+        "agent_actions_per_agent_active_user": 2.28
+      },
+      {
+        "week": 18,
+        "weekly_active": 10890,
+        "agent_active": 7433,
+        "agent_share_of_active": 0.683,
+        "agent_actions_per_agent_active_user": 2.29
+      },
+      {
+        "week": 19,
+        "weekly_active": 9467,
+        "agent_active": 6902,
+        "agent_share_of_active": 0.729,
+        "agent_actions_per_agent_active_user": 2.32
+      }
+    ],
+    "weeks_active_of_first_8": {
+      "activated": 4.9,
+      "question_only": 2.9
+    },
+    "expansion": {
+      "companies_at_trigger": 180,
+      "weeks_first_to_trigger_median": 10.0,
+      "weeks_p25": 8.0,
+      "weeks_p75": 13.0,
+      "later_colleagues_via_share_or_invite": 0.535,
+      "users_via_share_or_invite_elsewhere": 0.44
+    },
+    "champions": {
+      "contract_rate_if_champion_shared_early": 0.24,
+      "contract_rate_otherwise": 0.194,
+      "companies_champion_shared": 342,
+      "companies_champion_did_not": 443,
+      "share_of_champions_sharing_early_by_tier": {
+        "below": 0.409,
+        "one_short": 0.469,
+        "at_trigger": 0.478
+      }
+    },
+    "virality": {
+      "activated_recipients_per_100_activated_users": 17.1,
+      "activated_users_who_shared": 0.819
+    }
   },
   "reward_guidelines": {
     "growth_team_q4": {
@@ -802,33 +1166,33 @@
       "open_questions": [],
       "simulation": {
         "policy": {
-          "shares": 73311,
-          "signups": 5793,
-          "activated_new_users": 2982,
-          "rewards_paid": 1340,
-          "extra_prospects_over_trigger": 7.3,
-          "extra_companies_seeded_by_customers": 3.4,
+          "shares": 84741,
+          "signups": 4970,
+          "activated_new_users": 2554,
+          "rewards_paid": 1039,
+          "extra_prospects_over_trigger": 5.5,
+          "extra_companies_seeded_by_customers": 2.4,
           "assumption": "sharers pick people who will actually use it",
-          "incremental_activated": 294,
-          "north_star_lift": 147,
-          "rewards_per_incremental_activated": 4.56
+          "incremental_activated": 229,
+          "north_star_lift": 114,
+          "rewards_per_incremental_activated": 4.54
         },
         "reference": {
-          "shares": 73311,
-          "signups": 5793,
-          "activated_new_users": 2982,
-          "rewards_paid": 1340,
-          "extra_prospects_over_trigger": 7.3,
-          "extra_companies_seeded_by_customers": 3.4,
+          "shares": 84741,
+          "signups": 4970,
+          "activated_new_users": 2554,
+          "rewards_paid": 1039,
+          "extra_prospects_over_trigger": 5.5,
+          "extra_companies_seeded_by_customers": 2.4,
           "assumption": "sharers pick people who will actually use it",
-          "incremental_activated": 294,
-          "north_star_lift": 147,
-          "rewards_per_incremental_activated": 4.56
+          "incremental_activated": 229,
+          "north_star_lift": 114,
+          "rewards_per_incremental_activated": 4.54
         },
         "status_quo": {
-          "shares": 69583,
-          "signups": 5242,
-          "activated_new_users": 2688,
+          "shares": 80545,
+          "signups": 4532,
+          "activated_new_users": 2325,
           "rewards_paid": 0,
           "extra_prospects_over_trigger": 0.0,
           "extra_companies_seeded_by_customers": 0.0,
@@ -838,7 +1202,7 @@
           "rewards_per_incremental_activated": null
         }
       },
-      "outcome": "Compared with offering no reward, this policy would add about 294 activated users (about 147 more weekly agent-active users, the north star), push about 7.3 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 3.4 new companies. It would pay about 1,340 rewards, or 4.56 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
+      "outcome": "Compared with offering no reward, this policy would add about 229 activated users (about 114 more weekly agent-active users, the north star), push about 5.5 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 2.4 new companies. It would pay about 1,039 rewards, or 4.54 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
     },
     "launch_blitz": {
       "path": "policies/examples/launch_blitz.md",
@@ -889,33 +1253,33 @@
       "open_questions": [],
       "simulation": {
         "policy": {
-          "shares": 125249,
-          "signups": 5766,
-          "activated_new_users": 2957,
-          "rewards_paid": 125249,
-          "extra_prospects_over_trigger": 2.2,
-          "extra_companies_seeded_by_customers": 1.2,
+          "shares": 144981,
+          "signups": 4985,
+          "activated_new_users": 2558,
+          "rewards_paid": 144981,
+          "extra_prospects_over_trigger": 1.7,
+          "extra_companies_seeded_by_customers": 0.8,
           "assumption": "people blast links for credit; recipients learn to ignore them",
-          "incremental_activated": 269,
-          "north_star_lift": 135,
-          "rewards_per_incremental_activated": 465.61
+          "incremental_activated": 233,
+          "north_star_lift": 116,
+          "rewards_per_incremental_activated": 622.24
         },
         "reference": {
-          "shares": 73311,
-          "signups": 5793,
-          "activated_new_users": 2982,
-          "rewards_paid": 1340,
-          "extra_prospects_over_trigger": 7.3,
-          "extra_companies_seeded_by_customers": 3.4,
+          "shares": 84741,
+          "signups": 4970,
+          "activated_new_users": 2554,
+          "rewards_paid": 1039,
+          "extra_prospects_over_trigger": 5.5,
+          "extra_companies_seeded_by_customers": 2.4,
           "assumption": "sharers pick people who will actually use it",
-          "incremental_activated": 294,
-          "north_star_lift": 147,
-          "rewards_per_incremental_activated": 4.56
+          "incremental_activated": 229,
+          "north_star_lift": 114,
+          "rewards_per_incremental_activated": 4.54
         },
         "status_quo": {
-          "shares": 69583,
-          "signups": 5242,
-          "activated_new_users": 2688,
+          "shares": 80545,
+          "signups": 4532,
+          "activated_new_users": 2325,
           "rewards_paid": 0,
           "extra_prospects_over_trigger": 0.0,
           "extra_companies_seeded_by_customers": 0.0,
@@ -925,7 +1289,7 @@
           "rewards_per_incremental_activated": null
         }
       },
-      "outcome": "Compared with offering no reward, this policy would add about 269 activated users (about 135 more weekly agent-active users, the north star), push about 2.2 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 1.2 new companies. It would pay about 125,249 rewards, or 465.61 per added activated user. For comparison, the stage-aware reference policy adds about 294 activated users and 7.3 prospect companies for about 1,340 rewards (4.56 per added activated user). These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
+      "outcome": "Compared with offering no reward, this policy would add about 233 activated users (about 116 more weekly agent-active users, the north star), push about 1.7 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 0.8 new companies. It would pay about 144,981 rewards, or 622.24 per added activated user. For comparison, the stage-aware reference policy adds about 229 activated users and 5.5 prospect companies for about 1,039 rewards (4.54 per added activated user). These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out."
     },
     "partner_draft": {
       "path": "policies/examples/partner_draft.md",

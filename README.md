@@ -6,12 +6,12 @@
 
 ## In 60 seconds
 
-- **Activation is the first agent action.** Users who complete one in their first week retain at 45% at week 8, versus 15% for those who only ask questions.
-- **Start an enterprise sales motion at 5+ activated independent users at a company**, not at a sign-up count: those companies convert at 50% versus a 15% baseline. At 4 users, run champion enablement instead.
+- **Activation is the first agent action.** Users who complete one in their first week retain at 43% at week 8, versus 14% for those who only ask questions.
+- **Start an enterprise sales motion at 5+ activated independent users at a company**, not at a sign-up count: those companies convert at 57% versus a 20% baseline. At 4 users, run champion enablement instead.
 - **Shared agents are the strongest viral loop; shared assets are the landing loop** that seeds new companies. Embeds and digests barely convert.
-- **Pay sharing rewards when the recipient completes a first agent action, and tie them to the account's stage**: same-company shares before a contract, external shares after it. In simulation that keeps the same pipeline gains as uniform rewards while paying 1,340 rewards instead of 12,488.
+- **Pay sharing rewards when the recipient completes a first agent action, and tie them to the account's stage**: same-company shares before a contract, external shares after it. In simulation that keeps the same pipeline gains as uniform rewards while paying 1,039 rewards instead of 12,276.
 - **Reward policy is written in plain language.** Teams submit prose guidelines and approve a plain-English card; the framework flags pay-per-share and uncapped schemes, and asks rather than guesses when wording is ambiguous.
-- **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is 70% accurate and invents sales-ready accounts from school clubs and side projects.
+- **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is 72% accurate and invents sales-ready accounts from school clubs and side projects.
 - **Everything is graded**: 40 of 40 checks pass against planted ground truth, including tests of the grader itself.
 
 ## Quick start
@@ -37,33 +37,33 @@ Each finding is checked against a planted answer. The [findings memo](reports/fi
 
 ### 1. Activation is the first agent action, not the first question
 
-External users who complete an agent action in their first week retain at 45% at week 8, versus 15% for question-only users, and the gap holds in every segment. It's observational: high-intent users both act and stay, so the next step is an onboarding experiment that nudges a first agent action.
+External users who complete an agent action in their first week retain at 43% at week 8, versus 14% for question-only users, and the gap holds in every segment. It's observational: high-intent users both act and stay, so the next step is an onboarding experiment that nudges a first agent action.
 
 ![Retention by week-0 behavior](reports/retention_by_activation.png)
 
 ### 2. Customer zero flatters every headline
 
-A large internal deployment with mandated use lifts week-8 retention from 27% to 33%. External users are always reported separately.
+A large internal deployment with mandated use lifts week-8 retention from 26% to 34%. External users are always reported separately.
 
 ### 3. Breadth predicts retention
 
-Users who link three or more connectors in their first week retain at 49%, versus 19% for one or two.
+Users who link three or more connectors in their first week retain at 48%, versus 19% for one or two.
 
 ### 4. Not every lift is real
 
-Desktop-app users retain +18% better in aggregate and about -1% inside every segment. The internal rollout installed the app by default, so the aggregate is a mix effect (Simpson's paradox), and the analysis flags it automatically.
+Desktop-app users retain +23% better in aggregate and about +0% inside every segment. The internal rollout installed the app by default, so the aggregate is a mix effect (Simpson's paradox), and the analysis flags it automatically.
 
 ![Desktop app lift disappears within segments](reports/desktop_simpson.png)
 
 ### 5. Test sales plays at the account level
 
-Colleagues share the outcome of outreach. Splitting users inside a company leaks treatment into the control group: in simulation it reports +1.8% against a true lift of +4.0%, while randomizing whole accounts recovers +3.9%.
+Colleagues share the outcome of outreach. Splitting users inside a company leaks treatment into the control group: in simulation it reports +1.7% against a true lift of +4.0%, while randomizing whole accounts recovers +4.0%.
 
 ![Experiment design comparison](reports/experiment_design.png)
 
 ### 6. Start the sales motion at 5 activated adopters
 
-Learned from 123 observed contracts. Companies with 5+ independent users who completed an agent action convert at 50% versus a 15% baseline (3.4x). At exactly 4 they convert at 24%, a champion-enablement tier; below that, at 4%. The best rule built on raw sign-up counts scores F1 0.42 against 0.55, because event spikes inflate sign-ups without activating.
+Learned from 170 observed contracts. Companies with 5+ independent users who completed an agent action convert at 57% versus a 20% baseline (2.8x). At exactly 4 they convert at 27%, a champion-enablement tier; below that, at 5%. The best rule built on raw sign-up counts scores F1 0.50 against 0.59, because event spikes inflate sign-ups without activating.
 
 ![Sales trigger threshold](reports/sales_trigger_threshold.png)
 
@@ -71,35 +71,35 @@ Learned from 123 observed contracts. Companies with 5+ independent users who com
 
 ### 7. Rank acquisition channels by pipeline, not volume
 
-Rankings disagree. 'search' brings the most sign-ups, but 'teammate_invite' produces the most sales-ready accounts per 1,000 sign-ups (28.8) and retains 28% at week 8. 'webinar' and 'reddit' retain worst. Invest in invite loops and work-identity channels for pipeline; judge broad social channels on retained users, not sign-ups. Pipeline ranks for 'webinar' rest on fewer than 5 accounts; treat that rank as noise.
+Rankings disagree. 'search' brings the most sign-ups, but 'teammate_invite' produces the most sales-ready accounts per 1,000 sign-ups (25.2) and retains 25% at week 8. 'webinar' and 'reddit' retain worst. Invest in invite loops and work-identity channels for pipeline; judge broad social channels on retained users, not sign-ups. Pipeline ranks for 'webinar', 'reddit' rest on fewer than 5 accounts each; treat their order as noise.
 
 | Channel | Sign-ups | Activation | Week-8 retention | Resolved to a company | Sales-ready accounts per 1,000 | Rank: volume / retention / pipeline |
 |---|---|---|---|---|---|---|
-| teammate_invite | 1,147 | 54% | 28% | 63% | 28.8 | 7 / 1 / 1 |
-| linkedin | 1,386 | 46% | 23% | 61% | 26.7 | 2 / 2 / 2 |
-| direct | 1,149 | 42% | 20% | 37% | 15.7 | 6 / 3 / 3 |
-| search | 1,970 | 42% | 19% | 36% | 10.2 | 1 / 4 / 4 |
-| reddit | 1,288 | 32% | 14% | 15% | 8.5 | 4 / 7 / 5 |
-| x | 1,311 | 34% | 16% | 19% | 7.6 | 3 / 6 / 6 |
-| webinar | 277 | 12% | 0% | 87% | 7.2 | 8 / 8 / 7 |
-| youtube | 1,227 | 40% | 17% | 24% | 4.9 | 5 / 5 / 8 |
+| teammate_invite | 1,630 | 55% | 25% | 62% | 25.2 | 6 / 1 / 1 |
+| linkedin | 1,949 | 47% | 22% | 59% | 15.4 | 2 / 2 / 2 |
+| search | 2,807 | 41% | 20% | 35% | 15.0 | 1 / 3 / 3 |
+| direct | 1,630 | 39% | 18% | 34% | 10.4 | 6 / 4 / 4 |
+| webinar | 304 | 10% | 1% | 88% | 9.9 | 8 / 8 / 5 |
+| x | 1,840 | 32% | 15% | 20% | 8.2 | 3 / 6 / 6 |
+| youtube | 1,829 | 36% | 17% | 26% | 7.7 | 4 / 5 / 7 |
+| reddit | 1,813 | 31% | 13% | 14% | 2.2 | 5 / 7 / 8 |
 
-**Attribution warning.** Viral-loop recipients are 50% of the activated users at sales-ready accounts but get first-touch credit for only 6% of those accounts. First-touch attribution undervalues expansion loops by design, so loops are measured separately, on the prospects they push over the sales trigger.
+**Attribution warning.** Viral-loop recipients are 36% of the activated users at sales-ready accounts but get first-touch credit for only 8% of those accounts. First-touch attribution undervalues expansion loops by design, so loops are measured separately, on the prospects they push over the sales trigger.
 
 ### 8. Sign-in provider decides who you can see
 
-Provider decides visibility more than quality. 50% of Google and 58% of email sign-ups can be tied to a company, versus 4% for 'amazon' and 9% for 'apple'. 'microsoft' users retain best (23%), consistent with a builder persona. The pipeline ranking mostly mirrors visibility: an account you cannot see never reaches the sales trigger.
+Provider decides visibility more than quality. 49% of Google and 55% of email sign-ups can be tied to a company, versus 4% for 'amazon' and 7% for 'apple'. 'github' users retain best (24%), consistent with a builder persona. The pipeline ranking mostly mirrors visibility: an account you cannot see never reaches the sales trigger.
 
 | Provider | Sign-ups | Activation | Week-8 retention | Resolved to a company | Private relay | Users at sales-ready accounts per 1,000 | Rank: volume / retention / visibility / pipeline |
 |---|---|---|---|---|---|---|---|
-| microsoft | 1,392 | 46% | 23% | 61% | 0% | 177.4 | 5 / 1 / 1 / 1 |
-| email | 2,674 | 43% | 19% | 58% | 0% | 163.1 | 2 / 5 / 2 / 2 |
-| google | 6,149 | 46% | 21% | 50% | 0% | 144.7 | 1 / 3 / 3 / 3 |
-| github | 1,581 | 48% | 22% | 30% | 0% | 89.8 | 4 / 2 / 4 / 4 |
-| apple | 2,156 | 41% | 19% | 9% | 59% | 25.5 | 3 / 4 / 5 / 5 |
-| amazon | 1,045 | 37% | 18% | 4% | 0% | 9.6 | 6 / 6 / 6 / 6 |
+| microsoft | 1,630 | 40% | 18% | 58% | 0% | 189.6 | 5 / 5 / 1 / 1 |
+| email | 3,165 | 43% | 20% | 55% | 0% | 160.8 | 2 / 3 / 2 / 2 |
+| google | 7,468 | 44% | 21% | 49% | 0% | 154.9 | 1 / 2 / 3 / 3 |
+| github | 1,925 | 46% | 24% | 27% | 0% | 80.0 | 4 / 1 / 4 / 4 |
+| apple | 2,734 | 40% | 19% | 7% | 61% | 19.8 | 3 / 4 / 5 / 5 |
+| amazon | 1,412 | 37% | 16% | 4% | 0% | 9.2 | 6 / 6 / 6 / 6 |
 
-1015 self-serve users at prospect companies are invisible today, mostly via apple, github sign-ins. If 30% added a work email, about 18 more companies would cross the sales trigger, on top of 145 visible today; with full visibility, 62 more would. A 'connect your work email to share with your team' prompt is a pipeline lever, not just an identity feature. *(Simulation on synthetic ground truth; real uptake must be measured with an A/B test of the prompt.)*
+1034 self-serve users at prospect companies are invisible today, mostly via github, apple sign-ins. If 30% added a work email, about 25 more companies would cross the sales trigger, on top of 180 visible today; with full visibility, 86 more would. A 'connect your work email to share with your team' prompt is a pipeline lever, not just an identity feature. *(Simulation on synthetic ground truth; real uptake must be measured with an A/B test of the prompt.)*
 
 ### 9. Connected workspaces reveal employers, with guards against false positives
 
@@ -107,43 +107,43 @@ People connect their employer's Slack, Teams or Jira, but also their kid's robot
 
 | Matcher | Users attributed | Precision | Hidden employees recovered | Sales-ready accounts (correct / phantom) |
 |---|---|---|---|---|
-| Work email only | - | - | - | 145 / 0 |
-| Naive connector match | 701 | 70% | 45% | 168 / 9 |
-| Guarded connector match | 374 | 100% | 34% | 163 / 0 |
+| Work email only | - | - | - | 180 / 0 |
+| Naive connector match | 790 | 72% | 48% | 223 / 9 |
+| Guarded connector match | 454 | 100% | 38% | 217 / 0 |
 
-Naive matching attributes 701 hidden users at 70% precision and creates 9 phantom sales-ready accounts. The worst naive error: 'Lumora Makers' put 16 unrelated users into Lumora Retail. Guarded matching attributes 374 at 100% precision, recovers 34% of hidden employees, and adds 18 genuinely sales-ready accounts with 0 phantoms. Trust a workspace's verified domain; treat names as clues that need a colleague to corroborate them; drop guests and any workspace whose members already resolve to several companies. Synthetic data makes the guards look perfect; in production, audit a sample of attributions by hand each quarter.
+Naive matching attributes 790 hidden users at 72% precision and creates 9 phantom sales-ready accounts. The worst naive error: 'Lumora Book Club' put 19 unrelated users into Lumora Retail. Guarded matching attributes 454 at 100% precision, recovers 38% of hidden employees, and adds 37 genuinely sales-ready accounts with 0 phantoms. Trust a workspace's verified domain; treat names as clues that need a colleague to corroborate them; drop guests and any workspace whose members already resolve to several companies. Synthetic data makes the guards look perfect; in production, audit a sample of attributions by hand each quarter.
 
 The guarded matcher trusts verified domains; treats a matching name as a clue that needs a colleague resolved by work email to corroborate it; drops guest memberships; drops workspaces whose connected users already resolve to 3+ companies, the signature of a school club; skips users whose evidence points to two companies; and never overrides a work email. Workspace metadata is personal context: use it only in aggregate at the account level, within the permissions users granted, and never to contact an individual about a side project.
 
 ### 10. Viral loops: agent shares grow, asset shares land, rewards must fire on activation
 
-'Shared agent' grows the product most (3.25 activated recipients per 100 users; 56% of its sign-ups activate) and turns fastest. 'Shared asset (URL)' is the landing loop: it seeds the most new companies (49). 'Shared space / knowledge base' recipients retain best. Embeds and digests create many impressions but convert under 3% per share, and referral credits paid on sign-up bring sign-ups of which only 31% activate. In the reward simulation, paying per share sent nearly doubles shares but adds only +269 activated users. The stage-aware policy delivers the same pipeline as uniform weighted rewards (7.3 vs 7.3 extra prospects over the trigger; 3.4 vs 3.4 companies seeded by customers) while paying 1,340 rewards instead of 12,488. Uniform rewards buy more total sign-ups, mostly prosumer activity and colleagues who were already licensed.
+'Shared agent' grows the product most (2.7 activated recipients per 100 users; 56% of its sign-ups activate) and turns fastest. 'Shared asset (URL)' is the landing loop: it seeds the most new companies (60). 'Shared space / knowledge base' recipients retain best. Embeds and digests create many impressions but convert under 3% per share, and referral credits paid on sign-up bring sign-ups of which only 31% activate. In the reward simulation, paying per share sent nearly doubles shares but adds only +233 activated users. The stage-aware policy delivers the same pipeline as uniform weighted rewards (5.5 vs 5.5 extra prospects over the trigger; 2.4 vs 2.4 companies seeded by customers) while paying 1,039 rewards instead of 12,276. Uniform rewards buy more total sign-ups, mostly prosumer activity and colleagues who were already licensed.
 
 ![Viral loops](reports/viral_loops.png)
 
 | Loop | Shares | Sign-up per share | Sign-ups that activate | Activated recipients per 100 users | Median days to sign-up | Recipient week-8 retention | Companies seeded | Prospects pushed over trigger |
 |---|---|---|---|---|---|---|---|---|
-| Shared agent | 9,624 | 34.2% | 56% | 3.25 | 2 | 31% | 27 | 46 |
-| Shared asset (URL) | 13,402 | 17.2% | 46% | 3.01 | 4 | 24% | 49 | 63 |
-| Shared space / knowledge base | 5,443 | 41.0% | 65% | 2.36 | 6 | 34% | 7 | 33 |
-| Recurring digest | 13,727 | 2.7% | 38% | 0.36 | 17 | 11% | 5 | 7 |
-| Referral credit | 1,218 | 23.9% | 31% | 0.31 | 3 | 12% | 2 | 4 |
-| Slack or email embed | 26,169 | 1.6% | 35% | 0.25 | 12 | 15% | 2 | 3 |
+| Shared agent | 10,941 | 25.1% | 56% | 2.7 | 2 | 27% | 23 | 39 |
+| Shared asset (URL) | 15,515 | 12.0% | 46% | 2.19 | 4 | 24% | 60 | 50 |
+| Shared space / knowledge base | 6,185 | 27.9% | 64% | 1.82 | 7 | 42% | 17 | 33 |
+| Referral credit | 1,669 | 16.5% | 31% | 0.26 | 3 | 12% | 1 | 0 |
+| Recurring digest | 16,074 | 1.6% | 34% | 0.2 | 16 | 24% | 4 | 1 |
+| Slack or email embed | 30,161 | 0.9% | 43% | 0.19 | 13 | 28% | 0 | 4 |
 
 **Reward policy simulation.** Eight ways to reward sharing, on the same population:
 
 | Reward fires... | Shares | Extra activated users | North-star lift (weekly agent-active users) | Rewards paid | Rewards per extra activated user | Extra prospects over trigger | Extra companies seeded by customers |
 |---|---|---|---|---|---|---|---|
-| No reward (status quo) | 69,583 | +0 | +0 | 0 | - | 0.0 | 0.0 |
-| Per share sent | 125,249 | +269 | +135 | 125,249 | 465.61 | 2.2 | 1.2 |
-| Per recipient sign-up | 97,416 | +484 | +243 | 6,186 | 12.78 | 4.0 | 2.2 |
-| Per recipient first agent action | 86,979 | +605 | +303 | 12,198 | 20.16 | 5.0 | 2.7 |
-| Per first agent action, weighted by share type | 84,977 | +773 | +388 | 12,488 | 16.16 | 7.3 | 3.4 |
-| Stage-aware, sharer rewarded (see below) | 73,311 | +294 | +147 | 1,340 | 4.56 | 7.3 | 3.4 |
-| Stage-aware, recipient rewarded | 71,074 | +578 | +290 | 1,624 | 2.81 | 13.1 | 6.7 |
-| Stage-aware, sharer and recipient rewarded | 73,311 | +803 | +403 | 3,698 | 4.61 | 18.8 | 9.3 |
+| No reward (status quo) | 80,545 | +0 | +0 | 0 | - | 0.0 | 0.0 |
+| Per share sent | 144,981 | +233 | +116 | 144,981 | 622.24 | 1.7 | 0.8 |
+| Per recipient sign-up | 112,763 | +418 | +207 | 5,348 | 12.79 | 3.0 | 1.5 |
+| Per recipient first agent action | 100,681 | +523 | +259 | 12,005 | 22.95 | 3.7 | 1.9 |
+| Per first agent action, weighted by share type | 98,317 | +679 | +337 | 12,276 | 18.08 | 5.5 | 2.4 |
+| Stage-aware, sharer rewarded (see below) | 84,741 | +229 | +114 | 1,039 | 4.54 | 5.5 | 2.4 |
+| Stage-aware, recipient rewarded | 82,223 | +449 | +223 | 1,259 | 2.8 | 9.6 | 4.6 |
+| Stage-aware, sharer and recipient rewarded | 84,741 | +624 | +310 | 2,869 | 4.6 | 13.7 | 6.4 |
 
-The **stage-aware** policy pays on the recipient's first agent action, weights agent and space shares higher, rewards *same-company* shares before a company has a contract (each activated colleague moves it toward the sales trigger), rewards *external* shares to customers and partners after a contract (customers become a distribution channel), and never pays for colleagues who are already licensed. Paying per share sent nearly doubles shares (125,249) for the smallest gain in activated users.
+The **stage-aware** policy pays on the recipient's first agent action, weights agent and space shares higher, rewards *same-company* shares before a company has a contract (each activated colleague moves it toward the sales trigger), rewards *external* shares to customers and partners after a contract (customers become a distribution channel), and never pays for colleagues who are already licensed. Paying per share sent nearly doubles shares (144,981) for the smallest gain in activated users.
 
 Viral coefficients are single-generation. The reward simulation rests on stated behavioral assumptions (see BEHAVIOR in sangam/policy.py); test the policy with an A/B test, randomized by workspace, before rolling it out.
 
@@ -153,8 +153,8 @@ The people who set reward policy (growth, finance, partner teams) write guidelin
 
 | Guidelines (prose) | What the policy owner sees |
 |---|---|
-| [Sharing rewards, Q4](policies/examples/growth_team_q4.md) | No warnings; 1,340 rewards for +294 activated users (4.56 each); ready to approve |
-| [Launch blitz](policies/examples/launch_blitz.md) | 5 warnings; 125,249 rewards for +269 activated users (465.61 each) |
+| [Sharing rewards, Q4](policies/examples/growth_team_q4.md) | No warnings; 1,039 rewards for +229 activated users (4.54 each); ready to approve |
+| [Launch blitz](policies/examples/launch_blitz.md) | 5 warnings; 144,981 rewards for +233 activated users (622.24 each) |
 | [Partner rewards (draft)](policies/examples/partner_draft.md) | 3 questions to answer; simulation and approval blocked until they are |
 
 The launch-blitz memo ("$10 for every link they share, to anyone ... no limits") comes back with:
@@ -192,7 +192,7 @@ The partner draft ("reward users when their teammates start using the product in
 **Filled in where the guidelines were silent** (confirm or correct):
 - The guidelines didn't mention shares to personal email addresses; we assumed they don't count.
 
-Compared with offering no reward, this policy would add about 294 activated users (about 147 more weekly agent-active users, the north star), push about 7.3 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 3.4 new companies. It would pay about 1,340 rewards, or 4.56 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out.
+Compared with offering no reward, this policy would add about 229 activated users (about 114 more weekly agent-active users, the north star), push about 5.5 more prospect companies to the point where a sales conversation makes sense, and help customers bring in about 2.4 new companies. It would pay about 1,039 rewards, or 4.54 per added activated user. This matches the stage-aware reference policy. These figures rest on the growth team's assumptions about how people respond to incentives; confirm them with an A/B test, randomized by workspace, before rolling the policy out.
 
 </details>
 
@@ -228,7 +228,7 @@ evals/
 policies/examples/  sample guidelines: sound, sloppy and ambiguous
 ```
 
-**Dhruva, the north star and metric layer.** Named for the pole star you navigate by. The north star is weekly agent-active users, external users only (peak 7,825). Each activated user is agent-active in 50% of weeks, versus 11% for a question-only user, so every reward program is judged by its north-star lift and its cost. Every number, in a chart or in an agent's answer, comes from one set of definitions.
+**Dhruva, the north star and metric layer.** Named for the pole star you navigate by. The north star is weekly agent-active users, external users only (peak 7,433). Each activated user is agent-active in 50% of weeks, versus 11% for a question-only user, so every reward program is judged by its north-star lift and its cost. Every number, in a chart or in an agent's answer, comes from one set of definitions.
 
 **An agent you can check.** The agent can only call governed tools. Its instructions require sample sizes, external-only reporting, a within-segment check before crediting any feature, a named alternative explanation, and a confirming experiment. The eval rubric scores each answer on required facts, required caveats and forbidden claims, and the rubric is itself tested: a known-good answer must pass and a known-bad one must fail. That self-test once caught the grader reading "5 activated users" as "5%" and failing a correct answer.
 
@@ -246,7 +246,7 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
   PASS  Account-level design recovers true lift (within 1.5 pts)
   PASS  User-level design underestimates (interference)
   PASS  Sales trigger recovers the planted tipping point (5 activated users)
-  PASS  Activated-user trigger beats a sign-up-count trigger
+  PASS  Activated-user trigger beats a sign-up-count trigger (higher F1 and precision)
   PASS  Teammate invites retain best; invites and LinkedIn lead on pipeline
   PASS  Low-intent social channels rank in the bottom half on retention
   PASS  Work identities (Google, Microsoft, email) are the most visible providers; Apple and Amazon the least
@@ -255,7 +255,7 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
   PASS  Guarded connector matching is precise and adds real sales-ready accounts
   PASS  Community and side-project workspaces are the main false-positive source
   PASS  Shared agents have the highest viral coefficient on activated users
-  PASS  Shared spaces retain recipients best
+  PASS  Shared spaces retain recipients best (within 2 points of the top loop)
   PASS  Shared assets seed the most new companies
   PASS  Embeds and digests convert worst per share
   PASS  Referral sign-ups activate least
@@ -284,7 +284,7 @@ policies/examples/  sample guidelines: sound, sloppy and ambiguous
 ## Limits
 
 - Planted effects are deliberately clear; real data is noisier. Thresholds are starting points to tune against real outcomes.
-- The sales trigger is fit on 123 contracts, so several rules tie; refit it as contracts accumulate and by segment.
+- The sales trigger is fit on 170 contracts, so several rules tie; refit it as contracts accumulate and by segment.
 - Activation and channel findings are observational. Only experiments settle cause.
 - The reward simulation rests on stated behavioral assumptions (`BEHAVIOR` in `sangam/policy.py`); its value is the measurement design. Viral coefficients are single-generation.
 - Using a personal sign-up's activity or workspace metadata to prompt outreach must respect the permissions users granted and regional law. Individuals get in-product nudges, not sales calls.

@@ -51,6 +51,9 @@ def main():
     results["work_email_whatif"] = work_email_prompt_whatif()
     results["connector_identity"] = connector_identity()
     results["viral_loops"] = viral_loops()
+    from sangam.funnel import summarize as funnel_summary
+    from sangam.tools import _outcomes, _ready_accounts
+    results["funnel"] = funnel_summary(ds, _outcomes(), _ready_accounts()[1]["min_activated"])
     from sangam.policy import examples
     results["reward_guidelines"] = examples()
 
