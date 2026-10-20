@@ -29,6 +29,14 @@ def _style(ax, title, subtitle=None):
         ax.text(0, 1.03, subtitle, transform=ax.transAxes, fontsize=9, color=INK2)
 
 
+SYNTHETIC_NOTE = "Synthetic data: shows the method, not real-world rates"
+
+
+def _save(fig, path):
+    fig.text(0.995, 0.008, SYNTHETIC_NOTE, ha="right", va="bottom", fontsize=7, color=INK2, style="italic")
+    fig.savefig(path, facecolor=SURFACE)
+
+
 def _fig():
     fig, ax = plt.subplots(figsize=(8, 4.6), dpi=150)
     fig.patch.set_facecolor(SURFACE)
@@ -54,7 +62,7 @@ def retention_chart(curves: dict, path: Path):
     _style(ax, "Activation is the first agent action, not the first question",
            "Weekly retention by week-0 behavior, external users; customer zero shown for contrast")
     fig.tight_layout()
-    fig.savefig(path, facecolor=SURFACE)
+    _save(fig, path)
     plt.close(fig)
 
 
@@ -84,7 +92,7 @@ def simpson_chart(sim: dict, ds, path: Path):
     _style(ax, "The desktop app's 'lift' is a mix effect",
            f"Aggregate gap {sim['aggregate_lift']:+.0%}; inside each segment about {sim['weighted_within_lift']:+.0%}")
     fig.tight_layout()
-    fig.savefig(path, facecolor=SURFACE)
+    _save(fig, path)
     plt.close(fig)
 
 
@@ -106,7 +114,7 @@ def experiment_chart(exp: dict, path: Path):
     _style(ax, "Test sales plays at the account level",
            "Colleagues share the outcome, so user-level splits leak treatment into the control group")
     fig.tight_layout()
-    fig.savefig(path, facecolor=SURFACE)
+    _save(fig, path)
     plt.close(fig)
 
 
@@ -142,7 +150,7 @@ def threshold_chart(res: dict, path: Path):
     _style(ax, f"Start the sales motion at {k}+ activated users, not at a sign-up count",
            "Contract conversion by number of activated independent adopters; bars right of the line meet the trigger")
     fig.tight_layout()
-    fig.savefig(path, facecolor=SURFACE)
+    _save(fig, path)
     plt.close(fig)
 
 
@@ -168,7 +176,7 @@ def findings_memo(r: dict, top, path: Path):
         for t in top.itertuples())
     md = f"""# Findings memo: growth signals for an AI workspace product
 
-*All data is synthetic, generated with a fixed seed. The data was generated to enable the cohort analysis and prove the methodology; every finding is checked against the expected result.*
+> **Synthetic evidence, not market evidence.** All data is generated with a fixed seed to enable the cohort analysis and prove the methodology, and every finding is checked against the expected result. These findings show that the method works and where analyses go wrong; they do not predict the retention or conversion rates of a real product.
 
 ## Summary
 
@@ -282,5 +290,5 @@ def loops_chart(loops: dict, path: Path):
     _style(ax, "Agent shares grow fastest; embeds and digests barely convert",
            "Viral coefficient on activated recipients vs cycle time; dot size = shares sent")
     fig.tight_layout()
-    fig.savefig(path, facecolor=SURFACE)
+    _save(fig, path)
     plt.close(fig)

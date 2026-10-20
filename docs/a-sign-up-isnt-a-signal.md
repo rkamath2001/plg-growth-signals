@@ -6,9 +6,13 @@ Rahul Kamath · Published on [Substack](https://rrkamath.substack.com/p/a-sign-u
 
 ## Summary
 
+**Who this is for.** Growth and product leaders at AI workspace products that sell to both individuals and enterprises. Their problem is that the numbers easiest to grow, sign-ups and shares, are weak predictors of an enterprise contract, and the obvious analyses of them are often wrong. They need to know which early behavior predicts lasting use, when individual adoption becomes an account, what to pay for, and how to test each answer before spending on it.
+
 A freemium AI workspace does not win an enterprise when people sign up. It wins when colleagues get the product to do real work, when their company decides to deploy it, and when that company starts building its own context into it. This paper sets out a growth strategy for that whole path and tests the first half of it on a synthetic workspace of 35,017 users across 900 companies over 19 weeks. We generated the data to enable the cohort analysis and to prove the methodology before it meets real customers.
 
 ### What the experiment showed
+
+These figures come from synthetic data. They show that the method finds the right answers and avoids common traps; they are not forecasts of any real product's rates.
 
 - **Activation is an action, not a sign-up.** Users whose first week included an agent action were still active at week 8 at 43%, against 14% for users who only asked questions.
 - **Five activated colleagues make a company ready to buy.** Companies with five or more bought at 57%, against a 20% baseline; at four, 27%; below that, 5%. A rule built on sign-up counts picked buyers at only 38%.
@@ -230,7 +234,21 @@ The approach rests on one discipline: state the hypothesis, the metric and the d
 
 The study held itself to the same standard. Every hypothesis was fixed before analysis, and automated checks graded the results. When the synthetic data was regenerated with sign-ups continuing through the full period, a promising finding about champions who share early shrank from 20% against 13% to 24% against 19%, so it was withdrawn as a claim and became the team-progress test. When the generator itself proved flawed, with sign-ups stopping early and creating a false cliff in the north star, the flaw was fixed, the analysis rerun and the loosened eval thresholds disclosed. Rapid iteration only works when results that do not replicate are dropped as quickly as results that do are adopted.
 
-## 10. Built to be reused, and its limits
+## 10. Questions a reader would ask
+
+**If the data is synthetic, what does this prove?** That the method works. The data includes known effects and known traps, such as a mix effect and webinar sign-up spikes, and the analysis must recover the first and avoid the second; 40 automated checks confirm it does. It does not prove that a real product will see 43% retention or a five-user trigger. Those are hypotheses to measure.
+
+**Would a real product's trigger also be five?** Not necessarily. The number is learned from closed contracts and should be refit on real data each quarter. What transfers is the rule: count activated colleagues, not sign-ups.
+
+**What would you do in the first 90 days on a real product?** Put gates 1 to 5 into one metric layer, set the retention window where the real curve flattens, start the onboarding and reward tests with company-level holdouts, and fit the contract trigger on real closed deals. Gates 6 to 12 would be instrumented next.
+
+**Why reward the recipient, not only the sharer?** In simulation, paying the recipient on their first agent action bought contracts most cheaply, and paying both bought the most. Both results rest on assumptions about how people respond to incentives, which is why the reward test comes first.
+
+**Doesn't growth inside companies conflict with IT policy?** It can. That is why rewards never pay for moving company work outside without an admin's approval, and why five activated colleagues is the point to bring IT in rather than to grow around it.
+
+**What would change this strategy?** Real cohorts that do not separate on a first agent action, a contract rate that does not jump at any count of activated users, or a reward test in which no arm beats offering nothing. Each would send the strategy back to its hypotheses.
+
+## 11. Built to be reused, and its limits
 
 The project is designed so a growth team can apply it to its own questions: a synthetic data generator, where every effect and source of noise is a setting; Dhruva, the metric layer; the funnel, cohort, identity, expansion, viral-loop and reward analyses packaged as tools; an agent restricted to those tools, which must quote sample sizes, report external users separately, check lifts within segments and name the experiment that would confirm its answer; reward guidelines in plain language, evaluated before launch; and evals that grade the work and the grader. The README is generated from the results, so the documentation cannot drift from the numbers. Everything is open source under the MIT license and runs offline on a laptop in under a minute: github.com/rkamath2001/plg-growth-signals.
 

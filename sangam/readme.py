@@ -131,13 +131,35 @@ def render(r: dict, ev: dict, path: Path) -> None:
 
     md = f"""# Sangam: growth signals for an AI workspace product
 
-**Sangam** (Sanskrit: *confluence*) is where independent streams meet and become one river. In product-led growth, the streams are individual adopters who sign up on their own, the colleagues they share with, and the enterprise rollouts that follow. This project finds where they converge.
+**Sangam** (Sanskrit: *confluence*) is where independent streams meet and become one river. In product-led growth, the streams are individual adopters who sign up on their own, the colleagues they share with, and the enterprise rollouts that follow. This project finds where they converge, and how to measure, reward and test that path.
 
-> **All data is synthetic.** The product modeled is a generic AI workspace (an assistant that answers questions, takes agent actions, shares agents and outputs, and connects to apps), described from public information only. Company names and `.example` domains are fictional. Nothing here reflects any company's internal data.
+> **Synthetic evidence, not market evidence.** Every number here comes from generated data about a generic AI workspace, built from public information only; company names and `.example` domains are fictional. The data shows that the method works and exposes the ways growth analyses go wrong. It cannot show that a real product will reach these retention or conversion rates; those must be measured on real users.
 
 The write-up, [A Sign-up Isn't a Signal](docs/a-sign-up-isnt-a-signal.md), sets out the growth strategy this project supports.
 
-## In 60 seconds
+## Verify it in two minutes
+
+**Prerequisites:** Python 3.11 or later and about 200 MB of disk. No cloud account, API key or network access is needed after install.
+
+```bash
+git clone https://github.com/rkamath2001/plg-growth-signals.git
+cd plg-growth-signals
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\\Scripts\\activate
+pip install -r requirements.txt
+python run.py                 # about 20 seconds: generate data, analyze, grade, write reports/
+python -m evals.run_evals     # about 10 seconds: the test suite
+```
+
+**Expected output.** `run.py` ends with `Done. {passed}/{total} eval checks passed.` and writes `reports/findings.md`, `reports/results.json` and the charts. `python -m evals.run_evals` ends with `{passed}/{total} checks passed`. One meaningful result to look for in its output:
+
+```
+PASS  Sales trigger recovers the configured tipping point (5 activated users)
+PASS  Activated-user trigger beats a sign-up-count trigger (higher F1 and precision)
+```
+
+The same seed reproduces the same data and the same numbers on every run.
+
+## Findings in the synthetic data, in 60 seconds
 
 - **Activation is the first agent action.** Users who complete one in their first week retain at {_pct(a_ret)} at week 8, versus {_pct(q_ret)} for those who only ask questions.
 - **Start an enterprise sales motion at {rule['min_activated']}+ activated independent users at a company**, not at a sign-up count: those companies convert at {_pct(rule['precision'])} versus a {_pct(trig['baseline_conversion'])} baseline. At {rule['min_activated'] - 1} users, run champion enablement instead.
@@ -147,17 +169,14 @@ The write-up, [A Sign-up Isn't a Signal](docs/a-sign-up-isnt-a-signal.md), sets 
 - **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is {_pct(con['naive']['precision'])} accurate and wrongly attributes users from school clubs and side projects, making companies look sales-ready when they are not.
 - **Everything is graded**: {passed} of {total} checks pass against the expected results, including tests of the grader itself.
 
-## Quick start
+These rates are properties of the generated data. Treat each as a hypothesis to test on real users, not a forecast.
+
+## Optional: the agent
+
+The agent answers growth questions using only the project's analysis tools. It needs Amazon Bedrock model access:
 
 ```bash
-pip install -r requirements.txt
-python run.py                 # generate data, analyze, grade, write reports/ and this README
-python -m evals.run_evals     # grade the analysis against the expected results
-```
-
-The agent is optional and needs AWS credentials with Amazon Bedrock model access:
-
-```bash
+pip install -r requirements-agent.txt
 export AWS_REGION=us-west-2            # optional: SANGAM_MODEL_ID=<bedrock model id>
 export AWS_BEARER_TOKEN_BEDROCK=<key>  # or a Bedrock API key instead of an AWS CLI profile
 python -m sangam.agent "Which accounts should business development contact this week, and why?"

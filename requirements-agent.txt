@@ -1,0 +1,3 @@
+-r requirements.txt
+strands-agents>=1.0   # the live agent and the reward-policy compiler
+boto3>=1.39           # Bedrock API key support

@@ -1,6 +1,6 @@
 # Findings memo: growth signals for an AI workspace product
 
-*All data is synthetic, generated with a fixed seed. The data was generated to enable the cohort analysis and prove the methodology; every finding is checked against the expected result.*
+> **Synthetic evidence, not market evidence.** All data is generated with a fixed seed to enable the cohort analysis and prove the methodology, and every finding is checked against the expected result. These findings show that the method works and where analyses go wrong; they do not predict the retention or conversion rates of a real product.
 
 ## Summary
 

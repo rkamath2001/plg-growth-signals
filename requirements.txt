@@ -3,5 +3,3 @@ numpy>=1.26
 matplotlib>=3.8
 scipy>=1.11
 pydantic>=2.5
-strands-agents>=1.0   # optional: the live agent and policy compiler
-boto3>=1.39           # Bedrock API key support
