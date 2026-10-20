@@ -135,6 +135,8 @@ def render(r: dict, ev: dict, path: Path) -> None:
 
 > **All data is synthetic.** The product modeled is a generic AI workspace (an assistant that answers questions, takes agent actions, shares agents and outputs, and connects to apps), described from public information only. Company names and `.example` domains are invented. Nothing here reflects any company's internal data.
 
+The write-up, [A Sign-up Isn't a Signal](docs/a-sign-up-isnt-a-signal.md), sets out the growth strategy this project supports.
+
 ## In 60 seconds
 
 - **Activation is the first agent action.** Users who complete one in their first week retain at {_pct(a_ret)} at week 8, versus {_pct(q_ret)} for those who only ask questions.

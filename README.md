@@ -4,6 +4,8 @@
 
 > **All data is synthetic.** The product modeled is a generic AI workspace (an assistant that answers questions, takes agent actions, shares agents and outputs, and connects to apps), described from public information only. Company names and `.example` domains are invented. Nothing here reflects any company's internal data.
 
+The write-up, [A Sign-up Isn't a Signal](docs/a-sign-up-isnt-a-signal.md), sets out the growth strategy this project supports.
+
 ## In 60 seconds
 
 - **Activation is the first agent action.** Users who complete one in their first week retain at 43% at week 8, versus 14% for those who only ask questions.
