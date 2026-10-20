@@ -89,6 +89,8 @@ Of 18,334 self-serve sign-ups, 42% completed an agent action in their first week
 
 Weekly sign-ups grew from about 490 to about 1,350, and the share arriving through a share or invite rose from 14% in week 0 to nearly 40% by week 14. Weekly active users grew from 633 to about 10,900 by week 18, and the north star from 306 to 7,433. Each weekly cohort activated at 39 to 45% and retained 19 to 23% at week 8: steady, because the synthetic product does not change over time.
 
+![The acquisition funnel, and the gates beyond it](images/13-lifecycle-gates.png)
+
 ### Activation is an action
 
 Users who completed an agent action in their first week retained at 43% at week 8 (7,483 users), against 14% for those who only asked questions (7,835 users), and were active in 4.9 of their first 8 weeks against 2.9. Breadth matters too: users who connected three or more apps in their first week retained at 48%. Both findings are observational, since high-intent users both act and stay; the onboarding test in section 7 separates cause from correlation.
@@ -152,7 +154,7 @@ The first experience must deliver value without company data: public research, c
 
 ### Context curation
 
-Content becomes useful to agents only when someone gives it meaning. Curating a space for a topic, describing datasets and fields so a term means the same thing in every answer, scoping a custom agent's instructions and knowledge, and encoding a team's procedure as a reusable workflow are the actions that build a company's context. They compound: one person's curated space improves every colleague's answers.
+Content becomes useful to agents only when someone gives it meaning. Curating a space for a topic, describing datasets and fields so a term means the same thing in every answer, scoping a custom agent's instructions and knowledge, and encoding a team's procedure as a reusable workflow are the actions that build a company's context. They compound: one person's curated space improves every colleague's answers. Three kinds of context matter most: definitions that fix what a term means, an ontology that maps how entities, relationships and hierarchies connect, and knowledge bases that gather authoritative content. Without them, agents answer fluently from the wrong meaning.
 
 ### Collaborative contribution and consumption
 
@@ -160,7 +162,7 @@ A healthy account has both contributors and consumers. The measure of contributi
 
 ## 6. The lifecycle funnel and the gates we would add
 
-The funnel measured in this study runs from a sign-up to a contract. For an AI workspace, the contract is the midpoint. The lifecycle continues as a company connects, curates and builds, and each stage needs a gate: a defined event that marks passage, a metric, and an owner.
+The funnel measured in this study runs from a sign-up to a contract. For an AI workspace, the contract is the midpoint. The lifecycle continues as a company connects, curates and builds, and each stage needs a gate: a defined event that marks passage, a metric, and an owner. The chart in section 3 shows all twelve.
 
 ### The gates measured today
 
@@ -174,7 +176,7 @@ The funnel measured in this study runs from a sign-up to a contract. For an AI w
 
 6. **Secure connection.** An admin takes ownership of the workspace, turns on single sign-on and approves the first connector to a company system. Measured by weeks from contract to first approved connector. Owned by the account team with the customer's IT.
 7. **Content ingested.** Approved company content is brought in with its permissions. Measured by the share of deployed companies with content from at least one company system.
-8. **Context curated.** Spaces, definitions and descriptions exist for the company's important topics. Measured by the share of active users who contribute context.
+8. **Context curated.** The company establishes what its terms mean and how its things relate: a shared vocabulary of business definitions, an ontology of entities, relationships and hierarchies, and knowledge bases of authoritative content organized in spaces. This lets an agent answer "bookings by region" the way finance means it. Measured by the share of the company's most-used terms with an approved definition, and the share of active users who contribute context.
 9. **Indexes built.** Company content is indexed and grounds agent answers. Measured by the share of agent actions grounded in company content.
 10. **Custom agents built.** Teams build agents and workflows scoped to their own work. Measured by custom agents with active users beyond their author.
 11. **Shared and consumed.** Context and agents are reused across the company. Measured by agent actions by others that draw on contributed context.
@@ -182,11 +184,9 @@ The funnel measured in this study runs from a sign-up to a contract. For an AI w
 
 Gates 6 to 12 are hypotheses. The expectation is that they predict renewal and expansion better than seat counts, and the first job of the instrumentation is to test that. They also change who acts: individuals pass the early gates on their own, while the later gates need admins, curators and teams, so the growth motion shifts from individual incentives to account programs.
 
-![Twelve lifecycle gates: five measured, seven designed](images/13-lifecycle-gates.png)
+## 7. A/B tests we would run, by signpost
 
-## 7. Experiments we would run, by signpost
-
-Each test begins from a signpost, the observed state that makes the test worth running, and states the hypothesis, the design and the decision rule. Tests on sharing, onboarding for work sign-ups and sales outreach are randomized by company, because colleagues talk and a test inside one company leaks. In the simulated outreach test, splitting users inside each company estimated less than half the true effect.
+Each of these is an A/B test against a control or holdout. Each begins from a signpost, the observed state that makes the test worth running, and states the hypothesis, the design and the decision rule. Tests on sharing, onboarding for work sign-ups and sales outreach are randomized by company, because colleagues talk and a test inside one company leaks. In the simulated outreach test, splitting users inside each company estimated less than half the true effect.
 
 1. **Reward programs.** Signpost: a company without a contract where colleagues are sharing. Hypothesis: rewarding the recipient's first agent action, or both sides, raises activated recipients per share at acceptable cost. Design: no reward against initiator, recipient and two-sided rewards, all stage-aware. Primary metric: activated recipients per 1,000 shares; secondary: companies reaching five. Guardrails: cost per activated user and self-referral. About 8,500 same-company shares per arm detect a rise from 4.8% to 5.8%.
 2. **Onboarding to a first agent action.** Signpost: a new user in their first week. Hypothesis: steering users to an agent action raises week-8 retention, not only activation. Primary metric: week-8 retention and the north star. About 2,900 users per arm detect a rise from 20% to 23%.
