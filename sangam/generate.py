@@ -1,7 +1,7 @@
 """Synthetic data generator for Sangam.
 
 Everything this module produces is SYNTHETIC. Company names, domains, users and
-events are invented. The product modeled here is a generic "AI workspace"
+events are fictional. The product modeled here is a generic "AI workspace"
 (an assistant that answers questions, takes agent actions and connects to apps),
 described from public information only. Nothing here reflects any company's
 internal data.
@@ -581,7 +581,7 @@ def generate(out_dir: str | Path = "data", cfg: Config | None = None) -> dict[st
     (out / "README.md").write_text(
         "# Synthetic data\n\nEvery row in this folder is synthetic, produced by "
         "`sangam/generate.py` with a fixed seed. Company names and `.example` "
-        "domains are invented. `ground_truth/` holds the expected results used "
+        "domains are fictional. `ground_truth/` holds the expected results used "
         "only for grading; the analysis never reads it.\n", encoding="utf-8")
     (out / "config.json").write_text(json.dumps(cfg.__dict__, indent=2), encoding="utf-8")
     return paths

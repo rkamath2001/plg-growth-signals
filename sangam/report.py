@@ -182,7 +182,7 @@ Ten findings, each checked against the expected result (see `evals/`):
 6. **Trigger sales on activated adopters, not sign-ups.** Companies with {trig['recommended_rule']['min_activated']}+ activated independent users convert at {trig['recommended_rule']['precision']:.0%}, {trig['lift_over_baseline']}x the {trig['baseline_conversion']:.0%} baseline.
 7. **Rank channels by pipeline, not volume.** The top channel by sign-ups is not the top channel by sales-ready accounts; teammate invites lead on retention and pipeline.
 8. **Sign-in provider decides visibility.** Google and work-email sign-ups reveal the company about half the time; Apple and Amazon almost never. A work-email prompt at the moment of sharing would put more companies over the sales trigger.
-9. **Connected workspaces reveal employers, if guarded.** Matching Slack, Teams and Jira workspaces naively invents adopters from school clubs, side projects and client workspaces; trusting verified domains and requiring corroboration for names recovers real sales-ready accounts with no phantoms.
+9. **Connected workspaces reveal employers, if guarded.** Matching Slack, Teams and Jira workspaces naively attributes unrelated users from school clubs, side projects and client workspaces; trusting verified domains and requiring corroboration for names recovers real sales-ready accounts with no phantoms.
 10. **Agent shares grow, asset shares land; reward activation, by account stage.** Paying per share sent buys shares, not users; a stage-aware policy paid on the recipient's first agent action keeps the pipeline gains at a fraction of the cost.
 
 ## When to start an enterprise sales motion

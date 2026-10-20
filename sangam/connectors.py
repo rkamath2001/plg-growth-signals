@@ -1,11 +1,11 @@
 """Connector-derived identity: using the Slack, Teams and Jira workspaces a user
-connects as evidence of where they work, without inventing adopters.
+connects as evidence of where they work, without misattributing adopters.
 
 A connected workspace is evidence, not proof. An engineer at a bank may connect
 their employer's Slack and also their kid's FTC robotics team Slack. A school
 workspace named "Ulnex Robotics Boosters" is not Ulnex Holdings. A contractor
 may be a guest in a client's workspace. Each would put a user in the wrong
-company, and enough of them invent a "cluster of adopters" that isn't there.
+company, and enough of them suggest a "cluster of adopters" that isn't there.
 
 Two matchers are compared:
 

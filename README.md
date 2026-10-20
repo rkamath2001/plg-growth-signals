@@ -2,7 +2,7 @@
 
 **Sangam** (Sanskrit: *confluence*) is where independent streams meet and become one river. In product-led growth, the streams are individual adopters who sign up on their own, the colleagues they share with, and the enterprise rollouts that follow. This project finds where they converge.
 
-> **All data is synthetic.** The product modeled is a generic AI workspace (an assistant that answers questions, takes agent actions, shares agents and outputs, and connects to apps), described from public information only. Company names and `.example` domains are invented. Nothing here reflects any company's internal data.
+> **All data is synthetic.** The product modeled is a generic AI workspace (an assistant that answers questions, takes agent actions, shares agents and outputs, and connects to apps), described from public information only. Company names and `.example` domains are fictional. Nothing here reflects any company's internal data.
 
 The write-up, [A Sign-up Isn't a Signal](docs/a-sign-up-isnt-a-signal.md), sets out the growth strategy this project supports.
 
@@ -13,7 +13,7 @@ The write-up, [A Sign-up Isn't a Signal](docs/a-sign-up-isnt-a-signal.md), sets 
 - **Shared agents are the strongest viral loop; shared assets are the landing loop** that seeds new companies. Embeds and digests barely convert.
 - **Pay sharing rewards when the recipient completes a first agent action, and tie them to the account's stage**: same-company shares before a contract, external shares after it. In simulation that keeps the same pipeline gains as uniform rewards while paying 1,039 rewards instead of 12,276.
 - **Reward policy is written in plain language.** Teams submit prose guidelines and approve a plain-English card; the framework flags pay-per-share and uncapped schemes, and asks rather than guesses when wording is ambiguous.
-- **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is 72% accurate and invents sales-ready accounts from school clubs and side projects.
+- **Visibility is the hidden constraint.** Apple and Amazon sign-ins almost never reveal a company. Connected Slack, Teams and Jira workspaces help, but only with guards: naive matching is 72% accurate and wrongly attributes users from school clubs and side projects, making companies look sales-ready when they are not.
 - **Everything is graded**: 40 of 40 checks pass against the expected results, including tests of the grader itself.
 
 ## Quick start
