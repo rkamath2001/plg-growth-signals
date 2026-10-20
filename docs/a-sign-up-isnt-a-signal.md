@@ -178,6 +178,8 @@ The funnel measured in this study runs from a sign-up to a contract. For an AI w
 
 Gates 6 to 12 are hypotheses. The expectation is that they predict renewal and expansion better than seat counts, and the first job of the instrumentation is to test that. They also change who acts: individuals pass the early gates on their own, while the later gates need admins, curators and teams, so the growth motion shifts from individual incentives to account programs.
 
+![Twelve lifecycle gates: five measured, seven designed](images/13-lifecycle-gates.png)
+
 ## 7. Experiments we would run, by signpost
 
 Each test begins from a signpost, the observed state that makes the test worth running, and states the hypothesis, the design and the decision rule. Tests on sharing, onboarding for work sign-ups and sales outreach are randomized by company, because colleagues talk and a test inside one company leaks. In the simulated outreach test, splitting users inside each company estimated less than half the true effect.
